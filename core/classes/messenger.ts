@@ -97,6 +97,13 @@ module networkcube {
     /// SPECIFIC MESSAGES ///
     /////////////////////////
 
+    function isEmpty(obj) {
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
+        }
+        return true;
+    }
 
 
     // HIGHLIGHT
@@ -104,6 +111,15 @@ module networkcube {
 
         var g: DynamicGraph = networkcube.getDynamicGraph();
         var idCompound: IDCompound = makeIdCompound(elementCompound);
+
+
+        var highlightAnyElement = false;
+        if(elementCompound != null && !isEmpty(elementCompound)){
+            highlightAnyElement = true;
+        }
+        console.log('>>>>' + highlightAnyElement);
+
+        trace.event(null, 'toolFunctionUse', MESSAGE_HIGHLIGHT, highlightAnyElement);
 
         if (!elementCompound == undefined)
             action = 'reset';
@@ -151,6 +167,8 @@ module networkcube {
             selectionId = g.currentSelection_id;
         var selection = g.getSelection(selectionId)
 
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION, compound);
+
         var idCompound:IDCompound = makeIdCompound(compound);
         
         var m: SelectionMessage = new SelectionMessage(
@@ -183,6 +201,8 @@ module networkcube {
         if(propagate == undefined)
             propagate = false;
 
+        trace.event(null, 'toolFunctionUse', MESSAGE_TIME_RANGE, );
+
         if (propagate)
             distributeMessage(m); // notifies all views, including this
         else
@@ -205,6 +225,8 @@ module networkcube {
     
     export function createSelection(type:string, name:string){
 
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_CREATE, );
+
         var g:DynamicGraph = networkcube.getDynamicGraph();
         var b = g.createSelection(type);
         b.name = name;
@@ -226,7 +248,11 @@ module networkcube {
     // SET CURRENT SELECTION
 
 
-    export function setCurrentSelection(b: Selection) {
+    export function setCurrentSelection(b: Selection) 
+    {
+
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_SET_CURRENT, );
+
         var g: DynamicGraph = networkcube.getDynamicGraph();
         // g.setCurrentSelection(b.id);
         var m = new SetCurrentSelectionIdMessage(b);
@@ -243,7 +269,10 @@ module networkcube {
 
     // CHANGE SELECTION COLOR
     
-    export function showSelectionColor(selection: Selection, showColor: boolean){
+    export function showSelectionColor(selection: Selection, showColor: boolean)
+    {
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_SET_COLORING_VISIBILITY, );
+        
         var m = new ShowSelectionColorMessage(selection, showColor)
         distributeMessage(m);
     }
@@ -276,7 +305,10 @@ module networkcube {
     /// FILTER SELECTION
 
 
-    export function filterSelection(selection: Selection, filter: boolean) {
+    export function filterSelection(selection: Selection, filter: boolean) 
+    {
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_FILTER, );
+
         var m = new FilterSelectionMessage(selection, filter);
         distributeMessage(m);
     }
@@ -292,7 +324,10 @@ module networkcube {
     
     /// SWAP PRIORITY
 
-    export function swapPriority(s1: Selection, s2: Selection) {
+    export function swapPriority(s1: Selection, s2: Selection) 
+    {
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_PRIORITY, );
+
         var m = new SelectionPriorityMessage(s1, s2, s2.priority, s1.priority);
         distributeMessage(m);
     }
@@ -315,7 +350,10 @@ module networkcube {
 
     /// DELETE SELECTION
 
-    export function deleteSelection(selection: Selection){
+    export function deleteSelection(selection: Selection)
+    {
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_DELETE, );
+
         var m = new DeleteSelectionMessage(selection);
         distributeMessage(m);
     }
@@ -332,7 +370,11 @@ module networkcube {
 
     /// SET SELECTION COLOR
     
-    export function setSelectionColor(s: Selection, color: string){
+    export function setSelectionColor(s: Selection, color: string)
+    {
+        trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_COLORING, );
+
+
         distributeMessage(new SelectionColorMessage(s, color));
     }
 
@@ -350,7 +392,10 @@ module networkcube {
     /// SEARCH SELECTION
 
 
-    export function search(term:string, type?:string){
+    export function search(term:string, type?:string)
+    {
+        trace.event(null, 'toolFunctionUse', MESSAGE_SEARCH_RESULT, term);
+
         var idCompound:IDCompound = searchForTerm(term, networkcube.getDynamicGraph(), type);
         distributeMessage(new SearchResultMessage(term, idCompound));
     }
@@ -378,7 +423,7 @@ module networkcube {
     export function distributeMessage(message: Message, ownView?: boolean) {
      
         //VS: Link Function Use
-        trace.event(null, 'LinkFunctionUse', message.type, );
+        // trace.event(null, 'LinkFunctionUse', message.type, );
 
         if (ownView == undefined || ownView)
             processMessage(message);

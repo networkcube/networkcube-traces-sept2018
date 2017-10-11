@@ -1,24 +1,22 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var vistorian;
 (function (vistorian) {
     var head = $('head');
-    head.append("<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300italic,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'></head>");
-    head.append("<link href='https://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>");
-    head.append("<link href='https://fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>");
-    head.append("<link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>");
-    head.append("<link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>");
-    head.append("<link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>");
-    head.append("<link href='https://fonts.googleapis.com/css?family=Caveat' rel='stylesheet' type='text/css'>");
-    head.append("<link href='https://fonts.googleapis.com/css?family=IM+Fell+English' rel='stylesheet' type='text/css'>");
+    head.append("<link href='//fonts.googleapis.com/css?family=Open+Sans+Condensed:300italic,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'></head>");
+    head.append("<link href='//fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>");
+    head.append("<link href='//fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>");
+    head.append("<link href='//fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>");
+    head.append("<link href='//fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>");
+    head.append("<link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>");
+    head.append("<link href='//fonts.googleapis.com/css?family=Caveat' rel='stylesheet' type='text/css'>");
+    head.append("<link href='//fonts.googleapis.com/css?family=IM+Fell+English' rel='stylesheet' type='text/css'>");
+    head.append("<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css'>");
+    head.append('<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>');
+    head.append("<script src='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>");
     function append(url) {
         var script = document.createElement('script');
         script.type = 'text/javascript';
@@ -32,63 +30,60 @@ var vistorian;
             this.data = data;
         }
         return VTable;
-    }());
+    })();
     vistorian.VTable = VTable;
     var VTableSchema = (function () {
         function VTableSchema(name) {
             this.name = name;
         }
         return VTableSchema;
-    }());
+    })();
     vistorian.VTableSchema = VTableSchema;
     var VNodeSchema = (function (_super) {
         __extends(VNodeSchema, _super);
         function VNodeSchema() {
-            var _this = _super.call(this, 'userNodeSchema') || this;
-            _this.relation = [];
-            _this.location = -1;
-            _this.id = 0;
-            _this.label = -1;
-            _this.time = -1;
-            _this.nodeType = -1;
-            return _this;
+            _super.call(this, 'userNodeSchema');
+            this.relation = [];
+            this.location = -1;
+            this.id = 0;
+            this.label = -1;
+            this.time = -1;
+            this.nodeType = -1;
         }
         ;
         return VNodeSchema;
-    }(VTableSchema));
+    })(VTableSchema);
     vistorian.VNodeSchema = VNodeSchema;
     var VLinkSchema = (function (_super) {
         __extends(VLinkSchema, _super);
         function VLinkSchema() {
-            var _this = _super.call(this, 'userLinkSchema') || this;
-            _this.location_source = -1;
-            _this.location_target = -1;
-            _this.id = 0;
-            _this.source = -1;
-            _this.target = -1;
-            _this.weight = -1;
-            _this.time = -1;
-            _this.linkType = -1;
-            return _this;
+            _super.call(this, 'userLinkSchema');
+            this.location_source = -1;
+            this.location_target = -1;
+            this.id = 0;
+            this.source = -1;
+            this.target = -1;
+            this.weight = -1;
+            this.time = -1;
+            this.linkType = -1;
         }
         ;
         return VLinkSchema;
-    }(VTableSchema));
+    })(VTableSchema);
     vistorian.VLinkSchema = VLinkSchema;
     var VLocationSchema = (function (_super) {
         __extends(VLocationSchema, _super);
         function VLocationSchema() {
-            var _this = _super.call(this, 'userLocationSchema') || this;
-            _this.id = 0;
-            _this.label = 1;
-            _this.geoname = 2;
-            _this.longitude = 3;
-            _this.latitude = 4;
-            return _this;
+            _super.call(this, 'userLocationSchema');
+            this.id = 0;
+            this.label = 1;
+            this.geoname = 2;
+            this.longitude = 3;
+            this.latitude = 4;
         }
         ;
         return VLocationSchema;
-    }(VTableSchema));
+    })(VTableSchema);
     vistorian.VLocationSchema = VLocationSchema;
     var Network = (function () {
         function Network(id) {
@@ -98,7 +93,7 @@ var vistorian;
             this.userLinkSchema = new VLinkSchema();
         }
         return Network;
-    }());
+    })();
     vistorian.Network = Network;
     function loadCSV(files, callBack, sessionid) {
         var loadCount = 0;
@@ -286,16 +281,84 @@ var vistorian;
     }
     vistorian.cleanTable = cleanTable;
     function setHeader(elementId, datasetname) {
-        var header = $('<a href="../index.html"><img width="100%" src="../logos/logo-networkcube.png"/></a>');
+        var header = $('<a href="index.html"><img width="100%" src="../logos/logo-networkcube.png"/></a>');
         $('#' + elementId).append(header);
-        var dataname = $('\
-        <p style="margin:5px;background-color:#eeeeee;border-radius:2px;padding-left:10px;padding:5px;"><b>Data:</b> ' + datasetname + '</h2>');
+        var dataname = $('<p style="margin:5px;background-color:#eeeeee;border-radius:2px;padding-left:10px;padding:5px;"><b>Data:</b> ' + datasetname + '</h2>');
         $('#' + elementId).append(dataname);
+        $('#' + elementId).append('\
+            <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"/>\
+            <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>\
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>\
+            <script src="../lib/bootbox.min.js"></script>\
+            <input id="enableDisableTrackingBtn" type="button" class="enable" onclick="vistorian.enableDisableTracking()" value="Enable tracking"></input>\
+            <div id="trackingContainer">\
+            </div>\
+        ');
+        console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled());
+        if (networkcube.isTrackingEnabled()) {
+            $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+            $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+        }
+        else {
+            $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+            if ($('#trackingButtonsDiv')) {
+                $('#trackingButtonsDiv').remove();
+            }
+        }
         var vars = networkcube.getUrlVars();
         $('#' + elementId).append('<a href="../dataview.html?session=' + vars['session'] + '&datasetName' + vars['datasetName'] + '" style="margin:5px;padding-left:5px;" onclick="trace.event(null, \'ToolLaunch\', \'ReturnToDataview\', );" target="_blank">Return to Dataview</a>');
         $('#' + elementId).append('<br/><br/>');
     }
     vistorian.setHeader = setHeader;
+    function enableDisableTracking() {
+        setupConditionalLogging();
+    }
+    vistorian.enableDisableTracking = enableDisableTracking;
+    function setupConditionalLogging() {
+        bootbox.confirm({
+            size: "large",
+            class: "text-left",
+            position: "left",
+            title: "Consent to tracking",
+            message: '<p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+            <br> This allows us understand how the Vistorian is used and to improve it.\
+            <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+            <br>No personal information will be collected or saved with the tracking data.\
+            <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+            <p>If you agree to be tracked we will start tracking, and\
+            <ul>\
+            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questionsEsto es una lista no ordenada.\
+            <li><strong>Turn on the &#147email screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+            </ul>\
+            <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+            <p>Thank you for agreeing to participate in our research\
+            <p>The Vistorian Team (vistorian@inria.fr)',
+            buttons: {
+                confirm: {
+                    label: "I AGREE",
+                    className: "btn-success pull-right"
+                },
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-warning pull-left"
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+                    $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+                    $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+                }
+                else {
+                    localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+                    if ($('#trackingButtonsDiv')) {
+                        $('#trackingButtonsDiv').remove();
+                    }
+                    $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+                }
+            }
+        });
+    }
     function exportNetwork(network) {
         var blurb = network;
         var element = document.createElement('a');

@@ -4,9 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff">
     <title>Networkcube</title>
-   	<!-- VS: Call to trace.js -->
-	<script type="text/javascript" src="traces/trace.js"></script>
-	
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
@@ -19,7 +16,7 @@
         <script src="lib/jstorage.js"></script>
         <script src="classes/storage.js"></script>
         <script src="classes/utils.js"></script>
-		<script src="classes/vistorian.js"></script>
+		<script src="vistorian.js"></script>
 
 
            <div id="main">
@@ -30,16 +27,16 @@
                 <br/>    
 
                 <div id="vistiles">                    
-                    <a href="sites/nodelink.html?session=0&datasetName=demo_scientists" target="_blank">
+                    <a href="sites/nodelink.html?session=0&datasetName=demo_scientists" target="_blank" onclick="trace.event(null, 'Training', 'ExampleSession', 'nodelink')">
                         <img class="visimage" src="figures/nodelink.png"/>
                     </a>
-                    <a href="sites/dynamicego.html?session=0&datasetName=demo_scientists" target="_blank">
+                    <a href="sites/dynamicego.html?session=0&datasetName=demo_scientists" target="_blank" onclick="trace.event(null, 'Training', 'ExampleSession', 'ego')">
                         <img class="visimage" src="figures/ego.png" />
                     </a>
-                    <a href="sites/matrix.html?session=0&datasetName=demo_scientists" target="_blank">
+                    <a href="sites/matrix.html?session=0&datasetName=demo_scientists" target="_blank" onclick="trace.event(null, 'Training', 'ExampleSession', 'matrix')">
                         <img class="visimage" src="figures/matrix.png" />
                     </a>
-                    <a href="sites/map.html?session=0&datasetName=demo_scientists" target="_blank">
+                    <a href="sites/map.html?session=0&datasetName=demo_scientists" target="_blank" onclick="trace.event(null, 'Training', 'ExampleSession', 'map')">
                         <img class="visimage" src="figures/map.png" />
                     </a>
 
@@ -48,10 +45,10 @@
 
                 <ul id="menu">
                     <li>
-                        <a href="demo.html?session=0&datasetName=demo_scientists" target="_blank"><img src="logos/eye65.png" class="menuicon" target="_blank"/>Visualizations</a>
+                        <a href="demo.html?session=0&datasetName=demo_scientists" target="_blank" onclick="trace.event(null, 'Help', 'Visualizations')"><img src="logos/eye65.png" class="menuicon" target="_blank"/>Visualizations</a>
                     </li>
                     <li>
-                        <a href="dataview.html?session=0" target="_blank"><img src="logos/soccer.png" class="menuicon"/>Example Session</a>
+                        <a href="dataview.html?session=0" target="_blank" onclick="trace.event(null, 'Training', 'ExampleSession')"><img src="logos/soccer.png" class="menuicon"/>Example Session</a>
                     </li>
                     <li>
 						<!-- VS: Clicks on Your Session -->
@@ -93,9 +90,21 @@
             <h2>Overview:</h2>
 
             <div id="video_div">                
-                <video width="800" height="500" controls>
-                  <source src="teaser.mp4" type="video/ogg">
-                </video>                    
+                <video width="800" height="500" controls onclick="this.play()">
+                    <source src="teaser.mp4" type="video/ogg">
+                    <!-- VS: Play Video -->
+                    <!-- <script> trace.event(null, 'Help', 'PlayVideo'); </script> -->
+                </video>  
+                <script>
+                      var play = $('.playbutton');
+                      var video = $('video')
+                      video.click(function(){
+                      video.get(0).play();
+                      console.log('BUTTON PRESSED');
+                      trace.event(null, 'Help', 'PlayVideo'); 
+                      })
+                       
+                </script>          
             </div>
 
 
@@ -116,15 +125,15 @@
                     Networkcube is both
 
                     <ul>
-                        <li>a <a href="https://github.com/networkcube/networkcube/tree/master/core">javascript library</a> for importing, storing, and querying dynamic networks in your browser cache, </li> 
-                        <li>a <a href="demo.html?session=0&datasetName=demo_scientists">set of online visualizations</a> build on top of that library, and</li> 
+                        <li>a <a href="https://github.com/networkcube/networkcube/tree/master/core" onclick="trace.event(null, 'Help', 'JavascriptLibrary')">javascript library</a> for importing, storing, and querying dynamic networks in your browser cache, </li> 
+                        <li>a <a href="demo.html?session=0&datasetName=demo_scientists" onclick="trace.event(null, 'Help', 'SetOfOnlineVisualizations')">set of online visualizations</a> build on top of that library, and</li> 
                         <li>a ready-to-use web application (this website).</li>
                     </ul>
                     
                     You can: 
 
                     <ul>
-                        <li>start using this website by <a id="resumeSessionLink3" target="_blank">creating your session</a> (no registration required) and start importing your data. Data gets stored in your browser's cache,</li>
+                        <li>start using this website by <a id="resumeSessionLink3" target="_blank" onclick="trace.event(null, 'WorkSessionStart', 'CreatingYourSession')">creating your session</a> (no registration required) and start importing your data. Data gets stored in your browser's cache,</li>
                         <li>build your own website/webapp <a href="">using networkcube.js</a> and include our visualizations through a simple call to the API, </li> 
                         <li>write your own visualizations on top of network and provide their URL for others to integrate,  and</li>                        
                         <li>help us improving the visualizations and the core-functionality of networkcube</li>
@@ -148,7 +157,8 @@
                     Charles Parker, Microsoft Research<br/>
                     Rick Guiterrez, Microsoft Research<br/>
                     Paola Llerena Valdivia, Inria<br/>
-                    Emmanouil Giannisakis, Inria<br/>  
+                    Emmanouil Giannisakis, Inria<br/>
+                    Vanessa Serrano Molinero, IQS School of Mngt., Spain<br/>
                     
                     <h2>Related Projects</h2>
                     
@@ -163,13 +173,13 @@
                 <div id="upload">
                     <h2>Import data</h2>
                     <p>
-                        Your data must be formatted in <a href="https://github.com/networkcube/networkcube/wiki/Importing-Data">CSV</a>.
+                        Your data must be formatted in <a href="https://github.com/networkcube/networkcube/wiki/Importing-Data" onclick="trace.event(null, 'Help', 'ImportDataCSV')">CSV</a>.
                         Data is <b>imported into your browser</b>. Deleting the browser cache, deletes your data.
                     </p>
                     <p>
                         Follow the link below to resume your last session or start a new one to import data.
                     </p>
-                        <a id="resumeSessionLink" target="_blank"><img src="logos/network.png" class="menuicon"  id="startcontinue"/><big>My Session</big></a>
+                        <a id="resumeSessionLink" target="_blank" onclick="trace.event(null, 'WorkSessionStart', 'MySession')"><img src="logos/network.png" class="menuicon"  id="startcontinue"/><big>My Session</big></a>
                     
                     <h2>Data</h2>
 
@@ -177,18 +187,19 @@
 
                         <img class="dataPicture" src="figures/nodetable.png" alt=""/>
                         
-                        <a href="demodata/timmysmith.csv">Download example data</a>
+                        <a href="demodata/timmysmith.csv" onclick="trace.event(null, 'Training', 'DownloadExampleData')">Download example data</a>
                         <br/>
-                        <a href="https://github.com/networkcube/networkcube/wiki/Importing-Data">Learn more</a> about data formatting and data schemas in networkcube.
+                        <a href="https://github.com/networkcube/networkcube/wiki/Importing-Data" onclick="trace.event(null, 'Help', 'DataLearnMore')">Learn more</a> about data formatting and data schemas in networkcube.
 
                     </h2>
 
                     <h2>Learn</h2>
 
-                    <a href="#video_div">Overview video</a><br/>
-                    <a href="http://github.com/networkcube/networkcube/wiki/Visualization-Manual">Manual</a><br/>
-                    <a href="demo.html?session=0&datasetName=demo_scientists">Interactive visualizations</a><br/>   
-                    <a href="dataview.html?session=0">Demo session</a><br/>
+                    <a href="#video_div" onclick="trace.event(null, 'Help', 'OverviewVideo')">Overview video</a><br/>
+                    <a href="http://github.com/networkcube/networkcube/wiki/Visualization-Manual" onclick="trace.event(null, 'Help', 'OpenManual')">Manual</a><br/>
+                    <a href="demo.html?session=0&datasetName=demo_scientists" onclick="trace.event(null, 'Help', 'InteractiveVisualizations');">Interactive visualizations</a><br/>   
+training
+                    <a href="dataview.html?session=0" onclick="trace.event(null, 'Training', 'DemoSession')">Demo session</a><br/>
 
 
                     <h2>Cite</h2>
@@ -283,7 +294,7 @@
 
 
             // Load demo data
-            $.get("https://raw.githubusercontent.com/networkcube/vistorian/master/demo/demo_scientists.vistorian",
+            $.get("//raw.githubusercontent.com/networkcube/vistorian/master/demo/demo_scientists.vistorian",
                 function (data)
                 {   
                     vistorian.importData(JSON.parse(data), 0);            

@@ -430,12 +430,20 @@ module networkcube {
     }
 
 
-    export function exportPNG(canvas, name:string)
-    {
-        var dataURL = canvas.toDataURL('image/jpg', 1);
-        var blob = dataURItoBlob(dataURL);
-        // window.open(dataURL);
+    ////////////////////////////
+    /// SCREENSHOT FUNCTIONS ///
+    ////////////////////////////
 
+
+    ///////////
+    /// PNG ///
+    ///////////
+
+    // Downloads the content of the openGL canvas to the 
+    // desktop.
+    export function downloadPNGFromCanvas(name:string)
+    {
+        var blob = getBlobFromCanvas(document.getElementsByTagName('canvas')[0]);
         var fileNameToSaveAs = name + '_' + new Date().toUTCString() + '.png';
         var downloadLink = document.createElement("a")
         downloadLink.download = fileNameToSaveAs;
@@ -443,7 +451,182 @@ module networkcube {
         downloadLink.click();
     } 
 
-    function dataURItoBlob(dataURI) {
+    // Returns a blob from the passed canvas.
+    function getBlobFromCanvas(canvas):Blob
+    {
+        var dataURL = canvas.toDataURL("image/png")
+       return dataURItoBlob(dataURL);
+    }
+
+    
+    
+    
+    ///////////
+    /// SVG ///
+    ///////////
+
+    // downloads a screenshot on the desktop from the passed svg
+    export function downloadPNGfromSVG(name:string, svgId:string)
+    {
+        var blob = getBlobFromSVG(name, svgId, saveAs);
+    }
+
+    // creates an image blob from the passed svg and calls the 
+    // callback function with the blob as parameter
+    export function getBlobFromSVG(name:string, svgId:string, callback:Function)
+    {
+        var width = $('#'+svgId).width(); 
+        var height = $('#'+svgId).height(); 
+        getBlobFromSVGString(name, getSVGString(d3.select('#'+svgId).node()), width, height, callback)
+    }
+    export function getBlobFromSVGNode(name:string, svgNode, width, height, callback:Function)
+    {
+        var string = getSVGString(svgNode);
+        getBlobFromSVGString(name, string, width, height, callback)
+    }
+    export function getBlobFromSVGString(name:string, svgString:string, width:number, height:number, callback:Function)
+    {
+        // get SVG string
+        // console.log('DRAW SVG: ', svgString)
+        // CREATE PNG
+        var format = format ? format : 'png';
+
+        // turn SVG in to PNG
+        var imgsrc = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent( svgString ) ) ); // Convert SVG string to data URL
+        
+        // Prepare canvas
+        var canvas = document.createElement("canvas");    
+        canvas.width = width;
+        canvas.height = height;
+    
+        var context = canvas.getContext("2d");
+        var image = new Image();
+        image.src = imgsrc;
+
+        console.log('image', image)
+        image.onload = function() 
+        {
+            context.clearRect ( 0, 0, width, height );
+            context.drawImage(image, 0, 0, width, height);
+        
+            canvas.toBlob(function(blob) 
+            {
+                console.log('BLOB', blob)
+                // var filesize = Math.round( blob.length/1024 ) + ' KB';
+                callback(blob, name)
+            });            
+        };
+
+        // return getBlobFromCanvas(canvas);
+
+        // var dataURL = canvas.toDataURL("image/png");
+        // // ?? 
+        // return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    }
+
+    // export function getPNGURL(svgId):String
+    // {
+    //     var svgString = getSVGString(d3.select('#'+svgId).node());
+    //     var obj = getPNGFromSVG(svgString, $('#'+svgId).width(), $('#'+svgId).height(), 'png');
+        
+    //     return obj.image;
+
+    // }
+
+    // function getPNGFromSVG( svgString, width, height, format):Object 
+    // {
+    //     var format = format ? format : 'png';
+    
+    //     var imgsrc = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent( svgString ) ) ); // Convert SVG string to data URL
+    
+    //     var canvas = document.createElement("canvas");    
+    //     canvas.width = width;
+    //     canvas.height = height;
+    
+    //     var context = canvas.getContext("2d");
+
+    //     var image = new Image();
+ 
+    //     image.src = imgsrc;
+    //     return {image:image, canvas:canvas};
+    // }
+
+    // returns the svg string from an svg node.
+    export function getSVGString( svgNode ) {
+        console.log('SVG NODE', svgNode);
+        svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
+        var cssStyleText = getCSSStyles( svgNode );
+        appendCSS( cssStyleText, svgNode );
+    
+        var serializer = new XMLSerializer();
+        var svgString = serializer.serializeToString(svgNode);
+        svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
+        svgString = svgString.replace(/NS\d+:href/g, 'xlink:href'); // Safari NS namespace fix
+    
+        return svgString;
+    
+        function getCSSStyles( parentElement ) {
+            var selectorTextArr = [];
+    
+            // Add Parent element Id and Classes to the list
+            selectorTextArr.push( '#'+parentElement.id );
+            for (var c = 0; c < parentElement.classList.length; c++)
+                    if ( !contains('.'+parentElement.classList[c], selectorTextArr) )
+                        selectorTextArr.push( '.'+parentElement.classList[c] );
+    
+            // Add Children element Ids and Classes to the list
+            var nodes = parentElement.getElementsByTagName("*");
+            for (var i = 0; i < nodes.length; i++) {
+                var id = nodes[i].id;
+                if ( !contains('#'+id, selectorTextArr) )
+                    selectorTextArr.push( '#'+id );
+    
+                var classes = nodes[i].classList;
+                for (var c = 0; c < classes.length; c++)
+                    if ( !contains('.'+classes[c], selectorTextArr) )
+                        selectorTextArr.push( '.'+classes[c] );
+            }
+    
+            // Extract CSS Rules
+            var extractedCSSText = "";
+            for (var i = 0; i < document.styleSheets.length; i++) {
+                var s = document.styleSheets[i];
+                
+                try {
+                    if(!s.cssRules) continue;
+                } catch( e ) {
+                        if(e.name !== 'SecurityError') throw e; // for Firefox
+                        continue;
+                    }
+    
+                var cssRules = s.cssRules;
+                for (var r = 0; r < cssRules.length; r++) {
+                    if ( contains( cssRules[r].selectorText, selectorTextArr ) )
+                        extractedCSSText += cssRules[r].cssText;
+                }
+            }
+            
+    
+            return extractedCSSText;
+    
+            function contains(str,arr) {
+                return arr.indexOf( str ) === -1 ? false : true;
+            }
+    
+        }
+    
+        function appendCSS( cssText, element ) {
+            var styleElement = document.createElement("style");
+            styleElement.setAttribute("type","text/css"); 
+            styleElement.innerHTML = cssText;
+            var refNode = element.hasChildNodes() ? element.children[0] : null;
+            element.insertBefore( styleElement, refNode );
+        }
+    }
+
+
+    // returns a blob from a URL/URI
+    function dataURItoBlob(dataURI):Blob {
         // convert base64/URLEncoded data component to raw binary data held in a string
         var byteString;
         if (dataURI.split(',')[0].indexOf('base64') >= 0)
@@ -453,6 +636,7 @@ module networkcube {
 
         // separate out the mime component
         var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        console.log('mimeString', mimeString)
 
         // write the bytes of the string to a typed array
         var ia = new Uint8Array(byteString.length);

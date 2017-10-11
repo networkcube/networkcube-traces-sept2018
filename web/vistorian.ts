@@ -1,5 +1,5 @@
-/// <reference path="./storage.ts"/>
-/// <reference path="../../core/networkcube.d.ts"/>
+/// <reference path="classes/storage.ts"/>
+/// <reference path="../core/networkcube.d.ts"/>
 
 /*
 Convenient class that provides an API to the vistorian "framework"
@@ -25,14 +25,18 @@ module vistorian {
 
     // LOADING FONTS:
     var head = $('head');
-    head.append("<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300italic,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'></head>")
-    head.append("<link href='https://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>")
-    head.append("<link href='https://fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>")
-    head.append("<link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>")
-    head.append("<link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>")
-    head.append("<link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>")
-    head.append("<link href='https://fonts.googleapis.com/css?family=Caveat' rel='stylesheet' type='text/css'>")
-    head.append("<link href='https://fonts.googleapis.com/css?family=IM+Fell+English' rel='stylesheet' type='text/css'>")
+    head.append("<link href='//fonts.googleapis.com/css?family=Open+Sans+Condensed:300italic,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'></head>")
+    head.append("<link href='//fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>")
+    head.append("<link href='//fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>")
+    head.append("<link href='//fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>")
+    head.append("<link href='//fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>")
+    head.append("<link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>")
+    head.append("<link href='//fonts.googleapis.com/css?family=Caveat' rel='stylesheet' type='text/css'>")
+    head.append("<link href='//fonts.googleapis.com/css?family=IM+Fell+English' rel='stylesheet' type='text/css'>")
+    head.append("<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css'>")
+    head.append('<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>')
+    head.append("<script src='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>")    
+    // head.append("<script src='../lib/bootbox.min.js'></script>")
 
     // append('./lib/xml2json.js');
     function append(url: string) {
@@ -135,11 +139,11 @@ module vistorian {
         var tables: VTable[] = [];
         var fileContents: any[] = []
         var readers: FileReader[] = [];
-        for (var i = 0, f: File; f = files[i]; i++) {
+        for (var i = 0, f: File; f = files[i]; i++)
+        {
             var reader = new FileReader();
             reader.filename = f.name.split('_')[0];
             readers[i] = reader;
-
             reader.onload = function(f) {
                 var obj: Object = {
                     content: f.target.result,
@@ -471,12 +475,37 @@ module vistorian {
     }
 
 
-    export function setHeader(elementId:String, datasetname:String){
-        var header = $('<a href="../index.html"><img width="100%" src="../logos/logo-networkcube.png"/></a>')
+    export function setHeader(elementId:String, datasetname:String)
+    {
+        var header = $('<a href="index.html"><img width="100%" src="../logos/logo-networkcube.png"/></a>')
+
         $('#'+elementId).append(header);
-        var dataname = $('\
-        <p style="margin:5px;background-color:#eeeeee;border-radius:2px;padding-left:10px;padding:5px;"><b>Data:</b> '+ datasetname +'</h2>')
+        var dataname = $('<p style="margin:5px;background-color:#eeeeee;border-radius:2px;padding-left:10px;padding:5px;"><b>Data:</b> '+ datasetname +'</h2>')
         $('#'+elementId).append(dataname);
+
+        $('#'+elementId).append('\
+            <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"/>\
+            <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>\
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>\
+            <script src="../lib/bootbox.min.js"></script>\
+            <input id="enableDisableTrackingBtn" type="button" class="enable" onclick="vistorian.enableDisableTracking()" value="Enable tracking"></input>\
+            <div id="trackingContainer">\
+            </div>\
+        ');
+
+        console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled())
+        if(networkcube.isTrackingEnabled())
+        {
+            $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+            $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+        }else{
+            $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');        
+            if($('#trackingButtonsDiv'))
+            {
+                $('#trackingButtonsDiv').remove()
+            }
+        }
+
 
         var vars = networkcube.getUrlVars();
 
@@ -485,6 +514,60 @@ module vistorian {
         $('#'+elementId).append('<br/><br/>');
     }
 
+
+    export function enableDisableTracking()
+    {
+        setupConditionalLogging();
+    }
+
+    function setupConditionalLogging() {
+        bootbox.confirm({
+            size: "large",
+            class:"text-left",
+            position: "left",
+            title: "Consent to tracking",
+            message: 
+            '<p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+            <br> This allows us understand how the Vistorian is used and to improve it.\
+            <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+            <br>No personal information will be collected or saved with the tracking data.\
+            <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+            <p>If you agree to be tracked we will start tracking, and\
+            <ul>\
+            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questionsEsto es una lista no ordenada.\
+            <li><strong>Turn on the &#147email screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+            </ul>\
+            <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+            <p>Thank you for agreeing to participate in our research\
+            <p>The Vistorian Team (vistorian@inria.fr)',
+            buttons: {
+                confirm: {
+                    label: "I AGREE",
+                    className:  "btn-success pull-right"
+                },
+                cancel: {
+                    label:  "Cancel",
+                    className:  "btn-warning pull-left"
+                }
+            },
+            callback: function (result) 
+            {
+                if (result == true)
+                {
+                    localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+                    $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+                    $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+                }else{
+                    localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+                    if($('#trackingButtonsDiv'))
+                    {
+                        $('#trackingButtonsDiv').remove()
+                    }
+                    $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+                }
+            }
+        });
+    }
 
     export function exportNetwork(network:vistorian.Network){
         

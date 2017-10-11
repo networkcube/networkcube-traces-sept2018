@@ -1,6 +1,7 @@
-/// <reference path="./classes/storage.ts"/>
+/// <reference path="classes/storage.ts"/>
 /// <reference path="../core/networkcube.d.ts"/>
-/// <reference path="./classes/vistorian.ts" />
+/// <reference path="vistorian.ts" />
+
 
 var DATA_TABLE_MAX_LENGTH = 200;
 
@@ -42,7 +43,90 @@ function init() {
     if(networkids.length > 0)
         showNetwork(networkids[0])
 
+    if(networkcube.isTrackingEnabled())
+    {
+        $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+    }else{
+        $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');        
+    }
+
+    var sessionId = parseInt(storage.getLastSessionId());
+    console.log('networkcube.isTrackingSet ', networkcube.isTrackingSet())
+    console.log('sessionId', sessionId)
+    if ( !networkcube.isTrackingSet() && sessionId != 0){
+        setupConditionalLogging();
+    }
 }
+
+if(networkcube.isTrackingEnabled())
+{
+    $('#trackingContainer').load('traces/questionnaires-dataview.html');
+} else {
+    if($('#trackingButtonsDiv'))
+    {
+        $('#trackingButtonsDiv').remove()
+    }
+}
+
+function enableDisableTracking()
+{
+    setupConditionalLogging();
+}
+
+ 
+
+function setupConditionalLogging() {
+    bootbox.confirm({
+        size: "large",
+        class:"text-left",
+        position: "left",
+        title: "Consent to tracking",
+        //show: false,
+        //message: boxMessage.html(),
+        //message: "<p> If you agree your activity will be logged. The information provided will remain anonymous, it will be used solely for this project.</p>",
+        message: 
+        '<p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+        <br> This allows us understand how the Vistorian is used and to improve it.\
+        <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+        <br>No personal information will be collected or saved with the tracking data.\
+        <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+        <p>If you agree to be tracked we will start tracking, and\
+        <ul>\
+        <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questionsEsto es una lista no ordenada.\
+        <li><strong>Turn on the &#147email screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+        </ul>\
+        <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+        <p>Thank you for agreeing to participate in our research\
+        <p>The Vistorian Team (vistorian@inria.fr)',
+        buttons: {
+            confirm: {
+                label: "I AGREE",
+                className:  "btn-success pull-right"
+            },
+            cancel: {
+                label:  "Cancel",
+                className:  "btn-warning pull-left"
+            }
+        },
+        callback: function (result) 
+        {
+            if (result == true)
+            {
+                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+                $('#trackingContainer').load('traces/questionnaires-dataview.html');
+                $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+            }else{
+                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+                if($('#trackingButtonsDiv'))
+                {
+                    $('#trackingButtonsDiv').remove()
+                }
+                $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+            }
+        }
+    });
+}
+       
 
 // loads the list of available visualizations and displays them on the left
 function loadVisualizationList() {
@@ -106,8 +190,9 @@ function loadNetworkList() {
 
 // creates a new visualization of the passed type
 function loadVisualization(visType) {
-    trace.event(null, "ToolLaunch", "Launch" + visType);
+    trace.event('dataview.html/' + currentNetwork.name, "ToolLaunch", "Launch" + visType);
     window.open('sites/' + visType + '.html?session=' + SESSION_NAME + '&datasetName=' + currentNetwork.name);
+    console.log('dataview.html/' + currentNetwork.name);
 }
 
 
@@ -656,7 +741,6 @@ function deleteCurrentNetwork() {
 
 
 function showNetwork(networkId: number) {
-
     unshowNetwork();
     $('#noNetworkTables').css('display', 'none');
     console.log('networkId', networkId)
@@ -1202,15 +1286,9 @@ function getFileInfos(e) {
     var output = [];
     for (var i = 0, f; f = files[i]; i++) {
         if (f.name.split('.')[1] != 'csv') {
-            // output.push('<li style="color:#f00;"><strong>', f.name, '</strong> is not a CSV file.</li>');
             showMessage("Uploaded file is not a .csv file. Please chose another file.", 4000)
             return;
         } else {
-            // output.push('<li><strong>',
-            //     f.name, '</strong> (', f.type || 'n/a', ') - ',
-            //     f.size, ' bytes, last modified: ',
-            //     f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-            //     '</li>');
             filesToUpload.push(f);
         }
     }
@@ -1403,13 +1481,14 @@ function updateLocations() {
         });
 }
 
+
 var msgBox;
 function showMessage(message: string, timeout) {
     if ($('.messageBox'))
         $('.messageBox').remove();
 
-    msgBox = $('<div class="messageBox"></div>');
-    msgBox.append('<div><p>' + message + '</p></div>');
+    msgBox = $('<div id="div" class="messageBox"></div>');
+    msgBox.append('<div id="div"><p>' + message + '</p></div>');
     $('body').append(msgBox);
     msgBox.click(function() {
         $('.messageBox').remove();

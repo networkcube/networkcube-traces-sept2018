@@ -21,6 +21,7 @@ declare var LZString: {
     _decompress: (o: any, n: any, e: any) => string;
 };
 declare var BSpline: (points: any, degree: any, copy: any) => void;
+declare var saveAs: any;
 declare module colorSchemes {
     var schema1: string[];
     var schema2: string[];
@@ -56,8 +57,8 @@ declare module networkcube {
         y1: number;
         y2: number;
         constructor(x1: number, y1: number, x2: number, y2: number);
-        readonly width: number;
-        readonly height: number;
+        width: number;
+        height: number;
         isPoint(): boolean;
     }
     function inBox(x: any, y: any, box: Box): boolean;
@@ -86,7 +87,12 @@ declare module networkcube {
     function encapsulate(array: any[], attrName?: string): Object[];
     function isPointInPolyArray(poly: number[][], pt: number[]): boolean;
     function formatTimeAtGranularity(time: networkcube.Time, granualarity: number): number;
-    function exportPNG(canvas: any, name: string): void;
+    function downloadPNGFromCanvas(name: string): void;
+    function downloadPNGfromSVG(name: string, svgId: string): void;
+    function getBlobFromSVG(name: string, svgId: string, callback: Function): void;
+    function getBlobFromSVGNode(name: string, svgNode: any, width: any, height: any, callback: Function): void;
+    function getBlobFromSVGString(name: string, svgString: string, width: number, height: number, callback: Function): void;
+    function getSVGString(svgNode: any): string;
 }
 declare module networkcube {
     class BasicElement {
@@ -140,8 +146,8 @@ declare module networkcube {
     class Link extends BasicElement {
         constructor(id: number, graph: DynamicGraph);
         linkType(): string;
-        readonly source: Node;
-        readonly target: Node;
+        source: Node;
+        target: Node;
         nodePair(): NodePair;
         directed(): boolean;
         other(n: Node): Node;
@@ -151,8 +157,8 @@ declare module networkcube {
     }
     class NodePair extends BasicElement {
         constructor(id: number, graph: DynamicGraph);
-        readonly source: Node;
-        readonly target: Node;
+        source: Node;
+        target: Node;
         links(): LinkQuery;
         nodeType(): string;
         presentIn(start: Time, end?: Time): boolean;
@@ -191,7 +197,7 @@ declare module networkcube {
         add(element: number): void;
         addAll(elements: number[]): void;
         addAllUnique(elements: number[]): void;
-        readonly length: number;
+        length: number;
         size(): number;
         ids(): number[];
         removeDuplicates(): Query;
@@ -215,7 +221,7 @@ declare module networkcube {
         add(element: string): void;
         addAll(elements: string[]): void;
         addAllUnique(elements: string[]): void;
-        readonly length: number;
+        length: number;
         size(): number;
         toArray(): string[];
         forEach(f: Function): StringQuery;
@@ -416,8 +422,8 @@ declare module networkcube {
         linkAttr(attr: string, id: number): any;
         pairAttr(attr: string, id: number): any;
         timeAttr(attr: string, id: number): any;
-        readonly startTime: Time;
-        readonly endTime: Time;
+        startTime: Time;
+        endTime: Time;
         highlight(action: string, idCompound?: IDCompound): void;
         selection(action: string, idCompound: IDCompound, selectionId?: number): void;
         addToAttributeArraysSelection(selection: Selection, type: string, id: number): void;
@@ -475,7 +481,7 @@ declare module networkcube {
     }
     class AttributeArray {
         id: number[];
-        readonly length: number;
+        length: number;
     }
     class NodeArray extends AttributeArray {
         id: number[];
@@ -776,13 +782,15 @@ declare module networkcube {
     function openVisualizationTab(session: string, visUri: string, dataName: string): void;
     function createTabVisualizations(parentId: string, visSpec: Object[], session: string, dataName: string, width: number, height: number, visParams?: Object): void;
     function switchVisTab(evt: any, visName: any): void;
-    function createVisualizationIFrame(parentId: string, visUri: string, session: string, dataName: string, width: number, height: number, visParams?: Object): JQuery<HTMLElement>;
+    function createVisualizationIFrame(parentId: string, visUri: string, session: string, dataName: string, width: number, height: number, visParams?: Object): JQuery;
     function getURLString(dataName: string): string;
     enum OrderType {
         Local = 0,
         Global = 1,
         Data = 2,
     }
+    function isTrackingEnabled(): Boolean;
+    function isTrackingSet(): Boolean;
 }
 declare module glutils {
     function makeAlphaBuffer(array: number[], stretch: number): Float32Array;
@@ -848,7 +856,7 @@ declare module glutils {
         push(e: any): WebGLElementQuery;
         getData(i: any): any;
         getVisual(i: any): any;
-        readonly length: number;
+        length: number;
         filter(f: Function): WebGLElementQuery;
         attr(name: string, v: any): WebGLElementQuery;
         style(name: string, v: any): WebGLElementQuery;
@@ -914,3 +922,6 @@ declare module geometry {
     function normalize(v: number[]): number[];
     function setLength(v: number[], l: number): number[];
 }
+declare function createCookie(name: any, value: any, days: any): void;
+declare function readCookie(name: any): string;
+declare function eraseCookie(name: any): void;
