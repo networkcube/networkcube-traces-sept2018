@@ -277,6 +277,13 @@
                         console.log(Comments);
                         closeWindow2();
                        
+                        var url = parent.location.href; 
+                        if(url.includes('/sites/'))
+                        {
+                          window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "../traces/EndActivityQuestionnaire1.html");
+                        } else {
+                          window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "traces/EndActivityQuestionnaire1.html");
+                        }
 
                         //window.history.back();
                       }
@@ -339,6 +346,14 @@
 
                         //window.history.back();
                         closeWindow2();
+
+                        var url = parent.location.href; 
+                        if(url.includes('/sites/'))
+                        {
+                          window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "../traces/EndActivityQuestionnaire1.html");
+                        } else {
+                          window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "traces/EndActivityQuestionnaire1.html");
+                        }
                       }
 
                     </script>

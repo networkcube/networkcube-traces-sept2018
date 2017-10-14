@@ -9101,11 +9101,14 @@ var networkcube;
     function getBlobFromSVG(name, svgId, callback) {
         var width = $('#' + svgId).width();
         var height = $('#' + svgId).height();
+        console.log('SVG SIZE: ' + width, height);
         getBlobFromSVGString(name, getSVGString(d3.select('#' + svgId).node()), width, height, callback);
     }
     networkcube.getBlobFromSVG = getBlobFromSVG;
-    function getBlobFromSVGNode(name, svgNode, width, height, callback) {
+    function getBlobFromSVGNode(name, svgNode, callback) {
         var string = getSVGString(svgNode);
+        var width = svgNode.getAttribute('width');
+        var height = svgNode.getAttribute('height');
         getBlobFromSVGString(name, string, width, height, callback);
     }
     networkcube.getBlobFromSVGNode = getBlobFromSVGNode;
@@ -9121,6 +9124,8 @@ var networkcube;
         console.log('image', image);
         image.onload = function () {
             context.clearRect(0, 0, width, height);
+            context.fillStyle = "white";
+            context.fillRect(0, 0, canvas.width, canvas.height);
             context.drawImage(image, 0, 0, width, height);
             canvas.toBlob(function (blob) {
                 console.log('BLOB', blob);

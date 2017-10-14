@@ -223,6 +223,7 @@
                                 var Context5;
                                 if(buttonNumber == 5){Context5 = 'Other'; console.log(Context5); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context5);}
 
+              
                                 sendEmail();
                                 closeWindow();
                               }
@@ -405,15 +406,12 @@
                           if(format && format == 'PNG')
                           {
                             // var svgString = networkcube.getSVGString(window.parent.$('#visSvg'));
-                            var svgString = window.parent.$('#visFrame').find('iframe'). contents().find('#visSvg');
+                            var svgString = window.parent.$('#visFrame').find('iframe').contents().find('#visSvg');
                             var d3Object = d3.select(svgString.get(0));
-                            console.log('>> svgNode', d3Object.node());
-                            networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), 800, 600, function(blob, name)
+                            networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
                             {
-                              console.log('SEND EMAIL WITH BLOB')
-
-                            //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
-                            trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
+                              //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
+                              trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
                             })
                           }
                         }

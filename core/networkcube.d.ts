@@ -90,7 +90,7 @@ declare module networkcube {
     function downloadPNGFromCanvas(name: string): void;
     function downloadPNGfromSVG(name: string, svgId: string): void;
     function getBlobFromSVG(name: string, svgId: string, callback: Function): void;
-    function getBlobFromSVGNode(name: string, svgNode: any, width: any, height: any, callback: Function): void;
+    function getBlobFromSVGNode(name: string, svgNode: any, callback: Function): void;
     function getBlobFromSVGString(name: string, svgString: string, width: number, height: number, callback: Function): void;
     function getSVGString(svgNode: any): string;
 }

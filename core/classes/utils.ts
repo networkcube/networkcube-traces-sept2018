@@ -476,18 +476,20 @@ module networkcube {
     export function getBlobFromSVG(name:string, svgId:string, callback:Function)
     {
         var width = $('#'+svgId).width(); 
-        var height = $('#'+svgId).height(); 
+        var height = $('#'+svgId).height();
+        console.log('SVG SIZE: ' + width, height) 
         getBlobFromSVGString(name, getSVGString(d3.select('#'+svgId).node()), width, height, callback)
     }
-    export function getBlobFromSVGNode(name:string, svgNode, width, height, callback:Function)
+    export function getBlobFromSVGNode(name:string, svgNode, callback:Function)
     {
         var string = getSVGString(svgNode);
+        var width = svgNode.getAttribute('width')
+        var height = svgNode.getAttribute('height') 
         getBlobFromSVGString(name, string, width, height, callback)
     }
     export function getBlobFromSVGString(name:string, svgString:string, width:number, height:number, callback:Function)
     {
         // get SVG string
-        // console.log('DRAW SVG: ', svgString)
         // CREATE PNG
         var format = format ? format : 'png';
 
@@ -507,6 +509,8 @@ module networkcube {
         image.onload = function() 
         {
             context.clearRect ( 0, 0, width, height );
+            context.fillStyle = "white";
+            context.fillRect(0, 0, canvas.width, canvas.height);
             context.drawImage(image, 0, 0, width, height);
         
             canvas.toBlob(function(blob) 

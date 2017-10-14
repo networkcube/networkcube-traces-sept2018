@@ -122,7 +122,6 @@ img.menuicon{
 }
 
 
-
 ul#menu{
 	margin-bottom: 50px;
 	margin-top: 70px;
@@ -138,6 +137,7 @@ ul#menu a{
 	font-family: 'Poiret One', 'Helvetica Neue', sans-serif; 
 	font-size:15pt;
 	text-decoration: none;
+	color: orange;	
 }
 
 ul#menu .menuicon{
