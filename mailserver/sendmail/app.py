@@ -51,13 +51,11 @@ def test():
 @app.route("/", methods=['GET', 'POST'])
 def send():
     try:
-        # uid = request.form['uid'].strip()
         send_from = request.form['from'].strip()
         send_to = request.form['to'].strip()
         send_cc = request.form['cc'].strip()
         send_subject = request.form['subject'].strip()
-        send_note = request.form['note'].strip() 
-        # + "\n\nYour unique user ID is" + uid
+        send_note = request.form['note'].strip()
     except Exception:
         return hello()
     if send_to not in valid_dest:

@@ -18,12 +18,13 @@ module networkcube {
         return TIME_FORMAT;
     }
 
+
     // GLOBAL VARIABLES
     var dataManager: DataManager = new DataManager();
     var session: string;
 
-    export function setSession(sessionName: string) {
-        session = sessionName;
+    export function getSessionId() {
+        return session;
     }
 
     export function setDataManagerOptions(options: DataManagerOptions): void {

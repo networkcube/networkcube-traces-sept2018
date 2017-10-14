@@ -772,7 +772,7 @@ declare module networkcube {
 declare module networkcube {
     var TIME_FORMAT: string;
     function timeFormat(): string;
-    function setSession(sessionName: string): void;
+    function getSessionId(): string;
     function setDataManagerOptions(options: DataManagerOptions): void;
     function isSessionCached(session: string, dataSetName: string): boolean;
     function importData(sessionName: string, data: DataSet): void;

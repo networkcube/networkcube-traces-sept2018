@@ -191,10 +191,24 @@
 			oReq = new XMLHttpRequest();
 	
 		var date = new Date();
+		// var uid = networkcube.getSessionId();
+		var params = window.parent.location.search.replace("?", "").split('&');
+		console.log('window.parent.location', params)
+		var tmp, value, vars = {};
+		params.forEach(function(item) {
+			console.log('item', item)
+			tmp = item.split("=");
+			console.log('tmp', tmp)
+            value = decodeURIComponent(tmp[1]);
+			vars[tmp[0]] = value;
+		});
+		var uid = vars['session']
+		console.log('session/userid: ' + uid)
+		
 		formdata.append("from", from);
 		formdata.append("to", to);
 		formdata.append("subject", '[Vistorian] Screenshot: ' + networkcube.getDynamicGraph().name + ', ' + date.getDate());
-		formdata.append("note", message);
+		formdata.append("note", message + "\n\n(Your unique user ID is " + uid + ".)");
 		formdata.append("cc", cc_vistorian);
 		//if (cc_vistorian) 
 		//	formdata.append("CopyToVistorian", "Yes");
