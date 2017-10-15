@@ -79,6 +79,8 @@ declare class TimeSlider {
     getGranularityFormattingString(granualarity: any, separator: boolean): string;
     updateTime(minUnix: number, maxUnix: number, single: number): void;
     set(startUnix: number, endUnix: number): void;
+    scrollUp(): void;
+    scrollDown(): void;
 }
 declare class SmartSlider {
     BAR_WIDTH: number;
@@ -119,7 +121,11 @@ declare class SmartSlider {
     dragMove(): void;
     dragEnd(): void;
     getRelX(): number;
+    clamp(x: any): number;
     set(min: number, max: number): void;
+    setPos(xmin: number, xmax: number): void;
+    scrollUp(): void;
+    scrollDown(): void;
     setIsInverted(inv: boolean): void;
 }
 declare class Timeline {

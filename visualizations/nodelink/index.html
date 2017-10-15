@@ -25,5 +25,17 @@
     <script src="lib/cola.js"></script>
     <script src="../widgets/widgets.js"></script>
     <script src="nodelink.js"></script>
+    <script>
+      d3.select("body").on("keydown", function() {
+          if (d3.event.key == "ArrowLeft") {
+              d3.event.preventDefault();
+              timeSlider.scrollDown();
+          }
+          if (d3.event.key == "ArrowRight") {
+              d3.event.preventDefault();
+              timeSlider.scrollUp();
+          }
+      });
+</script>
 </body>
 </html>

@@ -66,7 +66,7 @@ var Slider = (function () {
         this.knob.attr("cx", this.valueRange.invert(value));
     };
     return Slider;
-})();
+}());
 var networkcube;
 (function (networkcube) {
     function makeSlider(d3parent, label, width, height, value, min, max, f) {
@@ -134,7 +134,7 @@ var networkcube;
             this.clickHandler = f;
         };
         return RadioButton;
-    })();
+    }());
     networkcube.RadioButton = RadioButton;
     function makeCheckBox(d3parent, label, callback) {
         d3parent.append('input')
@@ -297,8 +297,14 @@ var TimeSlider = (function () {
     TimeSlider.prototype.set = function (startUnix, endUnix) {
         this.slider.set(startUnix, endUnix);
     };
+    TimeSlider.prototype.scrollUp = function () {
+        this.slider.scrollUp();
+    };
+    TimeSlider.prototype.scrollDown = function () {
+        this.slider.scrollDown();
+    };
     return TimeSlider;
-})();
+}());
 var SmartSlider = (function () {
     function SmartSlider(x, y, width, minValue, maxValue, stepWidth, tickMarks) {
         this.BAR_WIDTH = 5;
@@ -414,7 +420,7 @@ var SmartSlider = (function () {
             .call(this.drag);
     };
     SmartSlider.prototype.dragStart = function () {
-        this.dragStartXMouse = Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX()));
+        this.dragStartXMouse = this.clamp(this.getRelX());
         this.dragObj = d3.event.sourceEvent.target;
         if (this.isInverted) {
             var minPos = parseInt(this.circleMin.attr('cx'));
@@ -439,11 +445,12 @@ var SmartSlider = (function () {
     };
     SmartSlider.prototype.dragMove = function () {
         if (!this.isInverted && this.dragObj.id == this.bar0.attr('id')) {
-            var xOffset = Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX())) - this.dragStartXMouse;
-            var x1 = Math.max(this.LEFT, Math.min(this.width - this.RIGHT - this.currentBarLength, this.dragStartXBar + xOffset));
-            this.bar0.attr('x', x1);
-            this.circleMin.attr("cx", x1);
-            this.circleMax.attr("cx", x1 + this.currentBarLength);
+            var xmin = this.clamp(this.getRelX() - this.dragStartXMouse);
+            var xmax = this.clamp(xmin + this.currentBarLength);
+            this.bar0.attr('x', xmin);
+            this.bar0.attr('width', xmax - xmin);
+            this.circleMin.attr("cx", xmin);
+            this.circleMax.attr("cx", xmax);
         }
         else if (this.isInverted
             && (this.dragObj.id == this.bar0.attr('id')
@@ -451,11 +458,11 @@ var SmartSlider = (function () {
             return;
         }
         else if (this.dragObj == this.circleSingle) {
-            this.singleTimeStepX = Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX()));
+            this.singleTimeStepX = this.clamp(this.getRelX());
             d3.select(this.dragObj).attr("transform", 'translate(' + this.singleTimeStepX + ', 0)');
         }
         else {
-            d3.select(this.dragObj).attr("cx", Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX())));
+            d3.select(this.dragObj).attr("cx", this.clamp(this.getRelX()));
             if (this.isInverted) {
                 this.bar0
                     .attr('x', this.LEFT)
@@ -479,9 +486,15 @@ var SmartSlider = (function () {
     SmartSlider.prototype.getRelX = function () {
         return d3.event.sourceEvent.pageX - this.LEFT - this.x - this.rect.left;
     };
+    SmartSlider.prototype.clamp = function (x) {
+        return Math.max(this.LEFT, Math.min(this.width - this.RIGHT, x));
+    };
     SmartSlider.prototype.set = function (min, max) {
-        this.circleMin.attr("cx", this.valueRange.invert(min));
-        this.circleMax.attr("cx", this.valueRange.invert(max));
+        this.setPos(this.valueRange.invert(min), this.valueRange.invert(max));
+    };
+    SmartSlider.prototype.setPos = function (xmin, xmax) {
+        this.circleMin.attr("cx", this.clamp(xmin));
+        this.circleMax.attr("cx", this.clamp(xmax));
         if (this.isInverted) {
             this.bar0
                 .attr('x', this.LEFT)
@@ -495,6 +508,21 @@ var SmartSlider = (function () {
                 .attr('x', this.circleMin.attr('cx'))
                 .attr('width', this.circleMax.attr('cx') - this.circleMin.attr('cx'));
         }
+    };
+    SmartSlider.prototype.scrollUp = function () {
+        var start = parseInt(this.bar0.attr('x'));
+        var width = parseInt(this.bar0.attr('width'));
+        var newstart = this.clamp(start + width);
+        var newend = this.clamp(newstart + width);
+        this.setPos(newend - width, newend);
+        this.dragEnd();
+    };
+    SmartSlider.prototype.scrollDown = function () {
+        var start = parseInt(this.bar0.attr('x'));
+        var width = parseInt(this.bar0.attr('width'));
+        var newstart = this.clamp(start - width);
+        this.setPos(newstart, newstart + width);
+        this.dragEnd();
     };
     SmartSlider.prototype.setIsInverted = function (inv) {
         if (inv == this.isInverted)
@@ -516,7 +544,7 @@ var SmartSlider = (function () {
         this.set(this.min, this.max);
     };
     return SmartSlider;
-})();
+}());
 var Timeline = (function () {
     function Timeline(webgl, network, x, y, width, height) {
         this.TICK_MIN_DIST = 13;
@@ -761,7 +789,7 @@ var Timeline = (function () {
             .text(this.timeObjects[this.highlightId].format('DD/MM/YYYY'));
     };
     return Timeline;
-})();
+}());
 var RangeSlider = (function () {
     function RangeSlider(x, y, width, minValue, maxValue, stepWidth, tickMarks) {
         this.BAR_WIDTH = 5;
@@ -974,5 +1002,5 @@ var RangeSlider = (function () {
         this.set(this.min, this.max);
     };
     return RangeSlider;
-})();
+}());
 //# sourceMappingURL=widgets.js.map

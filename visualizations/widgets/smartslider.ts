@@ -184,7 +184,7 @@ class SmartSlider {
     currentBarLength: number;
 
     dragStart() {
-        this.dragStartXMouse = Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX()));
+        this.dragStartXMouse = this.clamp(this.getRelX());
         this.dragObj = d3.event.sourceEvent.target;
         if (this.isInverted) {
             // determine whether we are left of min, in between, or right of max
@@ -211,11 +211,12 @@ class SmartSlider {
     dragMove() {
         // if we are dragging the entire bar
         if (!this.isInverted && this.dragObj.id == this.bar0.attr('id')) {
-            var xOffset = Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX())) - this.dragStartXMouse;
-            var x1 = Math.max(this.LEFT, Math.min(this.width - this.RIGHT - this.currentBarLength, this.dragStartXBar + xOffset))
-            this.bar0.attr('x', x1)
-            this.circleMin.attr("cx", x1)
-            this.circleMax.attr("cx", x1 + this.currentBarLength);
+            var xmin = this.clamp(this.getRelX() - this.dragStartXMouse);
+            var xmax = this.clamp(xmin + this.currentBarLength);
+            this.bar0.attr('x', xmin);
+            this.bar0.attr('width', xmax-xmin);
+            this.circleMin.attr("cx", xmin);
+            this.circleMax.attr("cx", xmax);
             // or else we are dragging one of the circles.
         } else if (this.isInverted
             && (this.dragObj.id == this.bar0.attr('id')
@@ -224,10 +225,10 @@ class SmartSlider {
             return;
         } else if(this.dragObj == this.circleSingle){
             // move the one time steper
-            this.singleTimeStepX = Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX()))
+            this.singleTimeStepX = this.clamp(this.getRelX());
             d3.select(this.dragObj).attr("transform", 'translate('+this.singleTimeStepX+', 0)');
         } else {
-            d3.select(this.dragObj).attr("cx", Math.max(this.LEFT, Math.min(this.width - this.RIGHT, this.getRelX())));
+            d3.select(this.dragObj).attr("cx", this.clamp(this.getRelX()));
             if (this.isInverted) {
                 this.bar0
                     .attr('x', this.LEFT)
@@ -255,14 +256,22 @@ class SmartSlider {
         return d3.event.sourceEvent.pageX - this.LEFT - this.x - this.rect.left
     }
 
-
+    clamp(x): number {
+        return Math.max(this.LEFT, Math.min(this.width - this.RIGHT, x));
+    }
 
     set(min: number, max: number) {
-        // seems like this would make sense, 
-        // this.min = min;
-        // this.max = max;
-        this.circleMin.attr("cx", this.valueRange.invert(min));
-        this.circleMax.attr("cx", this.valueRange.invert(max));
+        this.setPos(this.valueRange.invert(min), this.valueRange.invert(max));
+    }
+
+    setPos(xmin: number, xmax: number) {
+        if (xmin == this.circleMin.attr("cx") &&
+            ymin == this.circleMax.attr("cx")) {
+            console.log('saved a slider redraw');
+            return;
+        }
+        this.circleMin.attr("cx", this.clamp(xmin));
+        this.circleMax.attr("cx", this.clamp(xmax));
         // inverted support
         if (this.isInverted) {
             this.bar0
@@ -276,6 +285,23 @@ class SmartSlider {
                 .attr('x', this.circleMin.attr('cx'))
                 .attr('width', this.circleMax.attr('cx') - this.circleMin.attr('cx'));
         }
+    }
+
+    scrollUp() {
+        var start = parseInt(this.bar0.attr('x'));
+        var width = parseInt(this.bar0.attr('width'));
+        var newstart = this.clamp(start+width);
+        var newend = this.clamp(newstart + width);
+        this.setPos(newend-width, newend);
+        this.dragEnd();
+    }
+
+    scrollDown() {
+        var start = parseInt(this.bar0.attr('x'));
+        var width = parseInt(this.bar0.attr('width'));
+        var newstart = this.clamp(start-width);
+        this.setPos(newstart, newstart+width);
+        this.dragEnd();
     }
 
     setIsInverted(inv: boolean): void {

@@ -212,7 +212,11 @@ class TimeSlider {
         this.slider.set(startUnix, endUnix)
     }
 
+    scrollUp() {
+        this.slider.scrollUp();
+    }
 
-
-
+    scrollDown() {
+        this.slider.scrollDown();
+    }
 }
