@@ -522,12 +522,14 @@ module vistorian {
 
     function setupConditionalLogging() {
         bootbox.confirm({
+            closeButton: true,
             size: "large",
             class:"text-left",
-            position: "left",
-            title: "Consent to tracking",
+            //position: "left",
+            //title: "Consent to tracking",
             message: 
-            '<p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+            '<p><strong><big>Consent to tracking</big></strong>\
+            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
             <br> This allows us to understand how the Vistorian is used and to improve it.\
             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
             <br>No personal information will be collected or saved with the tracking data.\
