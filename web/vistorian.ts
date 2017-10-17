@@ -528,17 +528,17 @@ module vistorian {
             title: "Consent to tracking",
             message: 
             '<p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-            <br> This allows us understand how the Vistorian is used and to improve it.\
+            <br> This allows us to understand how the Vistorian is used and to improve it.\
             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
             <br>No personal information will be collected or saved with the tracking data.\
             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
             <p>If you agree to be tracked we will start tracking, and\
             <ul>\
-            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questionsEsto es una lista no ordenada.\
-            <li><strong>Turn on the &#147email screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+            <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
             </ul>\
             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-            <p>Thank you for agreeing to participate in our research\
+            <p>Thank you for agreeing to participate in our research.\
             <p>The Vistorian Team (vistorian@inria.fr)',
             buttons: {
                 confirm: {
