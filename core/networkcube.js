@@ -9206,6 +9206,38 @@ var networkcube;
         }
         return new Blob([ia], { type: mimeString });
     }
+    var msgBox;
+    function showMessage(message, timeout) {
+        if ($('.messageBox'))
+            $('.messageBox').remove();
+        msgBox = $('<div id="div" class="messageBox" style="\
+            width: 100%;\
+            height: 100%;\
+            background-color: #ffffff;\
+            opacity: .9;\
+            position: absolute;\
+            top: 0px;\
+            left: 0px;"></div>');
+        msgBox.append('<div id="div" style="\
+            font-size: 20pt;\
+            font-weight: bold;\
+            font-family: "Helvetica Neue", Helvetica, sans-serif;\
+            width: 500px;\
+            padding-top: 300px;\
+            text-align: center;\
+            margin:auto;">\
+            <p>' + message + '</p></div>');
+        $('body').append(msgBox);
+        msgBox.click(function () {
+            $('.messageBox').remove();
+        });
+        if (timeout) {
+            window.setTimeout(function () {
+                $('.messageBox').fadeOut(1000);
+            }, timeout);
+        }
+    }
+    networkcube.showMessage = showMessage;
 })(networkcube || (networkcube = {}));
 var networkcube;
 (function (networkcube) {
@@ -14684,7 +14716,9 @@ var geometry;
         }
         var ts = Date.now();
         if (cat == null) {
-            cat = getPageName() + "/" + networkcube.getDynamicGraph().name;
+            var url = parent.location.href;
+            var datasetName = url.split('datasetName=')[1];
+            cat = getPageName() + "/" + datasetName;
             console.log(">> CAT: " + cat);
         }
         _traceq.push({ "session": sessionId,
@@ -14702,7 +14736,6 @@ var geometry;
         var formdata = new FormData(), oReq = new XMLHttpRequest();
         var date = new Date();
         var params = window.parent.location.search.replace("?", "").split('&');
-        console.log('window.parent.location', params);
         var tmp, value, vars = {};
         params.forEach(function (item) {
             console.log('item', item);
@@ -14715,7 +14748,10 @@ var geometry;
         console.log('session/userid: ' + uid);
         formdata.append("from", from);
         formdata.append("to", to);
-        formdata.append("subject", '[Vistorian] Screenshot: ' + networkcube.getDynamicGraph().name + ', ' + date.getDate());
+        var url = parent.location.href;
+        var datasetName = url.split('datasetName=')[1];
+        console.log('datasetName:', datasetName);
+        formdata.append("subject", '[Vistorian] Screenshot: ' + datasetName + ', ' + date.getDate());
         formdata.append("note", message + "\n\n(Your unique user ID is " + uid + ".)");
         formdata.append("cc", cc_vistorian);
         if (blob_image)

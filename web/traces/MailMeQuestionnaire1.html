@@ -225,7 +225,9 @@
 
               
                                 sendEmail();
-                                closeWindow();
+                                window.setTimeout(function() {
+                                  closeWindow();
+                                }, 3000);
                               }
 
                             }
@@ -302,7 +304,9 @@
                             sendEmail();
 
                             // Close window
-                            closeWindow();
+                            window.setTimeout(function() {
+                              closeWindow();
+                            }, 3000);
                         }
 
                         function continueBtnPressed()
@@ -378,7 +382,9 @@
                               if(checkedButtons["button5"] == true){Context5 = 'Other'; console.log(Context5); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context5);}
                               // trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', false, null, null);
                               sendEmail();
-                              closeWindow();
+                              window.setTimeout(function() {
+                                closeWindow();
+                              }, 3000);
                             }
                         }
 
@@ -412,6 +418,7 @@
                             {
                               //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
                               trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
+                              networkcube.showMessage('Email send!', 3000);
                             })
                           }
                         }

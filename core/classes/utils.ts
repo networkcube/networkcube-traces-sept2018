@@ -652,5 +652,40 @@ module networkcube {
     }
 
 
+    var msgBox;
+    export function showMessage(message: string, timeout) {
+        if ($('.messageBox'))
+            $('.messageBox').remove();
+    
+        msgBox = $('<div id="div" class="messageBox" style="\
+            width: 100%;\
+            height: 100%;\
+            background-color: #ffffff;\
+            opacity: .9;\
+            position: absolute;\
+            top: 0px;\
+            left: 0px;"></div>');
+        msgBox.append('<div id="div" style="\
+            font-size: 20pt;\
+            font-weight: bold;\
+            font-family: "Helvetica Neue", Helvetica, sans-serif;\
+            width: 500px;\
+            padding-top: 300px;\
+            text-align: center;\
+            margin:auto;">\
+            <p>' + message + '</p></div>');
+        $('body').append(msgBox);
+        msgBox.click(function() {
+            $('.messageBox').remove();
+        })
+    
+        if (timeout) {
+            // Automatically disappear
+            window.setTimeout(function() {
+                $('.messageBox').fadeOut(1000);
+            }, timeout);
+        }
+    }
+
 
 }

@@ -1481,26 +1481,25 @@ function updateLocations() {
 }
 
 
-var msgBox;
-function showMessage(message: string, timeout) {
-    if ($('.messageBox'))
-        $('.messageBox').remove();
+// var msgBox;
+// function showMessage(message: string, timeout) {
+//     if ($('.messageBox'))
+//         $('.messageBox').remove();
 
-    msgBox = $('<div id="div" class="messageBox"></div>');
-    msgBox.append('<div id="div"><p>' + message + '</p></div>');
-    $('body').append(msgBox);
-    msgBox.click(function() {
-        $('.messageBox').remove();
-    })
+//     msgBox = $('<div id="div" class="messageBox"></div>');
+//     msgBox.append('<div id="div"><p>' + message + '</p></div>');
+//     $('body').append(msgBox);
+//     msgBox.click(function() {
+//         $('.messageBox').remove();
+//     })
 
-    if (timeout) {
-        // Automatically disappear
-        window.setTimeout(function() {
-            $('.messageBox').fadeOut(1000);
-        }, timeout);
-    }
-
-}
+//     if (timeout) {
+//         // Automatically disappear
+//         window.setTimeout(function() {
+//             $('.messageBox').fadeOut(1000);
+//         }, timeout);
+//     }
+// }
 
 
 function saveCellChanges() {

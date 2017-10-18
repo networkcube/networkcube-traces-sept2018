@@ -639,22 +639,6 @@ function updateLocations() {
         showMessage('Locations updated successfully!', 2000);
     });
 }
-var msgBox;
-function showMessage(message, timeout) {
-    if ($('.messageBox'))
-        $('.messageBox').remove();
-    msgBox = $('<div id="div" class="messageBox"></div>');
-    msgBox.append('<div id="div"><p>' + message + '</p></div>');
-    $('body').append(msgBox);
-    msgBox.click(function () {
-        $('.messageBox').remove();
-    });
-    if (timeout) {
-        window.setTimeout(function () {
-            $('.messageBox').fadeOut(1000);
-        }, timeout);
-    }
-}
 function saveCellChanges() {
     if (currentCell == undefined)
         return;

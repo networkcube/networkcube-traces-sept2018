@@ -164,7 +164,9 @@
 		var ts = Date.now();
 		if (cat == null) 
 		{
-			cat = getPageName() + "/" + networkcube.getDynamicGraph().name;
+			var url = parent.location.href; 
+			var datasetName = url.split('datasetName=')[1]
+			cat = getPageName() + "/" + datasetName;
 			console.log(">> CAT: " + cat);
 			//cat = getPageName();
 		}
@@ -193,7 +195,6 @@
 		var date = new Date();
 		// var uid = networkcube.getSessionId();
 		var params = window.parent.location.search.replace("?", "").split('&');
-		console.log('window.parent.location', params)
 		var tmp, value, vars = {};
 		params.forEach(function(item) {
 			console.log('item', item)
@@ -207,7 +208,11 @@
 		
 		formdata.append("from", from);
 		formdata.append("to", to);
-		formdata.append("subject", '[Vistorian] Screenshot: ' + networkcube.getDynamicGraph().name + ', ' + date.getDate());
+		// console.log('networkcube.getDynamicGraph().name:', networkcube.getDynamicGraph(), networkcube.getDynamicGraph().name)
+		var url = parent.location.href; 
+		var datasetName = url.split('datasetName=')[1]
+		console.log('datasetName:', datasetName)
+		formdata.append("subject", '[Vistorian] Screenshot: ' + datasetName + ', ' + date.getDate());
 		formdata.append("note", message + "\n\n(Your unique user ID is " + uid + ".)");
 		formdata.append("cc", cc_vistorian);
 		//if (cc_vistorian) 

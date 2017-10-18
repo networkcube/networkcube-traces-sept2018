@@ -298,7 +298,9 @@
                         
                         //window.history.back();
                         sendEmail();
-                        closeWindow();
+                        window.setTimeout(function() {
+                          closeWindow();
+                        }, 3000);
                         window.parent.$('#mailmeQuestionnaireDiv2').css('visibility', 'hidden');
                       }
 
@@ -365,7 +367,9 @@
                         //window.history.back();
                         
                         sendEmail();
-                        closeWindow2();
+                        window.setTimeout(function() {
+                          closeWindow2();
+                        }, 3000);
                       }
 
                       
@@ -386,7 +390,7 @@
                               cc_vistorian = "vistorian@inria.fr";
                             }
 
-                          console.log(">>>>CC:", cc_vistorian);
+                          // console.log(">>>>CC:", cc_vistorian);
 
                           var to = email;
 
@@ -407,6 +411,7 @@
                             {
                               //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
                               trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
+                              networkcube.showMessage('Email send!', 3000);
                             })
                           }
                         }

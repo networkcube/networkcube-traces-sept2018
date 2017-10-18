@@ -93,6 +93,7 @@ declare module networkcube {
     function getBlobFromSVGNode(name: string, svgNode: any, callback: Function): void;
     function getBlobFromSVGString(name: string, svgString: string, width: number, height: number, callback: Function): void;
     function getSVGString(svgNode: any): string;
+    function showMessage(message: string, timeout: any): void;
 }
 declare module networkcube {
     class BasicElement {
