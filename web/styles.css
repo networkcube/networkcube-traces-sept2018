@@ -204,7 +204,7 @@ td{
 	vertical-align: top;
 }
 
-h1{
+body h1{
 	font-size: 30pt;
 	margin-top: 0px;
 	color: #d95f0e;
@@ -213,7 +213,7 @@ h1{
 	/*font-weight: 100;*/
 }
 
-h2{
+body h2{
 	font-size: 20pt;
 	margin-top: 50px;
 	/*font-family: 'Helvetica Neue';*/
@@ -226,26 +226,24 @@ h2{
 	border-radius: 2px;
 }
 
-h3{
+body h3{
 	font-size: 12pt;
 	margin:5px;
 }
 
 
-a{
-	color: #d95f0e;
+body a{
+	color: orange;
+	cursor:pointer;
 }
 
-a.vis_link{
+
+body a.vis_link{
 	font-size: 12pt;
 }
 
-a.underlined{
+body a.underlined{
 	text-decoration: underline;
-}
-
-a{
-	cursor:pointer;
 }
 
 p#intro{
