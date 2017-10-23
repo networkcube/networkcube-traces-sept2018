@@ -105,12 +105,15 @@ def send():
     if send_image is not None:
         with open(send_image, 'rb') as fp:
             img = MIMEImage(fp.read())
+            img.add_header('Content-Disposition', 'attachment', filename=filename)
         msg.attach(img)
 
     if send_svg is not None:
         with open(send_svg, 'rb') as fp:
             img = MIMEImage(fp.read(), _subtype="svg+xml")
+            img.add_header('Content-Disposition', 'attachment', filename=filename)
         msg.attach(img)
+
 
     tos = msg.get_all('to', [])
     ccs = msg.get_all('cc', [])
