@@ -222,7 +222,10 @@
 		if (blob_svg)
 			formdata.append("svg", blob_svg, "vistorian.svg");
 
-		oReq.open("POST", "http://aviz.fr/sendmail/", true);
+                if (location.protocol == "https:")
+                    oReq.open("POST", "https://aviz.saclay.inria.fr/sendmail/", true);
+                else
+                    oReq.open("POST", "http://aviz.fr/sendmail/", true);
 		oReq.send(formdata);
 		console.log('>>>> EMAIL SEND')
 		return trace;

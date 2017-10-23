@@ -188,8 +188,8 @@
         .on('end', ()=>{
             unshowMessage(); 
 
-            this.updateNodes();
             this.updateLinks();
+            this.updateNodes();
             this.updateLayout();
             // package layout coordinates
             var coords = []
