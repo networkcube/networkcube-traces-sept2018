@@ -70,7 +70,12 @@ if(networkcube.isTrackingEnabled())
 
 function enableDisableTracking()
 {
-    setupConditionalLogging();
+    if(networkcube.isTrackingEnabled())
+        {
+               setupConditionalLoggingDisable();
+        } else {
+               setupConditionalLogging(); 
+        }
 }
 
  
@@ -126,6 +131,71 @@ function setupConditionalLogging() {
     });
 }
        
+function setupConditionalLoggingDisable() {
+        bootbox.confirm({
+            closeButton: true,
+            size: "large",
+            class:"text-left",
+            //position: "left",
+            //title: "Consent to tracking",
+            message: 
+            '<p><strong><big>Disable tracking</big></strong>\
+            <p>Please confirm that you want Tracking to be disabled.\
+            <br>Once tracking is disabled no more tracking information will be captured.  Nothing will be sent to the server.\
+            <p>You will be able to restart tracking again (and getting screenshots) if you wish.\
+            <p>The data we gathered from your past use of the Victorian is de-identified and contains no personal information.\
+            <br>If you wish this data to be removed from the server please send a personal email to vistorian@inria.fr <vistorian@inria.fr>.\
+            <p>Thank you for participating in our study.\
+            <br>The Vistorian Team (vistorian@inria.fr)',
+        buttons: {
+            confirm: {
+                label: "CONFIRM",
+                className:  "btn-success pull-right"
+            },
+            cancel: {
+                label:  "Cancel",
+                className:  "btn-warning pull-left"
+            }
+        },
+        callback: function (result) 
+        {
+            if (result == false)
+            {
+                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+                $('#trackingContainer').load('traces/questionnaires-dataview.html');
+                $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+            }else{
+                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+                if($('#trackingButtonsDiv'))
+                {
+                    $('#trackingButtonsDiv').remove()
+                }
+                $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+                bootbox.prompt({
+                      size: "large",
+                      closeButton: false,
+                      class:"text-left",
+                      title: "&nbsp;",
+                       buttons: {
+                        confirm: {
+                            label: "Send",
+                            className:  "btn-success pull-right"
+                        },
+                        cancel: {
+                            label:  "Cancel",
+                            className:  "btn-warning pull-left"
+                        }
+                    },
+                      callback: function(result) {
+                          console.log(result);
+                          //trace.event(null, 'DisableTracking', 'DisableTrackingReason', result);
+                      }
+                    }).find('.bootbox-body').prepend('<p>Please, describe the reason for disabling tracking:</p>');
+            }
+        }
+    });
+}
+
 
 // loads the list of available visualizations and displays them on the left
 function loadVisualizationList() {
