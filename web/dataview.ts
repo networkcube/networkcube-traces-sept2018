@@ -119,6 +119,39 @@ function setupConditionalLogging() {
                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
                 $('#trackingContainer').load('traces/questionnaires-dataview.html');
                 $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+                    /*bootbox.alert({
+                         message: "Thank you for reporting on your activity.",
+                         backdrop: true
+                     });*/
+
+                   bootbox.prompt({
+                        closeButton: false,
+                        class:"text-left",
+                        title: "Thank you for reporting on your activity</p>",
+                        backdrop: true,
+                         buttons: {
+                             confirm: {
+                                 label: false,
+                                 className:  "btn-success pull-right"
+                             },
+                             cancel: {
+                             label:  false,
+                             className:  "btn-warning pull-left"
+                             }
+                         },
+                        inputType: 'checkbox',
+                        inputOptions: [
+                            {
+                                text: '&nbsp;Do not show this message again',
+                                value: '1',
+                            }
+                        ],
+                        callback: function (result) {
+                            console.log(result);
+                        }
+                    });
+
+
             }else{
                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                 if($('#trackingButtonsDiv'))
@@ -176,6 +209,7 @@ function setupConditionalLoggingDisable() {
                       closeButton: false,
                       class:"text-left",
                       title: "&nbsp;",
+                      backdrop: true,
                        buttons: {
                         confirm: {
                             label: "Send",
