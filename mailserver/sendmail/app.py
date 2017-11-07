@@ -35,6 +35,7 @@ def hello():
       <p>From: <input type=text name=from>
          To: <input type=text name=to>
          Subject: <input type=text name=subject>
+         cc: <input type=text name=cc>
          Note: <input type=text name=note>
          Copy to Vistorian? <input type=checkbox name=CopyToVistorian value=Yes>
          Image: <input type=file name=image>

@@ -224,7 +224,10 @@
 		if (blob_svg)
 			formdata.append("svg", blob_svg, "vistorian.svg");
 
-		oReq.open("POST", "http://aviz.fr/sendmail/send", true);
+		if (location.protocol == "https:")
+			oReq.open("POST", "https://aviz.saclay.inria.fr/sendmail/send", true);
+		else
+			oReq.open("POST", "http://aviz.fr/sendmail/send", true);
 		oReq.send(formdata);
 		console.log('>>>> EMAIL SEND')
 		return trace;
@@ -251,7 +254,11 @@
 				
 		formdata.append("email", email);
 
-		oReq.open("POST", "http://aviz.fr/sendmail/register", true);
+		if (location.protocol == "https:")
+			oReq.open("POST", "https://aviz.saclay.inria.fr/sendmail/register", true);
+		else
+			oReq.open("POST", "http://aviz.fr/sendmail/register", true);
+
 		oReq.send(formdata);
 		console.log('>>>> EMAIL SEND');
 	}
