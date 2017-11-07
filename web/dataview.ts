@@ -131,11 +131,11 @@ function setupConditionalLogging() {
                         backdrop: true,
                          buttons: {
                              confirm: {
-                                 label: false,
+                                 label: "OK",
                                  className:  "btn-success pull-right"
                              },
                              cancel: {
-                             label:  false,
+                             label:  "Cancel",
                              className:  "btn-warning pull-left"
                              }
                          },
@@ -212,7 +212,7 @@ function setupConditionalLoggingDisable() {
                       backdrop: true,
                        buttons: {
                         confirm: {
-                            label: "Send",
+                            label: "SEND",
                             className:  "btn-success pull-right"
                         },
                         cancel: {
