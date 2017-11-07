@@ -233,23 +233,11 @@
 		return trace;
 	}
 
-	function sendUserTrackingRegistrationFunction() 
+	function sendUserTrackingRegistrationFunction(email) 
 	{
 		var formdata = new FormData(),
 			oReq = new XMLHttpRequest();
-	
-		var date = new Date();
-		// var uid = networkcube.getSessionId();
-		var params = window.parent.location.search.replace("?", "").split('&');
-		var tmp, value, vars = {};
-		params.forEach(function(item) {
-			console.log('item', item)
-			tmp = item.split("=");
-			console.log('tmp', tmp)
-            value = decodeURIComponent(tmp[1]);
-			vars[tmp[0]] = value;
-		});
-		var email = vars['email']
+
 		console.log('session/email: ' + email)
 				
 		formdata.append("email", email);

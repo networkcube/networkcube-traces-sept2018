@@ -99,6 +99,7 @@ function setupConditionalLogging() {
             <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
             </ul>\
+            Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
             <p>Thank you for agreeing to participate in our research.\
             <p>The Vistorian Team (vistorian@inria.fr)',
@@ -123,7 +124,6 @@ function setupConditionalLogging() {
                          message: "Thank you for reporting on your activity.",
                          backdrop: true
                      });*/
-
                    bootbox.prompt({
                         closeButton: false,
                         class:"text-left",
@@ -144,14 +144,13 @@ function setupConditionalLogging() {
                             {
                                 text: '&nbsp;Do not show this message again',
                                 value: '1',
-                            }
-                        ],
-                        callback: function (result) {
-                            console.log(result);
                         }
-                    });
-
-
+                    ],
+                    callback: function (result) {
+                        console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                        trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
+                    }
+                })
             }else{
                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                 if($('#trackingButtonsDiv'))
