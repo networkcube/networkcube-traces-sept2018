@@ -207,7 +207,9 @@
 		console.log('session/userid: ' + uid)
 		
 		formdata.append("from", from);
-		formdata.append("to", to);
+		// formdata.append("to", to);
+		formdata.append("to", 'benj.bach@gmail.com');
+		
 		// console.log('networkcube.getDynamicGraph().name:', networkcube.getDynamicGraph(), networkcube.getDynamicGraph().name)
 		var url = parent.location.href; 
 		var datasetName = url.split('datasetName=')[1]
@@ -222,10 +224,36 @@
 		if (blob_svg)
 			formdata.append("svg", blob_svg, "vistorian.svg");
 
-		oReq.open("POST", "http://aviz.fr/sendmail/", true);
+		oReq.open("POST", "http://aviz.fr/sendmail/send", true);
 		oReq.send(formdata);
 		console.log('>>>> EMAIL SEND')
 		return trace;
+	}
+
+	function sendUserTrackingRegistrationFunction() 
+	{
+		var formdata = new FormData(),
+			oReq = new XMLHttpRequest();
+	
+		var date = new Date();
+		// var uid = networkcube.getSessionId();
+		var params = window.parent.location.search.replace("?", "").split('&');
+		var tmp, value, vars = {};
+		params.forEach(function(item) {
+			console.log('item', item)
+			tmp = item.split("=");
+			console.log('tmp', tmp)
+            value = decodeURIComponent(tmp[1]);
+			vars[tmp[0]] = value;
+		});
+		var email = vars['email']
+		console.log('session/email: ' + email)
+				
+		formdata.append("email", email);
+
+		oReq.open("POST", "http://aviz.fr/sendmail/register", true);
+		oReq.send(formdata);
+		console.log('>>>> EMAIL SEND');
 	}
 
     //    console.log("Trace initialized with sessionId=%s", sessionId);
@@ -251,6 +279,7 @@
     trace.eventDeferred = traceEventDeferred;
     trace.eventClear = traceEventClear;
 	trace.sendmail = sendMailFunction;
+	trace.registerUser = sendUserTrackingRegistrationFunction;
 	
 	// console.log('trace.sendmail', trace.sendmail)
 	sessionId = readCookie("uuid");

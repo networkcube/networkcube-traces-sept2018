@@ -1,6 +1,8 @@
 <html>
 <head>
   <script src="../../core/networkcube.js"></script>
+  <script src="js/canvas-to-blob.min.js"></script>
+  <script src="https://github.com/niklasvh/html2canvas/releases/download/v0.5.0-beta4/html2canvas.js"></script>
 <style>
 
     body{
@@ -412,20 +414,120 @@
                           if(format && format == 'PNG')
                           {
                             // var svgString = networkcube.getSVGString(window.parent.$('#visSvg'));
-                            var svgString = window.parent.$('#visFrame').find('iframe').contents().find('#visSvg');
-                            var d3Object = d3.select(svgString.get(0));
-                            networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
+
+                            var url = parent.location.href; 
+
+                            // process D3 visualizations
+                            if(url.indexOf('nodelink') > -1)
                             {
-                              //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
-                              trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
-                              networkcube.showMessage('Email send!', 3000);
-                            })
+                              var svgString = window.parent.$('#visFrame').find('iframe').contents().find('#visSvg');
+                              var d3Object = d3.select(svgString.get(0));
+  
+                              networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
+                              {
+                                //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
+                                trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
+                                networkcube.showMessage('Email send!', 3000);
+                              }, 'white')
+                            }
+                            // if not d3, but webgl
+                            else 
+                            if(url.indexOf('matrix') > -1)
+                            {
+                              // getHtml2Canvas('networkcube-matrix-visDiv');
+                              getSVGCanvasMixture('visDiv')
+                            }
+                            else 
+                            if(url.indexOf('dynamicego') > -1)
+                            {
+                              // getHtml2Canvas('visDiv');
+                              getSVGCanvasMixture('visDiv')
+                            }
+                            else 
+                            if(url.indexOf('map') > -1)
+                            {
+                              // getHtml2Canvas('visDiv');
+                              getHtml2Canvas('visDiv')
+                            }
                           }
                         }
+
+                        // gets the PNG screenshot for a visualization that mixes canvas and 
+                        // d3 elemens. A little tricky.
+                        function getSVGCanvasMixture(elementId)
+                        {
+                          var svgString = window.parent.$('#visFrame').find('iframe').contents().find('#visSvg');
+                          var d3Object = d3.select(svgString.get(0));
+                          networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
+                          {
+                            var finalCanvas = document.createElement('canvas');
+                            var iFrame = window.parent.$('#visFrame').find('iframe'); 
+                            finalCanvas.width  = iFrame.attr('width')
+                            finalCanvas.height = iFrame.attr('height')
+                            
+                            var ctx = finalCanvas.getContext('2d');
+                            var img = new Image();
+                            img.onload = function()
+                            {
+                              ctx.drawImage(img, 0, 0)
+                              var foreignObject = $(window.parent.$('#visFrame').find('iframe').contents().find('foreignObject').get(0)); 
+                              var canvas = window.parent.$('#visFrame').find('iframe').contents().find('canvas').get(0); 
+                              ctx.drawImage(canvas, foreignObject.attr('x'), foreignObject.attr('y'));
+
+                              finalCanvas.toBlob(
+                                function (blob) {
+                                  // console.log('download canvas')
+                                  // var fileNameToSaveAs = name + '_' + new Date().toUTCString() + '.png';
+                                  // var downloadLink = document.createElement("a")
+                                  // downloadLink.download = fileNameToSaveAs;
+                                  // downloadLink.href = window.webkitURL.createObjectURL(blob);
+                                  // downloadLink.click();
+                                  // console.log('SEND MAIL', blob, '<<<')
+                                  trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
+                                  networkcube.showMessage('Email send!', 3000);
+                                }
+                              );
+                            }
+                            img.src = URL.createObjectURL(blob);
+                          }, 'white')
+                        }
+
+                        function getHtml2Canvas(elementId)
+                        {
+                          html2canvas(window.parent.$('#visFrame').find('iframe').contents().find('#'+elementId), 
+                          {
+                            useCORS: true,
+                            onrendered: function(canvas) 
+                            {
+                              var svgString = window.parent.$('#visFrame').find('iframe').contents().find('#svgOverlay');
+                              var d3Object = d3.select(svgString.get(0));
+                              networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
+                              {
+                                var ctx = canvas.getContext('2d');
+                                var img = new Image();
+                                img.onload = function()
+                                {
+                                  ctx.drawImage(img, 0, 0)
+                                  canvas.toBlob(function (blob) 
+                                  {
+                                    console.log('download canvas')
+                                    // var fileNameToSaveAs = name + '_' + new Date().toUTCString() + '.png';
+                                    // var downloadLink = document.createElement("a")
+                                    // downloadLink.download = fileNameToSaveAs;
+                                    // downloadLink.href = window.webkitURL.createObjectURL(blob);
+                                    // downloadLink.click();
+                                    // console.log('SEND MAIL', blob, '<<<')
+                                    trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
+                                    networkcube.showMessage('Email send!', 3000);
+                                  });
+                                }
+                                img.src = URL.createObjectURL(blob);
+                              });
+                            }
+                          });
+                        }                              
                         
-
-
-
+          
                         // function sendEmail($toEmail, $fromEmail, $subject, $message)
                         // {
 

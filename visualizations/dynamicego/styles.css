@@ -7,21 +7,21 @@
 
 /*NODES*/
 
-.nodeLabel{
+/* .nodeLabel{
 	font-family: 'Helvetiva Neue', sans-serif;	
 	font-size: 8pt;
     text-anchor: end;
 	cursor: pointer;	
-}
+} */
 
-.egolabel{
+/* .egolabel{
 	fill: #000;
 	text-decoration: underline;
 	font-weight: bold;
 	cursor: pointer;	
-}
+} */
 
-.rowBar{
+/* .rowBar{
     stroke-width: 1;
     z-index: 100;
 }
@@ -31,21 +31,21 @@
 }
 .rowBar-odd{
     fill: none;
-}
+} */
 
 /*LINKS*/
 
-.arc{
+/* .arc{
 	fill:none;		
 	stroke:#000;
 	stroke-width:1;
     opacity: .5;
 	marker-end: url(#end-arrow);
-}
+} */
 
-.linkAnchor{
+/* .linkAnchor{
     stroke:none;
-}
+} */
 
 
 

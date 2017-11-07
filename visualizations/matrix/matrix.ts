@@ -311,6 +311,9 @@ class MatrixLabels{
       .attr('id', (d, i) => { return 'nodeLabel_left_' + d.id(); })
       .attr('class', 'labelsLeft nodeLabel')
       .attr('text-anchor', 'end')
+      .style('font-family', 'Helvetica Neue')
+      .style('font-weight', 100)
+      .style('cursor','pointer')
       .attr('alignment-baseline', 'middle')
       .attr('x', this.margin.left - 10)
       .attr('y', (d, i) => { return leftLabelPosition(d.id())})
@@ -342,6 +345,9 @@ class MatrixLabels{
     labelsTop.enter().append('text')
       .attr('id', (d, i) => { return 'nodeLabel_top_' + d.id(); })
       .attr('class', 'labelsTop nodeLabel')
+      .style('font-family', 'Helvetica Neue')
+      .style('font-weight', 100)
+      .style('cursor','pointer')
       .text((d, i) => { return d.label(); })
       .attr('x', (d, i) => { return topLabelPosition(d.id())  })
       .attr('y', this.margin.left - 10)
@@ -1236,11 +1242,11 @@ let vizHeight: number = window.innerHeight - 115;
 let appendToBody = domId => {return  $('<div id='+ domId +'></div>').appendTo('body')};
 let menuJQ = appendToBody("networkcube-matrix-menu");
 let tsJQ = appendToBody("networkcube-matrix-timelineDiv'")
-let labJQ = appendToBody("networkcube-matrix-visDiv");
+let labJQ = appendToBody("visDiv");
 
 let svg = d3.select(labJQ.get(0))
   .append('svg')
-  .attr('id', 'networkcube-matrix-visSvg')
+  .attr('id', 'visSvg')
   .attr('width', vizWidth)
   .attr('height', vizHeight);
 let foreignObject: D3.Selection = svg.append('foreignObject')

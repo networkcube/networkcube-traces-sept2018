@@ -47,8 +47,28 @@ def hello():
 def test():
     return "test OK"
 
+@app.route("/register", methods=['GET', 'POST'])
+def sendUserRegistration():
+    send_from = 'vistorian'
+    send_to = 'vanessa.serrano@iqs.url.edu'
+    send_cc = 'benj.bach@gmail.com'
+    send_subject = '[Vistorian] New user tracking registration'
+    send_note = '??'    
+    textBody = "Hi Vistorians, This is a tracking request from a new user. Their email address is " + request.form['email'].strip() + "."
 
-@app.route("/", methods=['GET', 'POST'])
+    msg = MIMEText('')
+    msg['Subject'] = send_subject
+    msg['From'] = send_from
+    msg['To'] = send_to
+    msg['CC'] = send_cc
+
+    s = smtplib.SMTP('smtp.inria.fr')
+    s.send_message(msg)
+    s.quit()
+
+
+
+@app.route("/send", methods=['GET', 'POST'])
 def send():
     try:
         send_from = request.form['from'].strip()
@@ -105,12 +125,15 @@ def send():
     if send_image is not None:
         with open(send_image, 'rb') as fp:
             img = MIMEImage(fp.read())
+            img.add_header('Content-Disposition', 'attachment', filename=filename)
         msg.attach(img)
 
     if send_svg is not None:
         with open(send_svg, 'rb') as fp:
             img = MIMEImage(fp.read(), _subtype="svg+xml")
+            img.add_header('Content-Disposition', 'attachment', filename=filename)
         msg.attach(img)
+
 
     tos = msg.get_all('to', [])
     ccs = msg.get_all('cc', [])

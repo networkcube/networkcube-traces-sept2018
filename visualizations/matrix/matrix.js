@@ -9,7 +9,7 @@ var NMargin = (function () {
         this.top = v;
     };
     return NMargin;
-}());
+})();
 var MatrixMenu = (function () {
     function MatrixMenu(elem, matrix) {
         this.elem = elem;
@@ -45,7 +45,7 @@ var MatrixMenu = (function () {
         $('#cellSizeBox').val(val);
     };
     return MatrixMenu;
-}());
+})();
 var MatrixTimeSlider = (function () {
     function MatrixTimeSlider(elem, matrix, width) {
         this.elem = elem;
@@ -66,7 +66,7 @@ var MatrixTimeSlider = (function () {
         this.timeSlider.set(sT, eT);
     };
     return MatrixTimeSlider;
-}());
+})();
 var CellLabel = (function () {
     function CellLabel() {
         this.cellLabelBackground = glutils.selectAll()
@@ -107,7 +107,7 @@ var CellLabel = (function () {
             .style('opacity', .8);
     };
     return CellLabel;
-}());
+})();
 var MatrixOverview = (function () {
     function MatrixOverview(svg, width, height, matrix) {
         var _this = this;
@@ -188,7 +188,7 @@ var MatrixOverview = (function () {
         this.context.attr("fill", "url(#bg)");
     };
     return MatrixOverview;
-}());
+})();
 var MatrixLabels = (function () {
     function MatrixLabels(svg, margin, matrix) {
         this.svg = svg;
@@ -206,6 +206,9 @@ var MatrixLabels = (function () {
             .attr('id', function (d, i) { return 'nodeLabel_left_' + d.id(); })
             .attr('class', 'labelsLeft nodeLabel')
             .attr('text-anchor', 'end')
+            .style('font-family', 'Helvetica Neue')
+            .style('font-weight', 100)
+            .style('cursor', 'pointer')
             .attr('alignment-baseline', 'middle')
             .attr('x', this.margin.left - 10)
             .attr('y', function (d, i) { return leftLabelPosition(d.id()); })
@@ -232,6 +235,9 @@ var MatrixLabels = (function () {
         labelsTop.enter().append('text')
             .attr('id', function (d, i) { return 'nodeLabel_top_' + d.id(); })
             .attr('class', 'labelsTop nodeLabel')
+            .style('font-family', 'Helvetica Neue')
+            .style('font-weight', 100)
+            .style('cursor', 'pointer')
             .text(function (d, i) { return d.label(); })
             .attr('x', function (d, i) { return topLabelPosition(d.id()); })
             .attr('y', this.margin.left - 10)
@@ -277,15 +283,15 @@ var MatrixLabels = (function () {
             return 100;
         })
             .style('font-size', Math.min(this.cellSize, 20));
-        for (var i_1 = 0; i_1 < highlightedLinks.length; i_1++) {
-            d3.selectAll('#nodeLabel_left_' + highlightedLinks[i_1])
+        for (var i = 0; i < highlightedLinks.length; i++) {
+            d3.selectAll('#nodeLabel_left_' + highlightedLinks[i])
                 .style('font-weight', 900);
-            d3.selectAll('#nodeLabel_top_' + highlightedLinks[i_1])
+            d3.selectAll('#nodeLabel_top_' + highlightedLinks[i])
                 .style('font-weight', 900);
         }
     };
     return MatrixLabels;
-}());
+})();
 var MatrixVisualization = (function () {
     function MatrixVisualization(elem, width, height, matrix) {
         var _this = this;
@@ -433,8 +439,8 @@ var MatrixVisualization = (function () {
                     this.scene.remove(frame);
                 }
         }
-        for (var i_2 = 0; i_2 < this.guideLines.length; i_2++) {
-            this.scene.remove(this.guideLines[i_2]);
+        for (var i = 0; i < this.guideLines.length; i++) {
+            this.scene.remove(this.guideLines[i]);
         }
         this.vertexPositions = [];
         this.vertexColors = [];
@@ -546,7 +552,7 @@ var MatrixVisualization = (function () {
         var mat = new THREE.LineBasicMaterial({ color: 0xeeeeee, linewidth: 1 });
         var x, y;
         var j = 0;
-        for (var i_3 = 0; i_3 <= h; i_3 += this.cellSize) {
+        for (var i = 0; i <= h; i += this.cellSize) {
             pos = j * this.cellSize + this.offset[1];
             m = new THREE.Line(geometry1, mat);
             m.position.set(0, -pos, 0);
@@ -555,7 +561,7 @@ var MatrixVisualization = (function () {
             j++;
         }
         j = 0;
-        for (var i_4 = 0; i_4 <= w; i_4 += this.cellSize) {
+        for (var i = 0; i <= w; i += this.cellSize) {
             pos = j * this.cellSize + this.offset[0];
             m = new THREE.Line(geometry2, mat);
             m.position.set(pos, 0, 0);
@@ -615,7 +621,7 @@ var MatrixVisualization = (function () {
         this.matrix.updateTransform(z, tr);
     };
     return MatrixVisualization;
-}());
+})();
 var Matrix = (function () {
     function Matrix() {
         var _this = this;
@@ -624,18 +630,18 @@ var Matrix = (function () {
             var highlightedLinksIds = [];
             var highlightedLinks = _this._dgraph.links().highlighted().toArray();
             if (highlightedLinks.length > 0) {
-                for (var i_5 = 0; i_5 < highlightedLinks.length; i_5++) {
-                    if (!highlightedLinks[i_5].isVisible())
+                for (var i = 0; i < highlightedLinks.length; i++) {
+                    if (!highlightedLinks[i].isVisible())
                         continue;
-                    highlightedNodesIds.push(highlightedLinks[i_5].source.id());
-                    highlightedNodesIds.push(highlightedLinks[i_5].target.id());
-                    highlightedLinksIds.push(highlightedLinks[i_5].id());
+                    highlightedNodesIds.push(highlightedLinks[i].source.id());
+                    highlightedNodesIds.push(highlightedLinks[i].target.id());
+                    highlightedLinksIds.push(highlightedLinks[i].id());
                 }
             }
             else {
                 var highlightedNodes = _this._dgraph.nodes().highlighted().toArray();
-                for (var i_6 = 0; i_6 < highlightedNodes.length; i_6++) {
-                    var node = highlightedNodes[i_6];
+                for (var i = 0; i < highlightedNodes.length; i++) {
+                    var node = highlightedNodes[i];
                     if (node.isVisible()) {
                         for (var _i = 0, _a = node.links().toArray(); _i < _a.length; _i++) {
                             var link = _a[_i];
@@ -767,15 +773,15 @@ var Matrix = (function () {
         if (orderType == 'alphanumerical') {
             var nodes2 = this._dgraph.nodes().visible().sort('label').toArray();
             this.nodeOrder = [];
-            for (var i_7 = 0; i_7 < nodes2.length; i_7++) {
-                this.nodeOrder[nodes2[i_7].id()] = i_7;
+            for (var i = 0; i < nodes2.length; i++) {
+                this.nodeOrder[nodes2[i].id()] = i;
             }
         }
         else if (orderType == 'reverse-alpha') {
             var nodes2 = this._dgraph.nodes().visible().sort('label', false).toArray();
             this.nodeOrder = [];
-            for (var i_8 = 0; i_8 < nodes2.length; i_8++) {
-                this.nodeOrder[nodes2[i_8].id()] = i_8;
+            for (var i = 0; i < nodes2.length; i++) {
+                this.nodeOrder[nodes2[i].id()] = i;
             }
         }
         else if (orderType == 'degree') {
@@ -784,8 +790,8 @@ var Matrix = (function () {
                 return n.neighbors().length;
             })
                 .sort('degree').toArray();
-            for (var i_9 = 0; i_9 < nodes2.length; i_9++) {
-                this.nodeOrder[nodes2[i_9].id()] = i_9;
+            for (var i = 0; i < nodes2.length; i++) {
+                this.nodeOrder[nodes2[i].id()] = i;
             }
         }
         else if (orderType == 'similarity') {
@@ -799,8 +805,8 @@ var Matrix = (function () {
         else {
             var visibleNodes = this._dgraph.nodes().visible().toArray();
             this.nodeOrder = [];
-            for (var i_10 = 0; i_10 < visibleNodes.length; i_10++) {
-                this.nodeOrder[visibleNodes[i_10].id()] = i_10;
+            for (var i = 0; i < visibleNodes.length; i++) {
+                this.nodeOrder[visibleNodes[i].id()] = i;
             }
         }
         this.resetTransform();
@@ -835,8 +841,8 @@ var Matrix = (function () {
         var visibleData = {};
         var row, col;
         var node;
-        for (var i_11 = 0; i_11 < leftNodes.length; i_11++) {
-            node = leftNodes[i_11];
+        for (var i = 0; i < leftNodes.length; i++) {
+            node = leftNodes[i];
             if (node.isVisible()) {
                 row = this.nodeOrder[node.id()] - this.bbox.y0;
                 for (var _i = 0, _a = node.links().toArray(); _i < _a.length; _i++) {
@@ -904,17 +910,17 @@ var Matrix = (function () {
         this.cellLabel.updateCellLabel(mx, my, val, fw);
     };
     return Matrix;
-}());
+})();
 var matrix = new Matrix();
 var vizWidth = window.innerWidth - 10;
 var vizHeight = window.innerHeight - 115;
 var appendToBody = function (domId) { return $('<div id=' + domId + '></div>').appendTo('body'); };
 var menuJQ = appendToBody("networkcube-matrix-menu");
 var tsJQ = appendToBody("networkcube-matrix-timelineDiv'");
-var labJQ = appendToBody("networkcube-matrix-visDiv");
+var labJQ = appendToBody("visDiv");
 var svg = d3.select(labJQ.get(0))
     .append('svg')
-    .attr('id', 'networkcube-matrix-visSvg')
+    .attr('id', 'visSvg')
     .attr('width', vizWidth)
     .attr('height', vizHeight);
 var foreignObject = svg.append('foreignObject')
@@ -937,3 +943,4 @@ matrix.setCellLabel(cellLabel);
 matrix.setOverview(matrixOverview);
 matrix.setVis(matrixVis);
 networkcube.addEventListener('timeRange', matrix.timeRangeHandler);
+//# sourceMappingURL=matrix.js.map

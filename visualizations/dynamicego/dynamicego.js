@@ -104,6 +104,10 @@ function createNodes() {
     })
         .text(function (d) { return d.label() + ' (' + d.neighbors().size() + ')'; })
         .attr('class', 'nodeLabel')
+        .style('font-family', 'Helvetica Neue')
+        .style('font-size', '8pt')
+        .style('text-anchor', 'end')
+        .style('cursor', 'pointer')
         .style('font-weight', NODE_LABEL_WEIGHT)
         .style('fill', NODE_LABEL_COLOR)
         .on('mouseover', function (d, i) {

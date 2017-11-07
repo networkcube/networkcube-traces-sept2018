@@ -480,14 +480,22 @@ module networkcube {
         console.log('SVG SIZE: ' + width, height) 
         getBlobFromSVGString(name, getSVGString(d3.select('#'+svgId).node()), width, height, callback)
     }
-    export function getBlobFromSVGNode(name:string, svgNode, callback:Function)
+    export function getBlobFromSVGNode(name:string, svgNode, callback:Function, backgroundColor?:string)
     {
         var string = getSVGString(svgNode);
         var width = svgNode.getAttribute('width')
         var height = svgNode.getAttribute('height') 
-        getBlobFromSVGString(name, string, width, height, callback)
+        if(width == null)
+        {
+            width = window.innerWidth;
+        }
+        if(height == null)
+        {
+            height = window.innerHeight;
+        }
+        getBlobFromSVGString(name, string, width, height, callback, backgroundColor)
     }
-    export function getBlobFromSVGString(name:string, svgString:string, width:number, height:number, callback:Function)
+    export function getBlobFromSVGString(name:string, svgString:string, width:number, height:number, callback:Function, backgroundColor?:string)
     {
         // get SVG string
         // CREATE PNG
@@ -509,8 +517,10 @@ module networkcube {
         image.onload = function() 
         {
             context.clearRect ( 0, 0, width, height );
-            context.fillStyle = "white";
-            context.fillRect(0, 0, canvas.width, canvas.height);
+            if(backgroundColor){
+                context.fillStyle = backgroundColor;
+                context.fillRect(0, 0, canvas.width, canvas.height);
+            }
             context.drawImage(image, 0, 0, width, height);
         
             canvas.toBlob(function(blob) 
@@ -527,6 +537,36 @@ module networkcube {
         // // ?? 
         // return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
     }
+
+    // function generateStyleDefs(svgDomElement)
+    // {
+    //     var styleDefs = "";
+    //     var sheets = document.styleSheets;
+    //     for (var i = 0; i < sheets.length; i++) {
+    //       var rules = sheets[i].cssRules;
+    //       for (var j = 0; j < rules.length; j++) {
+    //         var rule = rules[j];
+    //         if (rule.style) {
+    //           var selectorText = rule.selectorText;
+    //           var elems = svgDomElement.querySelectorAll(selectorText);
+    //           console.log('elems', svgDomElement, elems.length)
+    //           if (elems.length) {
+    //             styleDefs += selectorText + " { " + rule.style.cssText + " }\n";
+    //           }
+    //         }
+    //       }
+    //     }
+      
+    //     var s = document.createElement('style');
+    //     s.setAttribute('type', 'text/css');
+    //     s.innerHTML = "<![CDATA[\n" + styleDefs + "\n]]>";
+    //     //somehow cdata section doesn't always work; you could use this instead:
+    //     //s.innerHTML = styleDefs;
+      
+    //     var defs = document.createElement('defs');
+    //     defs.appendChild(s);
+    //     svgDomElement.insertBefore(defs, svgDomElement.firstChild);
+    //   }
 
     // export function getPNGURL(svgId):String
     // {

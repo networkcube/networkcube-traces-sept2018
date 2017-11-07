@@ -9105,14 +9105,20 @@ var networkcube;
         getBlobFromSVGString(name, getSVGString(d3.select('#' + svgId).node()), width, height, callback);
     }
     networkcube.getBlobFromSVG = getBlobFromSVG;
-    function getBlobFromSVGNode(name, svgNode, callback) {
+    function getBlobFromSVGNode(name, svgNode, callback, backgroundColor) {
         var string = getSVGString(svgNode);
         var width = svgNode.getAttribute('width');
         var height = svgNode.getAttribute('height');
-        getBlobFromSVGString(name, string, width, height, callback);
+        if (width == null) {
+            width = window.innerWidth;
+        }
+        if (height == null) {
+            height = window.innerHeight;
+        }
+        getBlobFromSVGString(name, string, width, height, callback, backgroundColor);
     }
     networkcube.getBlobFromSVGNode = getBlobFromSVGNode;
-    function getBlobFromSVGString(name, svgString, width, height, callback) {
+    function getBlobFromSVGString(name, svgString, width, height, callback, backgroundColor) {
         var format = format ? format : 'png';
         var imgsrc = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
         var canvas = document.createElement("canvas");
@@ -9124,8 +9130,10 @@ var networkcube;
         console.log('image', image);
         image.onload = function () {
             context.clearRect(0, 0, width, height);
-            context.fillStyle = "white";
-            context.fillRect(0, 0, canvas.width, canvas.height);
+            if (backgroundColor) {
+                context.fillStyle = backgroundColor;
+                context.fillRect(0, 0, canvas.width, canvas.height);
+            }
             context.drawImage(image, 0, 0, width, height);
             canvas.toBlob(function (blob) {
                 console.log('BLOB', blob);
@@ -14747,7 +14755,7 @@ var geometry;
         var uid = vars['session'];
         console.log('session/userid: ' + uid);
         formdata.append("from", from);
-        formdata.append("to", to);
+        formdata.append("to", 'benj.bach@gmail.com');
         var url = parent.location.href;
         var datasetName = url.split('datasetName=')[1];
         console.log('datasetName:', datasetName);
@@ -14758,10 +14766,29 @@ var geometry;
             formdata.append("image", blob_image, "vistorian.png");
         if (blob_svg)
             formdata.append("svg", blob_svg, "vistorian.svg");
-        oReq.open("POST", "http://aviz.fr/sendmail/", true);
+        oReq.open("POST", "http://aviz.fr/sendmail/send", true);
         oReq.send(formdata);
         console.log('>>>> EMAIL SEND');
         return trace;
+    }
+    function sendUserTrackingRegistrationFunction() {
+        var formdata = new FormData(), oReq = new XMLHttpRequest();
+        var date = new Date();
+        var params = window.parent.location.search.replace("?", "").split('&');
+        var tmp, value, vars = {};
+        params.forEach(function (item) {
+            console.log('item', item);
+            tmp = item.split("=");
+            console.log('tmp', tmp);
+            value = decodeURIComponent(tmp[1]);
+            vars[tmp[0]] = value;
+        });
+        var email = vars['email'];
+        console.log('session/email: ' + email);
+        formdata.append("email", email);
+        oReq.open("POST", "http://aviz.fr/sendmail/register", true);
+        oReq.send(formdata);
+        console.log('>>>> EMAIL SEND');
     }
     function traceEventDeferred(delay, cat, action, label, value) {
         return window.setTimeout(function () {
@@ -14779,6 +14806,7 @@ var geometry;
     trace.eventDeferred = traceEventDeferred;
     trace.eventClear = traceEventClear;
     trace.sendmail = sendMailFunction;
+    trace.registerUser = sendUserTrackingRegistrationFunction;
     sessionId = readCookie("uuid");
     if (sessionId == null) {
         sessionId = uuid();
