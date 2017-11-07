@@ -28,6 +28,8 @@ var visualizations = [
 
 var messages: string[] = [];
 
+var showMessageAgain: null;
+
 
 init()
 
@@ -100,6 +102,7 @@ function setupConditionalLogging() {
             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
             </ul>\
             Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
+            <p>\
             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
             <p>Thank you for agreeing to participate in our research.\
             <p>The Vistorian Team (vistorian@inria.fr)',
@@ -120,37 +123,39 @@ function setupConditionalLogging() {
                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
                 $('#trackingContainer').load('traces/questionnaires-dataview.html');
                 $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+                console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
                     /*bootbox.alert({
                          message: "Thank you for reporting on your activity.",
                          backdrop: true
                      });*/
-                   bootbox.prompt({
-                        closeButton: false,
-                        class:"text-left",
-                        title: "Thank you for reporting on your activity</p>",
-                        backdrop: true,
-                         buttons: {
-                             confirm: {
-                                 label: "OK",
-                                 className:  "btn-success pull-right"
+                   if (showMessageAgain == null){
+                       bootbox.confirm({
+                            closeButton: true,
+                            //size: "small",
+                            class:"text-left",
+                            backdrop: true,
+                            message: 
+                            '<p><big>Thank you for reporting on your activity</big>\
+                             <p><input id="showMessageAgainInput" type="checkbox" name="ShowMessageAgain" onkeyup="localStorage.setItem(\'SHOW_MESSAGE_AGAIN\', document.getElementById(\'showMessageAgainInput\').value)"> &nbsp;Do not show this message again<br>',
+                             buttons: {
+                                 confirm: {
+                                     label: "OK",
+                                     className:  "btn-success pull-right"
+                                 },
+                                 cancel: {
+                                 label:  "Cancel",
+                                 className:  "btn-warning pull-left"
+                                 }
                              },
-                             cancel: {
-                             label:  "Cancel",
-                             className:  "btn-warning pull-left"
-                             }
-                         },
-                        inputType: 'checkbox',
-                        inputOptions: [
-                            {
-                                text: '&nbsp;Do not show this message again',
-                                value: '1',
+                            
+                        callback: function (result) {
+                            if ($('#showMessageAgainInput').is(':checked'))
+                                showMessageAgain = true;
+                            console.log("RESULT", localStorage.getItem("SHOW_MESSAGE_AGAIN"));
                         }
-                    ],
-                    callback: function (result) {
-                        console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                        trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
-                    }
-                })
+                    })
+                   }
             }else{
                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                 if($('#trackingButtonsDiv'))
@@ -203,13 +208,17 @@ function setupConditionalLoggingDisable() {
                     $('#trackingButtonsDiv').remove()
                 }
                 $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
-                bootbox.prompt({
-                      size: "large",
-                      closeButton: false,
-                      class:"text-left",
-                      title: "&nbsp;",
-                      backdrop: true,
-                       buttons: {
+                bootbox.confirm({
+
+
+                    closeButton: true,
+                    size: "large",
+                    class:"text-left",
+                    message: 
+                    '<p>Please, describe the reason for disabling tracking:\
+                    <p><textarea id="reasonDisablingInput" type="text" name="reasonDisabling" cols="50" onkeyup="localStorage.setItem(\'REASON_DISABLING\', document.getElementById(\'reasonDisablingInput\').value)">',
+                    backdrop: true,
+                    buttons: {
                         confirm: {
                             label: "SEND",
                             className:  "btn-success pull-right"
@@ -219,17 +228,17 @@ function setupConditionalLoggingDisable() {
                             className:  "btn-warning pull-left"
                         }
                     },
-                      callback: function(result) {
-                          console.log(result);
-                          //trace.event(null, 'DisableTracking', 'DisableTrackingReason', result);
+                        callback: function(result) {
+                          if (result == true){
+                            localStorage.setItem("REASON_DISABLING", localStorage.getItem("REASON_DISABLING"));
+                            console.log('REASON_DISABLING: ', localStorage.getItem("REASON_DISABLING"));                          
                       }
-                    }).find('.bootbox-body').prepend('<p>Please, describe the reason for disabling tracking:</p>');
+                    });
             }
         }
     });
 }
-
-
+            
 // loads the list of available visualizations and displays them on the left
 function loadVisualizationList() {
     // create visualization links
