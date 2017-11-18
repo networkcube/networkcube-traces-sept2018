@@ -297,7 +297,7 @@ var vistorian;
         console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled());
         if (networkcube.isTrackingEnabled()) {
             $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-            $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+            $('#trackingContainer').load('../traces/questionnaires.html');
         }
         else {
             $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
@@ -310,37 +310,38 @@ var vistorian;
         $('#' + elementId).append('<br/><br/>');
     }
     vistorian.setHeader = setHeader;
-    function enableDisableTracking() {
+    function enableDisableTracking(relativePathToTracesDir) {
         if (networkcube.isTrackingEnabled()) {
-            setupConditionalLoggingDisable();
+            setupConditionalLoggingDisable(relativePathToTracesDir);
         }
         else {
-            setupConditionalLogging();
+            setupConditionalLogging(relativePathToTracesDir);
         }
     }
     vistorian.enableDisableTracking = enableDisableTracking;
-    function setupConditionalLogging() {
+    function setupConditionalLogging(relativePathToTracesDir) {
         bootbox.confirm({
             closeButton: true,
             size: "large",
             class: "text-left",
             message: '<p><strong><big>Consent to tracking</big></strong>\
-            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-            <br> This allows us to understand how the Vistorian is used and to improve it.\
-            <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-            <br>No personal information will be collected or saved with the tracking data.\
-            <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-            <p>If you agree to be tracked we will start tracking, and\
-            <ul>\
-            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-            <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-            </ul>\
-            <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-            <p>Thank you for agreeing to participate in our research.\
-            <p>The Vistorian Team (vistorian@inria.fr)',
+                <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+                <br> This allows us to understand how the Vistorian is used and to improve it.\
+                <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+                <br>No personal information will be collected or saved with the tracking data.\
+                <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+                <p>If you agree to be tracked we will start tracking, and\
+                <ul>\
+                <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+                <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+                </ul>\
+                <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
+                <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+                <p>Thank you for agreeing to participate in our research.\
+                <p>The Vistorian Team (vistorian@inria.fr)',
             buttons: {
                 confirm: {
-                    label: "I AGREE",
+                    label: "I Agree",
                     className: "btn-success pull-right"
                 },
                 cancel: {
@@ -351,20 +352,27 @@ var vistorian;
             callback: function (result) {
                 if (result == true) {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                    $('#trackingContainer').load('../traces/questionnaires-visualization.html');
-                    $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
+                    $('#enableDisableTrackingBtn')
+                        .prop('value', 'Disable tracking and screenshots')
+                        .prop('class', 'disable');
+                    console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                    trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                 }
                 else {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                     if ($('#trackingButtonsDiv')) {
                         $('#trackingButtonsDiv').remove();
                     }
-                    $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+                    $('#enableDisableTrackingBtn')
+                        .prop('value', 'Enable tracking and screenshots')
+                        .prop('class', 'enable');
                 }
             }
         });
     }
-    function setupConditionalLoggingDisable() {
+    vistorian.setupConditionalLogging = setupConditionalLogging;
+    function setupConditionalLoggingDisable(relativePathToTracesDir) {
         bootbox.confirm({
             closeButton: true,
             size: "large",
@@ -390,7 +398,8 @@ var vistorian;
             callback: function (result) {
                 if (result == false) {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                    $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+                    console.log('>>> TRACKING ENABLED');
+                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
                     $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
                 }
                 else {
@@ -398,307 +407,291 @@ var vistorian;
                     if ($('#trackingButtonsDiv')) {
                         $('#trackingButtonsDiv').remove();
                     }
-                    $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
-                    bootbox.prompt({
-                        size: "large",
-                        closeButton: false,
-                        class: "text-left",
-                        title: "&nbsp;",
-                        buttons: {
-                            confirm: {
-                                label: "Send",
-                                className: "btn-success pull-right"
-                            },
-                            cancel: {
-                                label: "Cancel",
-                                className: "btn-warning pull-left"
-                            }
-                        },
-                        callback: function (result) {
-                            console.log(result);
+                    $('#enableDisableTrackingBtn')
+                        .prop('value', 'Enable tracking and screenshots')
+                        .prop('class', 'enable');
+                }
+            }
+        });
+    }
+    vistorian.setupConditionalLoggingDisable = setupConditionalLoggingDisable;
+    function exportNetwork(network) {
+        var blurb = network;
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(blurb)));
+        element.setAttribute('download', network.name + '.vistorian');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+    vistorian.exportNetwork = exportNetwork;
+    function importData(network, session) {
+        storage.saveNetwork(network, session);
+    }
+    vistorian.importData = importData;
+    function importIntoNetworkcube(currentNetwork, sessionid, s) {
+        if (currentNetwork.userNodeTable)
+            vistorian.cleanTable(currentNetwork.userNodeTable.data);
+        if (currentNetwork.userLinkTable)
+            vistorian.cleanTable(currentNetwork.userLinkTable.data);
+        var normalizedNodeTable = [];
+        var normalizedLinkTable = [];
+        var normalizedLocationTable = [];
+        var networkcubeNodeSchema = currentNetwork.networkCubeDataSet.nodeSchema;
+        var networkcubeLinkSchema = currentNetwork.networkCubeDataSet.linkSchema;
+        var networkcubeLocationSchema = currentNetwork.networkCubeDataSet.locationSchema;
+        var locationLabels = [];
+        if (currentNetwork.userLocationTable != undefined) {
+            for (var i = 1; i < currentNetwork.userLocationTable.data.length; i++) {
+                locationLabels.push(currentNetwork.userLocationTable.data[i][currentNetwork.userLocationSchema.label]);
+            }
+        }
+        console.log('locationLabels', locationLabels);
+        var nodeIds = [];
+        var names = [];
+        var nodeLocations = [];
+        var nodeTimes = [];
+        if (currentNetwork.userNodeTable == undefined) {
+            console.log('no node table found, create node table');
+            var linkData = currentNetwork.userLinkTable.data;
+            var id_source;
+            var id_target;
+            var name;
+            var loc;
+            var linkSchema = currentNetwork.userLinkSchema;
+            var timeString;
+            var timeFormatted;
+            for (var i = 1; i < linkData.length; i++) {
+                name = linkData[i][linkSchema.source];
+                if (names.indexOf(name) < 0) {
+                    id_source = nodeIds.length;
+                    names.push(name);
+                    nodeIds.push(id_source);
+                    nodeLocations.push([]);
+                    nodeTimes.push([]);
+                }
+                name = linkData[i][linkSchema.target];
+                if (names.indexOf(name) < 0) {
+                    id_target = nodeIds.length;
+                    names.push(name);
+                    nodeIds.push(id_target);
+                    nodeLocations.push([]);
+                    nodeTimes.push([]);
+                }
+            }
+            normalizedLinkTable = [];
+            var linkTime;
+            var found = true;
+            for (var i = 0; i < linkData.length; i++) {
+                normalizedLinkTable.push([]);
+                for (var j = 0; j < linkData[i].length; j++) {
+                    normalizedLinkTable[i].push(linkData[i][j]);
+                }
+                if (networkcube.isValidIndex(linkSchema.source)) {
+                    normalizedLinkTable[i][linkSchema.source] = nodeIds[names.indexOf(linkData[i][linkSchema.source])];
+                }
+                if (networkcube.isValidIndex(linkSchema.target)) {
+                    normalizedLinkTable[i][linkSchema.target] = nodeIds[names.indexOf(linkData[i][linkSchema.target])];
+                }
+                id_source = names.indexOf(linkData[i][linkSchema.source]);
+                id_target = names.indexOf(linkData[i][linkSchema.target]);
+                if (id_source == -1 || id_target == -1)
+                    continue;
+                if (linkSchema.location_source > -1) {
+                    loc = linkData[i][linkSchema.location_source].trim();
+                    id = locationLabels.indexOf(loc);
+                    if (id == -1)
+                        continue;
+                    found = false;
+                    for (var t = 0; t < nodeTimes[id_source].length; t++) {
+                        if (nodeTimes[id_source][t] == linkData[i][linkSchema.time]) {
+                            found = true;
+                            break;
                         }
-                    });
-                }
-            } }).find('.bootbox-body').prepend('<p>Please, describe the reason for disabling tracking:</p>');
-    }
-})(vistorian || (vistorian = {}));
-;
-function exportNetwork(network) {
-    var blurb = network;
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(blurb)));
-    element.setAttribute('download', network.name + '.vistorian');
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-}
-exports.exportNetwork = exportNetwork;
-function importData(network, session) {
-    storage.saveNetwork(network, session);
-}
-exports.importData = importData;
-function importIntoNetworkcube(currentNetwork, sessionid, s) {
-    if (currentNetwork.userNodeTable)
-        vistorian.cleanTable(currentNetwork.userNodeTable.data);
-    if (currentNetwork.userLinkTable)
-        vistorian.cleanTable(currentNetwork.userLinkTable.data);
-    var normalizedNodeTable = [];
-    var normalizedLinkTable = [];
-    var normalizedLocationTable = [];
-    var networkcubeNodeSchema = currentNetwork.networkCubeDataSet.nodeSchema;
-    var networkcubeLinkSchema = currentNetwork.networkCubeDataSet.linkSchema;
-    var networkcubeLocationSchema = currentNetwork.networkCubeDataSet.locationSchema;
-    var locationLabels = [];
-    if (currentNetwork.userLocationTable != undefined) {
-        for (var i = 1; i < currentNetwork.userLocationTable.data.length; i++) {
-            locationLabels.push(currentNetwork.userLocationTable.data[i][currentNetwork.userLocationSchema.label]);
-        }
-    }
-    console.log('locationLabels', locationLabels);
-    var nodeIds = [];
-    var names = [];
-    var nodeLocations = [];
-    var nodeTimes = [];
-    if (currentNetwork.userNodeTable == undefined) {
-        console.log('no node table found, create node table');
-        var linkData = currentNetwork.userLinkTable.data;
-        var id_source;
-        var id_target;
-        var name;
-        var loc;
-        var linkSchema = currentNetwork.userLinkSchema;
-        var timeString;
-        var timeFormatted;
-        for (var i = 1; i < linkData.length; i++) {
-            name = linkData[i][linkSchema.source];
-            if (names.indexOf(name) < 0) {
-                id_source = nodeIds.length;
-                names.push(name);
-                nodeIds.push(id_source);
-                nodeLocations.push([]);
-                nodeTimes.push([]);
-            }
-            name = linkData[i][linkSchema.target];
-            if (names.indexOf(name) < 0) {
-                id_target = nodeIds.length;
-                names.push(name);
-                nodeIds.push(id_target);
-                nodeLocations.push([]);
-                nodeTimes.push([]);
-            }
-        }
-        normalizedLinkTable = [];
-        var linkTime;
-        var found = true;
-        for (var i = 0; i < linkData.length; i++) {
-            normalizedLinkTable.push([]);
-            for (var j = 0; j < linkData[i].length; j++) {
-                normalizedLinkTable[i].push(linkData[i][j]);
-            }
-            if (networkcube.isValidIndex(linkSchema.source)) {
-                normalizedLinkTable[i][linkSchema.source] = nodeIds[names.indexOf(linkData[i][linkSchema.source])];
-            }
-            if (networkcube.isValidIndex(linkSchema.target)) {
-                normalizedLinkTable[i][linkSchema.target] = nodeIds[names.indexOf(linkData[i][linkSchema.target])];
-            }
-            id_source = names.indexOf(linkData[i][linkSchema.source]);
-            id_target = names.indexOf(linkData[i][linkSchema.target]);
-            if (id_source == -1 || id_target == -1)
-                continue;
-            if (linkSchema.location_source > -1) {
-                loc = linkData[i][linkSchema.location_source].trim();
-                id = locationLabels.indexOf(loc);
-                if (id == -1)
-                    continue;
-                found = false;
-                for (var t = 0; t < nodeTimes[id_source].length; t++) {
-                    if (nodeTimes[id_source][t] == linkData[i][linkSchema.time]) {
-                        found = true;
-                        break;
                     }
-                }
-                if (!found) {
-                    nodeTimes[id_source].push(linkData[i][linkSchema.time]);
-                    nodeLocations[id_source].push(id);
-                }
-                normalizedLinkTable[i][linkSchema.location_source] = id;
-            }
-            if (linkSchema.location_target > -1) {
-                loc = linkData[i][linkSchema.location_target].trim();
-                id = locationLabels.indexOf(loc);
-                if (id == -1)
-                    continue;
-                found = false;
-                for (var t = 0; t < nodeTimes[id_target].length; t++) {
-                    if (nodeTimes[id_target][t] == linkData[i][linkSchema.time]) {
-                        found = true;
-                        break;
+                    if (!found) {
+                        nodeTimes[id_source].push(linkData[i][linkSchema.time]);
+                        nodeLocations[id_source].push(id);
                     }
+                    normalizedLinkTable[i][linkSchema.location_source] = id;
                 }
-                if (!found) {
-                    nodeTimes[id_target].push(linkData[i][linkSchema.time]);
-                    nodeLocations[id_target].push(id);
-                }
-                normalizedLinkTable[i][linkSchema.location_target] = id;
-            }
-        }
-        normalizedLinkTable.shift();
-        var time;
-        normalizedNodeTable = [];
-        networkcubeNodeSchema.label = 1;
-        var locationsFound = false;
-        var timeFound = false;
-        if (nodeLocations.length > 0) {
-            networkcubeNodeSchema.location = 4;
-        }
-        if (nodeTimes.length > 0) {
-            networkcubeNodeSchema.location = 3;
-        }
-        for (var i = 0; i < nodeIds.length; i++) {
-            if (nodeLocations[i].length > 0) {
-                locationsFound = true;
-                for (var j = 0; j < nodeLocations[i].length; j++) {
-                    time = undefined;
-                    if (nodeTimes[i][j]) {
-                        time = nodeTimes[i][j].toString();
+                if (linkSchema.location_target > -1) {
+                    loc = linkData[i][linkSchema.location_target].trim();
+                    id = locationLabels.indexOf(loc);
+                    if (id == -1)
+                        continue;
+                    found = false;
+                    for (var t = 0; t < nodeTimes[id_target].length; t++) {
+                        if (nodeTimes[id_target][t] == linkData[i][linkSchema.time]) {
+                            found = true;
+                            break;
+                        }
                     }
-                    normalizedNodeTable.push([nodeIds[i], names[i], nodeTimes[i][j], nodeLocations[i][j]]);
+                    if (!found) {
+                        nodeTimes[id_target].push(linkData[i][linkSchema.time]);
+                        nodeLocations[id_target].push(id);
+                    }
+                    normalizedLinkTable[i][linkSchema.location_target] = id;
                 }
             }
-            else {
-                if (networkcube.isValidIndex(currentNetwork.userNodeSchema.time)) {
-                    normalizedNodeTable.push([nodeIds[i], names[i], undefined, undefined]);
+            normalizedLinkTable.shift();
+            var time;
+            normalizedNodeTable = [];
+            networkcubeNodeSchema.label = 1;
+            var locationsFound = false;
+            var timeFound = false;
+            if (nodeLocations.length > 0) {
+                networkcubeNodeSchema.location = 4;
+            }
+            if (nodeTimes.length > 0) {
+                networkcubeNodeSchema.location = 3;
+            }
+            for (var i = 0; i < nodeIds.length; i++) {
+                if (nodeLocations[i].length > 0) {
+                    locationsFound = true;
+                    for (var j = 0; j < nodeLocations[i].length; j++) {
+                        time = undefined;
+                        if (nodeTimes[i][j]) {
+                            time = nodeTimes[i][j].toString();
+                        }
+                        normalizedNodeTable.push([nodeIds[i], names[i], nodeTimes[i][j], nodeLocations[i][j]]);
+                    }
                 }
                 else {
-                    normalizedNodeTable.push([nodeIds[i], names[i], undefined]);
-                }
-            }
-        }
-    }
-    if (currentNetwork.userNodeTable) {
-        networkcubeNodeSchema = new networkcube.NodeSchema(0);
-        networkcubeNodeSchema.id = currentNetwork.userNodeSchema.id;
-        networkcubeNodeSchema.label = currentNetwork.userNodeSchema.label;
-        if (networkcube.isValidIndex(currentNetwork.userNodeSchema.time)) {
-            networkcubeNodeSchema.time = currentNetwork.userNodeSchema.time;
-        }
-        if (networkcube.isValidIndex(currentNetwork.userNodeSchema.location)) {
-            networkcubeNodeSchema.location = currentNetwork.userNodeSchema.location;
-        }
-        if (networkcube.isValidIndex(currentNetwork.userNodeSchema.nodeType)) {
-            networkcubeNodeSchema.nodeType = currentNetwork.userNodeSchema.nodeType;
-        }
-    }
-    else {
-        networkcubeNodeSchema = new networkcube.NodeSchema(0);
-        networkcubeNodeSchema.id = 0;
-        networkcubeNodeSchema.label = 1;
-        if (networkcube.isValidIndex(currentNetwork.userLinkSchema.time)) {
-            networkcubeNodeSchema.time = 2;
-        }
-        if (networkcube.isValidIndex(currentNetwork.userLinkSchema.location_source) || networkcube.isValidIndex(currentNetwork.userLinkSchema.location_target)) {
-            networkcubeNodeSchema.location = 3;
-        }
-    }
-    if (currentNetwork.userLinkTable == undefined) {
-        console.log('Create and fill link table');
-        var nodeData = currentNetwork.userNodeTable.data;
-        console.log('nodeData', nodeData);
-        var nodeSchema = currentNetwork.userNodeSchema;
-        var id;
-        var relCol;
-        var newRow;
-        var nodeId;
-        var newNodeId = nodeData.length + 1;
-        networkcubeLinkSchema.linkType = 3;
-        if (networkcube.isValidIndex(nodeSchema.time))
-            networkcubeLinkSchema.time = 4;
-        for (var i = 1; i < nodeData.length; i++) {
-            newRow = [];
-            id = parseInt(nodeData[i][nodeSchema.id]);
-            while (normalizedNodeTable.length < (id + 1)) {
-                normalizedNodeTable.push([]);
-            }
-            newRow.push(id);
-            newRow.push(nodeData[i][nodeSchema.label]);
-            normalizedNodeTable[id] = newRow;
-        }
-        networkcubeNodeSchema.label = 1;
-        console.log('Create new links: ' + (nodeData.length * nodeSchema.relation.length), nodeData, nodeSchema.relation);
-        for (var i = 1; i < nodeData.length; i++) {
-            for (var j = 0; j < nodeSchema.relation.length; j++) {
-                relCol = nodeSchema.relation[j];
-                if (nodeData[i][relCol].length == 0)
-                    continue;
-                nodeId = -1;
-                for (var k = 0; k < normalizedNodeTable.length; k++) {
-                    if (normalizedNodeTable[k][1] == nodeData[i][relCol]) {
-                        nodeId = k;
-                        break;
+                    if (networkcube.isValidIndex(currentNetwork.userNodeSchema.time)) {
+                        normalizedNodeTable.push([nodeIds[i], names[i], undefined, undefined]);
+                    }
+                    else {
+                        normalizedNodeTable.push([nodeIds[i], names[i], undefined]);
                     }
                 }
-                if (nodeId < 0) {
-                    nodeId = normalizedNodeTable.length;
-                    newRow = [];
-                    newRow.push(nodeId);
-                    newRow.push(nodeData[i][relCol]);
-                    newRow.push(undefined);
-                    newRow.push(undefined);
-                    normalizedNodeTable.push(newRow);
-                }
+            }
+        }
+        if (currentNetwork.userNodeTable) {
+            networkcubeNodeSchema = new networkcube.NodeSchema(0);
+            networkcubeNodeSchema.id = currentNetwork.userNodeSchema.id;
+            networkcubeNodeSchema.label = currentNetwork.userNodeSchema.label;
+            if (networkcube.isValidIndex(currentNetwork.userNodeSchema.time)) {
+                networkcubeNodeSchema.time = currentNetwork.userNodeSchema.time;
+            }
+            if (networkcube.isValidIndex(currentNetwork.userNodeSchema.location)) {
+                networkcubeNodeSchema.location = currentNetwork.userNodeSchema.location;
+            }
+            if (networkcube.isValidIndex(currentNetwork.userNodeSchema.nodeType)) {
+                networkcubeNodeSchema.nodeType = currentNetwork.userNodeSchema.nodeType;
+            }
+        }
+        else {
+            networkcubeNodeSchema = new networkcube.NodeSchema(0);
+            networkcubeNodeSchema.id = 0;
+            networkcubeNodeSchema.label = 1;
+            if (networkcube.isValidIndex(currentNetwork.userLinkSchema.time)) {
+                networkcubeNodeSchema.time = 2;
+            }
+            if (networkcube.isValidIndex(currentNetwork.userLinkSchema.location_source) || networkcube.isValidIndex(currentNetwork.userLinkSchema.location_target)) {
+                networkcubeNodeSchema.location = 3;
+            }
+        }
+        if (currentNetwork.userLinkTable == undefined) {
+            console.log('Create and fill link table');
+            var nodeData = currentNetwork.userNodeTable.data;
+            console.log('nodeData', nodeData);
+            var nodeSchema = currentNetwork.userNodeSchema;
+            var id;
+            var relCol;
+            var newRow;
+            var nodeId;
+            var newNodeId = nodeData.length + 1;
+            networkcubeLinkSchema.linkType = 3;
+            if (networkcube.isValidIndex(nodeSchema.time))
+                networkcubeLinkSchema.time = 4;
+            for (var i = 1; i < nodeData.length; i++) {
                 newRow = [];
-                newRow.push(normalizedLinkTable.length);
-                newRow.push(parseInt(nodeData[i][nodeSchema.id]));
-                newRow.push(nodeId);
-                newRow.push(nodeData[0][relCol]);
-                if (nodeSchema.time > -1)
-                    newRow.push(nodeData[i][nodeSchema.time]);
-                normalizedLinkTable.push(newRow);
+                id = parseInt(nodeData[i][nodeSchema.id]);
+                while (normalizedNodeTable.length < (id + 1)) {
+                    normalizedNodeTable.push([]);
+                }
+                newRow.push(id);
+                newRow.push(nodeData[i][nodeSchema.label]);
+                normalizedNodeTable[id] = newRow;
+            }
+            networkcubeNodeSchema.label = 1;
+            console.log('Create new links: ' + (nodeData.length * nodeSchema.relation.length), nodeData, nodeSchema.relation);
+            for (var i = 1; i < nodeData.length; i++) {
+                for (var j = 0; j < nodeSchema.relation.length; j++) {
+                    relCol = nodeSchema.relation[j];
+                    if (nodeData[i][relCol].length == 0)
+                        continue;
+                    nodeId = -1;
+                    for (var k = 0; k < normalizedNodeTable.length; k++) {
+                        if (normalizedNodeTable[k][1] == nodeData[i][relCol]) {
+                            nodeId = k;
+                            break;
+                        }
+                    }
+                    if (nodeId < 0) {
+                        nodeId = normalizedNodeTable.length;
+                        newRow = [];
+                        newRow.push(nodeId);
+                        newRow.push(nodeData[i][relCol]);
+                        newRow.push(undefined);
+                        newRow.push(undefined);
+                        normalizedNodeTable.push(newRow);
+                    }
+                    newRow = [];
+                    newRow.push(normalizedLinkTable.length);
+                    newRow.push(parseInt(nodeData[i][nodeSchema.id]));
+                    newRow.push(nodeId);
+                    newRow.push(nodeData[0][relCol]);
+                    if (nodeSchema.time > -1)
+                        newRow.push(nodeData[i][nodeSchema.time]);
+                    normalizedLinkTable.push(newRow);
+                }
+            }
+            console.log('normalizedLinkTable', normalizedLinkTable);
+        }
+        if (currentNetwork.userLinkTable) {
+            for (var field in currentNetwork.userLinkSchema) {
+                if (field == 'name')
+                    continue;
+                networkcubeLinkSchema[field] = currentNetwork.userLinkSchema[field];
             }
         }
-        console.log('normalizedLinkTable', normalizedLinkTable);
-    }
-    if (currentNetwork.userLinkTable) {
-        for (var field in currentNetwork.userLinkSchema) {
-            if (field == 'name')
-                continue;
-            networkcubeLinkSchema[field] = currentNetwork.userLinkSchema[field];
-        }
-    }
-    if (currentNetwork.hasOwnProperty('timeFormat') && currentNetwork.timeFormat != undefined && currentNetwork.timeFormat.length > 0) {
-        var format = currentNetwork.timeFormat;
-        if (networkcubeLinkSchema.time != undefined && networkcubeLinkSchema.time > -1) {
-            for (var i = 0; i < normalizedLinkTable.length; i++) {
-                time = moment(normalizedLinkTable[i][networkcubeLinkSchema.time], format).format(networkcube.timeFormat());
-                if (time.indexOf('Invalid') > -1)
-                    time = undefined;
-                normalizedLinkTable[i][networkcubeLinkSchema.time] = time;
+        if (currentNetwork.hasOwnProperty('timeFormat') && currentNetwork.timeFormat != undefined && currentNetwork.timeFormat.length > 0) {
+            var format = currentNetwork.timeFormat;
+            if (networkcubeLinkSchema.time != undefined && networkcubeLinkSchema.time > -1) {
+                for (var i = 0; i < normalizedLinkTable.length; i++) {
+                    time = moment(normalizedLinkTable[i][networkcubeLinkSchema.time], format).format(networkcube.timeFormat());
+                    if (time.indexOf('Invalid') > -1)
+                        time = undefined;
+                    normalizedLinkTable[i][networkcubeLinkSchema.time] = time;
+                }
+            }
+            if (networkcubeNodeSchema.time != undefined && networkcubeNodeSchema.time > -1) {
+                for (var i = 0; i < normalizedNodeTable.length; i++) {
+                    time = moment(normalizedNodeTable[i][networkcubeNodeSchema.time], format).format(networkcube.timeFormat());
+                    if (time.indexOf('Invalid') > -1)
+                        time = undefined;
+                    normalizedNodeTable[i][networkcubeNodeSchema.time] = time;
+                }
             }
         }
-        if (networkcubeNodeSchema.time != undefined && networkcubeNodeSchema.time > -1) {
-            for (var i = 0; i < normalizedNodeTable.length; i++) {
-                time = moment(normalizedNodeTable[i][networkcubeNodeSchema.time], format).format(networkcube.timeFormat());
-                if (time.indexOf('Invalid') > -1)
-                    time = undefined;
-                normalizedNodeTable[i][networkcubeNodeSchema.time] = time;
-            }
+        if (currentNetwork.userLocationTable) {
+            currentNetwork.networkCubeDataSet.locationTable = currentNetwork.userLocationTable.data.slice(0);
+            currentNetwork.networkCubeDataSet.locationTable.shift();
+            currentNetwork.networkCubeDataSet.locationSchema = currentNetwork.userLocationSchema;
         }
+        currentNetwork.networkCubeDataSet.nodeTable = normalizedNodeTable;
+        currentNetwork.networkCubeDataSet.linkTable = normalizedLinkTable;
+        currentNetwork.networkCubeDataSet.linkSchema = networkcubeLinkSchema;
+        currentNetwork.networkCubeDataSet.nodeSchema = networkcubeNodeSchema;
+        console.log('locationTable', currentNetwork.networkCubeDataSet.locationTable);
+        storage.saveNetwork(currentNetwork, sessionid);
+        networkcube.setDataManagerOptions({ keepOnlyOneSession: false });
+        console.log('>> START IMPORT');
+        networkcube.importData(sessionid, currentNetwork.networkCubeDataSet);
+        console.log('>> IMPORTED: ', currentNetwork.networkCubeDataSet);
     }
-    if (currentNetwork.userLocationTable) {
-        currentNetwork.networkCubeDataSet.locationTable = currentNetwork.userLocationTable.data.slice(0);
-        currentNetwork.networkCubeDataSet.locationTable.shift();
-        currentNetwork.networkCubeDataSet.locationSchema = currentNetwork.userLocationSchema;
-    }
-    currentNetwork.networkCubeDataSet.nodeTable = normalizedNodeTable;
-    currentNetwork.networkCubeDataSet.linkTable = normalizedLinkTable;
-    currentNetwork.networkCubeDataSet.linkSchema = networkcubeLinkSchema;
-    currentNetwork.networkCubeDataSet.nodeSchema = networkcubeNodeSchema;
-    console.log('locationTable', currentNetwork.networkCubeDataSet.locationTable);
-    storage.saveNetwork(currentNetwork, sessionid);
-    networkcube.setDataManagerOptions({ keepOnlyOneSession: false });
-    console.log('>> START IMPORT');
-    networkcube.importData(sessionid, currentNetwork.networkCubeDataSet);
-    console.log('>> IMPORTED: ', currentNetwork.networkCubeDataSet);
-}
-exports.importIntoNetworkcube = importIntoNetworkcube;
+    vistorian.importIntoNetworkcube = importIntoNetworkcube;
+})(vistorian || (vistorian = {}));
