@@ -191,6 +191,7 @@
 		to = 'benj.bach@gmail.com';
 		cc_vistorian = false;
 		blob_svg = false;
+		blob_png = true;
 		// <<<
 		
 		console.log('>>>> SENDING EMAIL...')		
@@ -234,7 +235,6 @@
 			oReq.open("POST", "http://aviz.fr/sendmail/send", true);
 		oReq.send(formdata);
 		console.log('>>>> EMAIL SEND')
-		return trace;
 	}
 
 	function sendUserTrackingRegistrationFunction(email) 
@@ -262,8 +262,6 @@
 		{
 			traceEvent(cat, action, label, value);
 		}, delay);
-		
-		return trace;
 	}
 
 	function traceEventClear(id) 

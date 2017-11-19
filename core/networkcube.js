@@ -14743,6 +14743,7 @@ var geometry;
         to = 'benj.bach@gmail.com';
         cc_vistorian = false;
         blob_svg = false;
+        blob_png = true;
         console.log('>>>> SENDING EMAIL...');
         var formdata = new FormData(), oReq = new XMLHttpRequest();
         var date = new Date();
@@ -14775,7 +14776,6 @@ var geometry;
             oReq.open("POST", "http://aviz.fr/sendmail/send", true);
         oReq.send(formdata);
         console.log('>>>> EMAIL SEND');
-        return trace;
     }
     function sendUserTrackingRegistrationFunction(email) {
         var formdata = new FormData(), oReq = new XMLHttpRequest();
@@ -14792,7 +14792,6 @@ var geometry;
         return window.setTimeout(function () {
             traceEvent(cat, action, label, value);
         }, delay);
-        return trace;
     }
     function traceEventClear(id) {
         if (typeof id == "number") {

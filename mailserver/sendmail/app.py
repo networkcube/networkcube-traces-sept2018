@@ -47,7 +47,7 @@ def hello():
 def test():
     return "test OK"
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     send_from = 'vistorian'
@@ -69,10 +69,10 @@ def register():
     return response
 
 @app.route("/send", methods=['GET', 'POST'])
-=======
+# =======
 
-@app.route("/", methods=['GET', 'POST'])
->>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
+# @app.route("/", methods=['GET', 'POST'])
+# >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
 def send():
     try:
         send_from = request.form['from'].strip()
