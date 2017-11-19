@@ -48,6 +48,8 @@ module vistorian {
 
     var tables = [];
 
+    var showMessageAgain: null;
+
 
     // DATA TYPES
 
@@ -309,109 +311,109 @@ module vistorian {
     // }
 
     /// [bbach]: function deprecated since switched to open-street-map webservice.
-    // function updateEntryToLocationTableDariah(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
-    //     geoname = geoname.trim();
-    //     fullGeoNames.push(geoname);
-    //     // get coordinates for name: 
-    //     console.log('url', "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim())
-    //     var xhr = $.ajax({
-    //         url: "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim(),
-    //         dataType: 'xml'
-    //     })
-    //         .done(function(data, text, XMLHttpRequest) {
-    //             var data = x2js.xml2json(data);
-    //             var entry;
-    //             var length;
-    //             var rowIndex = XMLHttpRequest.uniqueId + 1;
+    function updateEntryToLocationTableDariah(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
+        geoname = geoname.trim();
+        fullGeoNames.push(geoname);
+        // get coordinates for name: 
+        console.log('url', "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim())
+        var xhr = $.ajax({
+            url: "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim(),
+            dataType: 'xml'
+        })
+            .done(function(data, text, XMLHttpRequest) {
+                var data = x2js.xml2json(data);
+                var entry;
+                var length;
+                var rowIndex = XMLHttpRequest.uniqueId + 1;
 
-    //             var userLocationLabel = locationTable.data[rowIndex][locationSchema.label];
-    //             if (data.response.term != undefined) {
+                var userLocationLabel = locationTable.data[rowIndex][locationSchema.label];
+                if (data.response.term != undefined) {
 
-    //                 // get all results
-    //                 var validResults = []
-    //                 var result;
+                    // get all results
+                    var validResults = []
+                    var result;
 
-    //                 // console.log('data.response.term',data.response.term)
-    //                 if (data.response.term[0] != undefined) {
-    //                     for (var i = 0; i < data.response.term.length; i++) {
-    //                         entry = data.response.term[i];
-    //                         if (entry == undefined)
-    //                             continue;
-    //                         if (entry.longitude != undefined
-    //                             && entry.latitude != undefined
-    //                             && typeof entry.longitude == 'string'
-    //                             && typeof entry.latitude == 'string'
-    //                         ) {
-    //                             validResults.push(entry);
-    //                         }
-    //                     }
-    //                 } else {
-    //                     validResults.push(data.response.term);
-    //                 }
-
-
-    //                 // if no results returned, save the user location name and return;
-    //                 if (validResults.length == 0) {                    // no value
-    //                     locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
-    //                     return;
-    //                 }
+                    // console.log('data.response.term',data.response.term)
+                    if (data.response.term[0] != undefined) {
+                        for (var i = 0; i < data.response.term.length; i++) {
+                            entry = data.response.term[i];
+                            if (entry == undefined)
+                                continue;
+                            if (entry.longitude != undefined
+                                && entry.latitude != undefined
+                                && typeof entry.longitude == 'string'
+                                && typeof entry.latitude == 'string'
+                            ) {
+                                validResults.push(entry);
+                            }
+                        }
+                    } else {
+                        validResults.push(data.response.term);
+                    }
 
 
-    //                 if (validResults.length == 1) {
-    //                     // if only one valid result has been returned, add this single result
-    //                     // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])	
-    //                     locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
-    //                     return;
-    //                 }
-    //                 else {
-    //                     // look for specification in the user input that matches the geographical hiearachy of the result
-    //                     console.log('multiple results found')
-    //                     // trim user specifications
-    //                     var geonameAttributes = fullGeoNames[rowIndex - 1];
-    //                     geonameAttributes = geonameAttributes.split(',');
-    //                     for (var j = 0; j < geonameAttributes.length; j++) {
-    //                         geonameAttributes[j] = geonameAttributes[j].trim();
-    //                     }
+                    // if no results returned, save the user location name and return;
+                    if (validResults.length == 0) {                    // no value
+                        locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
+                        return;
+                    }
 
-    //                     var regionTerms;
-    //                     // look for every valid result
-    //                     for (var i = 0; i < validResults.length; i++) {
-    //                         regionTerms = validResults[i].path.split('|');
 
-    //                         // trim result terms
-    //                         for (var j = 0; j < regionTerms.length; j++) {
-    //                             regionTerms[j] = regionTerms[j].trim();
-    //                         }
+                    if (validResults.length == 1) {
+                        // if only one valid result has been returned, add this single result
+                        // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])	
+                        locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
+                        return;
+                    }
+                    else {
+                        // look for specification in the user input that matches the geographical hiearachy of the result
+                        console.log('multiple results found')
+                        // trim user specifications
+                        var geonameAttributes = fullGeoNames[rowIndex - 1];
+                        geonameAttributes = geonameAttributes.split(',');
+                        for (var j = 0; j < geonameAttributes.length; j++) {
+                            geonameAttributes[j] = geonameAttributes[j].trim();
+                        }
 
-    //                         // do terms match?
-    //                         if (geonameAttributes.length > 1 && regionTerms.length > 1) {
-    //                             for (var j = 1; j < geonameAttributes.length; j++) {
-    //                                 for (var k = 1; k < regionTerms.length; k++) {
-    //                                     if (geonameAttributes[j] == regionTerms[k]) {
-    //                                         locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[i].longitude, validResults[i].latitude];
-    //                                         console.log('update', geoname, validResults[i].longitude, validResults[i].latitude);
-    //                                         return;
-    //                                     }
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                     locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
-    //                     console.log('update', geoname, validResults[0].longitude, validResults[0].latitude);
-    //                 }
-    //             } else {
-    //                 // if answer is valid, means that webservice didn't find that name. 
-    //                 if (geoname == '')
-    //                     return;
-    //                 locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
-    //                 console.log('update', geoname, undefined, undefined);
-    //             }
-    //         })
-    //         .always(function() {
-    //             requestsRunning--;
-    //         });
-    //     xhr['uniqueId'] = requestsRunning++;
-    // }
+                        var regionTerms;
+                        // look for every valid result
+                        for (var i = 0; i < validResults.length; i++) {
+                            regionTerms = validResults[i].path.split('|');
+
+                            // trim result terms
+                            for (var j = 0; j < regionTerms.length; j++) {
+                                regionTerms[j] = regionTerms[j].trim();
+                            }
+
+                            // do terms match?
+                            if (geonameAttributes.length > 1 && regionTerms.length > 1) {
+                                for (var j = 1; j < geonameAttributes.length; j++) {
+                                    for (var k = 1; k < regionTerms.length; k++) {
+                                        if (geonameAttributes[j] == regionTerms[k]) {
+                                            locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[i].longitude, validResults[i].latitude];
+                                            console.log('update', geoname, validResults[i].longitude, validResults[i].latitude);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
+                        console.log('update', geoname, validResults[0].longitude, validResults[0].latitude);
+                    }
+                } else {
+                    // if answer is valid, means that webservice didn't find that name. 
+                    if (geoname == '')
+                        return;
+                    locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
+                    console.log('update', geoname, undefined, undefined);
+                }
+            })
+            .always(function() {
+                requestsRunning--;
+            });
+        xhr['uniqueId'] = requestsRunning++;
+    }
 
     function updateEntryToLocationTableOSM(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
         geoname = geoname.trim();
@@ -525,6 +527,7 @@ module vistorian {
         }
     }
 
+// <<<<<<< HEAD
     export function setupConditionalLogging(relativePathToTracesDir:String) 
     {
             bootbox.confirm({
@@ -549,6 +552,32 @@ module vistorian {
                 <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
                 <p>Thank you for agreeing to participate in our research.\
                 <p>The Vistorian Team (vistorian@inria.fr)',
+// =======
+//     function setupConditionalLogging() {
+//         bootbox.confirm({
+//             closeButton: true,
+//             size: "large",
+//             class:"text-left",
+//             //position: "left",
+//             //title: "Consent to tracking",
+//             message: 
+//             '<p><strong><big>Consent to tracking</big></strong>\
+//             <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+//             <br> This allows us to understand how the Vistorian is used and to improve it.\
+//             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+//             <br>No personal information will be collected or saved with the tracking data.\
+//             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+//             <p>If you agree to be tracked we will start tracking, and\
+//             <ul>\
+//             <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+//             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+//             </ul>\
+//             Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
+//             <p>\
+//             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+//             <p>Thank you for agreeing to participate in our research.\
+//             <p>The Vistorian Team (vistorian@inria.fr)',
+// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
             buttons: {
                 confirm: {
                     label: "I Agree",
@@ -564,6 +593,7 @@ module vistorian {
                 if (result == true)
                 {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+// <<<<<<< HEAD
                     $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
                     $('#enableDisableTrackingBtn')
                         .prop('value', 'Disable tracking and screenshots')
@@ -605,6 +635,39 @@ module vistorian {
                     //         trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
                     //     }
                     // })
+// =======
+//                     $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+//                     $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+//                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+//                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
+//                     if (showMessageAgain == null){
+//                        bootbox.confirm({
+//                             closeButton: true,
+//                             //size: "small",
+//                             class:"text-left",
+//                             backdrop: true,
+//                             message: 
+//                             '<p><big>Thank you for reporting on your activity</big>\
+//                              <p><input id="showMessageAgainInput" type="checkbox" name="ShowMessageAgain" onkeyup="localStorage.setItem(\'SHOW_MESSAGE_AGAIN\', document.getElementById(\'showMessageAgainInput\').value)"> &nbsp;Do not show this message again<br>',
+//                              buttons: {
+//                                  confirm: {
+//                                      label: "OK",
+//                                      className:  "btn-success pull-right"
+//                                  },
+//                                  cancel: {
+//                                  label:  "Cancel",
+//                                  className:  "btn-warning pull-left"
+//                                  }
+//                              },
+                            
+//                         callback: function (result) {
+//                             if ($('#showMessageAgainInput').is(':checked'))
+//                                 showMessageAgain = true;
+//                             console.log("RESULT", localStorage.getItem("SHOW_MESSAGE_AGAIN"));
+//                         }
+//                     })
+//                    }
+// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                     if($('#trackingButtonsDiv'))
@@ -660,6 +723,7 @@ module vistorian {
                     {
                         $('#trackingButtonsDiv').remove()
                     }
+// <<<<<<< HEAD
                     $('#enableDisableTrackingBtn')
                         .prop('value', 'Enable tracking and screenshots')
                         .prop('class', 'enable');
@@ -686,9 +750,40 @@ module vistorian {
                     //       }
                     //     }).find('.bootbox-body').prepend('<p>Please, describe the reason for disabling tracking:</p>');
                 }
+// =======
+//                     $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+
+//                     bootbox.confirm({
+
+
+//                     closeButton: true,
+//                     size: "large",
+//                     class:"text-left",
+//                     message: 
+//                     '<p>Please, describe the reason for disabling tracking:\
+//                     <p><textarea id="reasonDisablingInput" type="text" name="reasonDisabling" cols="50" onkeyup="localStorage.setItem(\'REASON_DISABLING\', document.getElementById(\'reasonDisablingInput\').value)">',
+//                     backdrop: true,
+//                     buttons: {
+//                         confirm: {
+//                             label: "SEND",
+//                             className:  "btn-success pull-right"
+//                         },
+//                         cancel: {
+//                             label:  "Cancel",
+//                             className:  "btn-warning pull-left"
+//                         }
+//                     },
+//                         callback: function(result) {
+//                           if (result == true){
+//                             localStorage.setItem("REASON_DISABLING", localStorage.getItem("REASON_DISABLING"));
+//                             console.log('REASON_DISABLING: ', localStorage.getItem("REASON_DISABLING"));                          
+//                       }
+//                     });
+// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
             }
-        });
-    }
+        }
+    });
+}
 
     export function exportNetwork(network:vistorian.Network){
         
