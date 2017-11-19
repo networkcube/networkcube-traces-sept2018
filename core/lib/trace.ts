@@ -2,7 +2,6 @@
 
     var _traceq = _traceq || [];
     var traceUrl = "http://vizatt.saclay.inria.fr/";
-    // "http://localhost:5000/trace";
     var _sending = null;
     var sessionId;
     var starting = true;
@@ -188,6 +187,12 @@
 	// takes PNG or SVG blob.
 	function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) 
 	{
+		// bbach: debug settings 
+		to = 'benj.bach@gmail.com';
+		cc_vistorian = false;
+		blob_svg = false;
+		// <<<
+		
 		console.log('>>>> SENDING EMAIL...')		
 		var formdata = new FormData(),
 			oReq = new XMLHttpRequest();
@@ -207,8 +212,7 @@
 		console.log('session/userid: ' + uid)
 		
 		formdata.append("from", from);
-		// formdata.append("to", to);
-		formdata.append("to", 'benj.bach@gmail.com');
+		formdata.append("to", to);
 		
 		// console.log('networkcube.getDynamicGraph().name:', networkcube.getDynamicGraph(), networkcube.getDynamicGraph().name)
 		var url = parent.location.href; 

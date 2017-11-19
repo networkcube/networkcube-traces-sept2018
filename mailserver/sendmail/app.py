@@ -49,7 +49,7 @@ def test():
     return "test OK"
 
 @app.route("/register", methods=['GET', 'POST'])
-def sendUserRegistration():
+def register():
     send_from = 'vistorian'
     send_to = 'vanessa.serrano@iqs.url.edu'
     send_cc = 'benj.bach@gmail.com'
@@ -66,8 +66,7 @@ def sendUserRegistration():
     s = smtplib.SMTP('smtp.inria.fr')
     s.send_message(msg)
     s.quit()
-
-
+    return response
 
 @app.route("/send", methods=['GET', 'POST'])
 def send():
