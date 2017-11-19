@@ -34,6 +34,7 @@ def hello():
     <form enctype=multipart/form-data method=post>
       <p>From: <input type=text name=from>
          To: <input type=text name=to>
+         cc: <input type=text name=cc>
          Subject: <input type=text name=subject>
          Note: <input type=text name=note>
          Copy to Vistorian? <input type=checkbox name=CopyToVistorian value=Yes>
