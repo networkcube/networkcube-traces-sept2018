@@ -189,7 +189,7 @@
 	{
 		// bbach: debug settings 
 		to = 'benj.bach@gmail.com';
-		cc_vistorian = false;
+		cc_vistorian = '';
 		blob_svg = false;
 		blob_png = true;
 		// <<<

@@ -435,7 +435,10 @@
                             if(url.indexOf('matrix') > -1)
                             {
                               // getHtml2Canvas('networkcube-matrix-visDiv');
+                              console.log('>> VIS: matrix')
                               getSVGCanvasMixture('visDiv')
+                              I(ki
+                              9ii9§ fr4§
                             }
                             else 
                             if(url.indexOf('dynamicego') > -1)
@@ -447,7 +450,14 @@
                             if(url.indexOf('map') > -1)
                             {
                               // getHtml2Canvas('visDiv');
-                              getHtml2Canvas('visDiv')
+                              getHtml2Canvas(window.parent.$('#visFrame').find('iframe').contents().find('#visDiv'))
+                            }
+                            else 
+                            if(url.indexOf('dataview') > -1)
+                            {
+                              // getHtml2Canvas('visDiv');
+                              console.log('CENTER: ', window.parent.$('#center')[0])
+                              getHtml2CanvasFromDataView(window.parent.$('#center')[0])
                             }
                           }
                         }
@@ -464,6 +474,7 @@
                             var iFrame = window.parent.$('#visFrame').find('iframe'); 
                             finalCanvas.width  = iFrame.attr('width')
                             finalCanvas.height = iFrame.attr('height')
+                            console.log ('>> iFrame.attr(width)', iFrame.attr('width'))
                             
                             var ctx = finalCanvas.getContext('2d');
                             var img = new Image();
@@ -472,17 +483,10 @@
                               ctx.drawImage(img, 0, 0)
                               var foreignObject = $(window.parent.$('#visFrame').find('iframe').contents().find('foreignObject').get(0)); 
                               var canvas = window.parent.$('#visFrame').find('iframe').contents().find('canvas').get(0); 
-                              ctx.drawImage(canvas, foreignObject.attr('x'), foreignObject.attr('y'));
+                              ctx.drawImage(canvas, foreignObject.attr('x'), foreignObject.attr('y') );
 
                               finalCanvas.toBlob(
                                 function (blob) {
-                                  // console.log('download canvas')
-                                  // var fileNameToSaveAs = name + '_' + new Date().toUTCString() + '.png';
-                                  // var downloadLink = document.createElement("a")
-                                  // downloadLink.download = fileNameToSaveAs;
-                                  // downloadLink.href = window.webkitURL.createObjectURL(blob);
-                                  // downloadLink.click();
-                                  // console.log('SEND MAIL', blob, '<<<')
                                   trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
                                   networkcube.showMessage('Email send!', 3000);
                                 }
@@ -492,9 +496,10 @@
                           }, 'white')
                         }
 
-                        function getHtml2Canvas(elementId)
+                        function getHtml2Canvas(element)
                         {
-                          html2canvas(window.parent.$('#visFrame').find('iframe').contents().find('#'+elementId), 
+                          console.log('HTML TO CANVAS')
+                          html2canvas(element, 
                           {
                             useCORS: true,
                             onrendered: function(canvas) 
@@ -525,7 +530,27 @@
                               });
                             }
                           });
-                        }                              
+                        }  
+                        
+                        function getHtml2CanvasFromDataView(element)
+                        {
+                          console.log('HTML TO CANVAS', element)
+                          html2canvas(element, 
+                          {
+                            useCORS: true,
+                            background: '#ff0',
+                            onrendered: function(canvas) 
+                            {
+                              console.log('>>> CANVAS', canvas)
+                              canvas.toBlob(function (blob) 
+                              {
+                                // bbach: blob is empty
+                                trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
+                                networkcube.showMessage('Email send!', 3000);
+                              }, 'image/png');
+                            }
+                          });
+                        }  
                         
           
                         // function sendEmail($toEmail, $fromEmail, $subject, $message)

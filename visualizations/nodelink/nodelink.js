@@ -140,8 +140,8 @@ layout = d3.layout.force()
     .links(links)
     .on('end', function () {
     unshowMessage();
-    _this.updateNodes();
     _this.updateLinks();
+    _this.updateNodes();
     _this.updateLayout();
     var coords = [];
     for (var i = 0; i < nodes.length; i++) {
@@ -416,8 +416,7 @@ function calculateCurvedLinks() {
                 { x: multiLink.source.x, y: multiLink.source.y },
                 { x: multiLink.source.x, y: multiLink.source.y },
                 { x: multiLink.target.x, y: multiLink.target.y },
-                { x: multiLink.target.x, y: multiLink.target.y }
-            ];
+                { x: multiLink.target.x, y: multiLink.target.y }];
         }
         else {
             links = multiLink.links().toArray();
@@ -436,8 +435,7 @@ function calculateCurvedLinks() {
             else {
                 dir = {
                     x: multiLink.target.x - multiLink.source.x,
-                    y: multiLink.target.y - multiLink.source.y
-                };
+                    y: multiLink.target.y - multiLink.source.y };
                 offset = stretchVector([-dir.y, dir.x], LINK_GAP);
                 offset2 = stretchVector([dir.x, dir.y], LINK_GAP);
                 for (var j = 0; j < links.length; j++) {
@@ -447,8 +445,7 @@ function calculateCurvedLinks() {
                             y: (multiLink.source.y + offset2[1] + (j - links.length / 2 + .5) * offset[1]) },
                         { x: multiLink.target.x - offset2[0] + (j - links.length / 2 + .5) * offset[0],
                             y: (multiLink.target.y - offset2[1] + (j - links.length / 2 + .5) * offset[1]) },
-                        { x: multiLink.target.x, y: multiLink.target.y }
-                    ];
+                        { x: multiLink.target.x, y: multiLink.target.y }];
                 }
             }
         }

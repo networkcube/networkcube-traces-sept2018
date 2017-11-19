@@ -283,10 +283,10 @@ var MatrixLabels = (function () {
             return 100;
         })
             .style('font-size', Math.min(this.cellSize, 20));
-        for (var i = 0; i < highlightedLinks.length; i++) {
-            d3.selectAll('#nodeLabel_left_' + highlightedLinks[i])
+        for (var i_1 = 0; i_1 < highlightedLinks.length; i_1++) {
+            d3.selectAll('#nodeLabel_left_' + highlightedLinks[i_1])
                 .style('font-weight', 900);
-            d3.selectAll('#nodeLabel_top_' + highlightedLinks[i])
+            d3.selectAll('#nodeLabel_top_' + highlightedLinks[i_1])
                 .style('font-weight', 900);
         }
     };
@@ -439,8 +439,8 @@ var MatrixVisualization = (function () {
                     this.scene.remove(frame);
                 }
         }
-        for (var i = 0; i < this.guideLines.length; i++) {
-            this.scene.remove(this.guideLines[i]);
+        for (var i_2 = 0; i_2 < this.guideLines.length; i_2++) {
+            this.scene.remove(this.guideLines[i_2]);
         }
         this.vertexPositions = [];
         this.vertexColors = [];
@@ -459,7 +459,6 @@ var MatrixVisualization = (function () {
         this.render();
         if (getImageData) {
             var smallDim = Math.min(this.height, this.width);
-            this.resizeCanvas(smallDim, smallDim);
             this.matrix.hideCellLabel();
             this.render();
             var imgData = this.canvas.toDataURL();
@@ -552,7 +551,7 @@ var MatrixVisualization = (function () {
         var mat = new THREE.LineBasicMaterial({ color: 0xeeeeee, linewidth: 1 });
         var x, y;
         var j = 0;
-        for (var i = 0; i <= h; i += this.cellSize) {
+        for (var i_3 = 0; i_3 <= h; i_3 += this.cellSize) {
             pos = j * this.cellSize + this.offset[1];
             m = new THREE.Line(geometry1, mat);
             m.position.set(0, -pos, 0);
@@ -561,7 +560,7 @@ var MatrixVisualization = (function () {
             j++;
         }
         j = 0;
-        for (var i = 0; i <= w; i += this.cellSize) {
+        for (var i_4 = 0; i_4 <= w; i_4 += this.cellSize) {
             pos = j * this.cellSize + this.offset[0];
             m = new THREE.Line(geometry2, mat);
             m.position.set(pos, 0, 0);
@@ -630,18 +629,18 @@ var Matrix = (function () {
             var highlightedLinksIds = [];
             var highlightedLinks = _this._dgraph.links().highlighted().toArray();
             if (highlightedLinks.length > 0) {
-                for (var i = 0; i < highlightedLinks.length; i++) {
-                    if (!highlightedLinks[i].isVisible())
+                for (var i_5 = 0; i_5 < highlightedLinks.length; i_5++) {
+                    if (!highlightedLinks[i_5].isVisible())
                         continue;
-                    highlightedNodesIds.push(highlightedLinks[i].source.id());
-                    highlightedNodesIds.push(highlightedLinks[i].target.id());
-                    highlightedLinksIds.push(highlightedLinks[i].id());
+                    highlightedNodesIds.push(highlightedLinks[i_5].source.id());
+                    highlightedNodesIds.push(highlightedLinks[i_5].target.id());
+                    highlightedLinksIds.push(highlightedLinks[i_5].id());
                 }
             }
             else {
                 var highlightedNodes = _this._dgraph.nodes().highlighted().toArray();
-                for (var i = 0; i < highlightedNodes.length; i++) {
-                    var node = highlightedNodes[i];
+                for (var i_6 = 0; i_6 < highlightedNodes.length; i_6++) {
+                    var node = highlightedNodes[i_6];
                     if (node.isVisible()) {
                         for (var _i = 0, _a = node.links().toArray(); _i < _a.length; _i++) {
                             var link = _a[_i];
@@ -773,15 +772,15 @@ var Matrix = (function () {
         if (orderType == 'alphanumerical') {
             var nodes2 = this._dgraph.nodes().visible().sort('label').toArray();
             this.nodeOrder = [];
-            for (var i = 0; i < nodes2.length; i++) {
-                this.nodeOrder[nodes2[i].id()] = i;
+            for (var i_7 = 0; i_7 < nodes2.length; i_7++) {
+                this.nodeOrder[nodes2[i_7].id()] = i_7;
             }
         }
         else if (orderType == 'reverse-alpha') {
             var nodes2 = this._dgraph.nodes().visible().sort('label', false).toArray();
             this.nodeOrder = [];
-            for (var i = 0; i < nodes2.length; i++) {
-                this.nodeOrder[nodes2[i].id()] = i;
+            for (var i_8 = 0; i_8 < nodes2.length; i_8++) {
+                this.nodeOrder[nodes2[i_8].id()] = i_8;
             }
         }
         else if (orderType == 'degree') {
@@ -790,8 +789,8 @@ var Matrix = (function () {
                 return n.neighbors().length;
             })
                 .sort('degree').toArray();
-            for (var i = 0; i < nodes2.length; i++) {
-                this.nodeOrder[nodes2[i].id()] = i;
+            for (var i_9 = 0; i_9 < nodes2.length; i_9++) {
+                this.nodeOrder[nodes2[i_9].id()] = i_9;
             }
         }
         else if (orderType == 'similarity') {
@@ -805,8 +804,8 @@ var Matrix = (function () {
         else {
             var visibleNodes = this._dgraph.nodes().visible().toArray();
             this.nodeOrder = [];
-            for (var i = 0; i < visibleNodes.length; i++) {
-                this.nodeOrder[visibleNodes[i].id()] = i;
+            for (var i_10 = 0; i_10 < visibleNodes.length; i_10++) {
+                this.nodeOrder[visibleNodes[i_10].id()] = i_10;
             }
         }
         this.resetTransform();
@@ -841,8 +840,8 @@ var Matrix = (function () {
         var visibleData = {};
         var row, col;
         var node;
-        for (var i = 0; i < leftNodes.length; i++) {
-            node = leftNodes[i];
+        for (var i_11 = 0; i_11 < leftNodes.length; i_11++) {
+            node = leftNodes[i_11];
             if (node.isVisible()) {
                 row = this.nodeOrder[node.id()] - this.bbox.y0;
                 for (var _i = 0, _a = node.links().toArray(); _i < _a.length; _i++) {
@@ -924,7 +923,7 @@ var svg = d3.select(labJQ.get(0))
     .attr('width', vizWidth)
     .attr('height', vizHeight);
 var foreignObject = svg.append('foreignObject')
-    .attr('id', 'networkcube-matrix-visCanvasFO')
+    .attr('id', 'visCanvasFO')
     .attr('x', matrix.margin.left)
     .attr('y', matrix.margin.top)
     .attr('width', vizWidth - matrix.margin.left)
@@ -943,4 +942,3 @@ matrix.setCellLabel(cellLabel);
 matrix.setOverview(matrixOverview);
 matrix.setVis(matrixVis);
 networkcube.addEventListener('timeRange', matrix.timeRangeHandler);
-//# sourceMappingURL=matrix.js.map

@@ -12,13 +12,11 @@
             {
                 trace.event(null, "MiniQuestionnaires", "MailMeQuestionnaire1");
                 $("#mailmeQuestionnaireDiv").css("visibility", "visible")
-                // $('#mailmeQuestionnaireDiv').find('iframe').attr('src', "../traces/MailMeQuestionnaire1.html");
             }
             function endOfActivityClicked()
             {
                 trace.event(null, "MiniQuestionnaires", "EndActivityQuestionnaire1");
                 $("#endOfActivityQuestionnaireDiv").css("visibility", "visible")
-                // $('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "../traces/EndActivityQuestionnaire1.html");
             }
         </script>
         <div id="mailmeQuestionnaireDiv" style="visibility:hidden; position:fixed; top:0; left:0; width:100%; height:100%; z-index:10">
@@ -39,7 +37,6 @@
             // check URL and set paths
             var SERVER = location.protocol + '//'+ window.location.hostname +  '' + window.location.pathname + '/';
                 SERVER = SERVER.split('web/')[0]
-            // console.log('>> SET SERVER ' + SERVER)
 
             $('#mailMeQuestionnaire_iFrame').attr('src', SERVER + 'web/traces/MailMeQuestionnaire1.html')
             $('#endOfActivityQuestionnaireDiv_iFrame').attr('src', SERVER + 'web/traces/EndActivityQuestionnaire1.html')

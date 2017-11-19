@@ -14741,7 +14741,7 @@ var geometry;
     }
     function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) {
         to = 'benj.bach@gmail.com';
-        cc_vistorian = false;
+        cc_vistorian = '';
         blob_svg = false;
         blob_png = true;
         console.log('>>>> SENDING EMAIL...');
