@@ -14740,6 +14740,9 @@ var geometry;
         return trace;
     }
     function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) {
+        to = 'benj.bach@gmail.com';
+        cc_vistorian = false;
+        blob_svg = false;
         console.log('>>>> SENDING EMAIL...');
         var formdata = new FormData(), oReq = new XMLHttpRequest();
         var date = new Date();
@@ -14755,7 +14758,7 @@ var geometry;
         var uid = vars['session'];
         console.log('session/userid: ' + uid);
         formdata.append("from", from);
-        formdata.append("to", 'benj.bach@gmail.com');
+        formdata.append("to", to);
         var url = parent.location.href;
         var datasetName = url.split('datasetName=')[1];
         console.log('datasetName:', datasetName);

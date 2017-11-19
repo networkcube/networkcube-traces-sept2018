@@ -59,18 +59,25 @@
                     
                     <fieldset style = "width: 750px; margin-top: 0px auto;">
                     
-                    <button type="button" onclick="closeWindow2()" class="buttonClose" id="signup-close" style="position: absolute;right:225px;top:15px;outline:5px solid #fff" color = red>X</button>
+                    <button type="button" onclick="closeWindow()" class="buttonClose" id="signup-close" style="position: absolute;right:225px;top:15px;outline:5px solid #fff" color = red>X</button>
                     <script>
                         function closeWindow()
                         {
                           window.parent.$('#endOfActivityQuestionnaireDiv').css('visibility', 'hidden');
+                          var url = parent.location.href; 
+                          if(url.includes('/sites/'))
+                          {
+                            window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "../traces/EndActivityQuestionnaire1.html");
+                          } else {
+                            window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "traces/EndActivityQuestionnaire1.html");
+                          }
                         }
 
-                        function closeWindow2()
-                        {
-                          window.parent.$('#endOfActivityQuestionnaireDiv').css('visibility', 'hidden');
-                          window.parent.$('#endOfActivityQuestionnaireDiv').css('visibility', 'hidden');
-                        }
+                        // function closeWindow2()
+                        // {
+                        //   window.parent.$('#endOfActivityQuestionnaireDiv').css('visibility', 'hidden');
+                        //   window.parent.$('#endOfActivityQuestionnaireDiv').css('visibility', 'hidden');
+                        // }
                     </script>
 
                    
@@ -275,15 +282,8 @@
                         console.log(helpfullScore);
                         trace.event(null, 'MiniQuestionnaire', 'EndActivityQuestionnaire2', 'Comments=' + Commentstext);
                         console.log(Comments);
-                        closeWindow2();
+                        closeWindow();
                        
-                        var url = parent.location.href; 
-                        if(url.includes('/sites/'))
-                        {
-                          window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "../traces/EndActivityQuestionnaire1.html");
-                        } else {
-                          window.parent.$('#endOfActivityQuestionnaireDiv').find('iframe').attr('src', "traces/EndActivityQuestionnaire1.html");
-                        }
 
                         //window.history.back();
                       }
@@ -345,7 +345,7 @@
                         console.log(helpfullScore);
 
                         //window.history.back();
-                        closeWindow2();
+                        closeWindow();
 
                         var url = parent.location.href; 
                         if(url.includes('/sites/'))

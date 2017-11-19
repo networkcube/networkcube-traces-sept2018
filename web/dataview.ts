@@ -56,13 +56,14 @@ function init() {
     console.log('networkcube.isTrackingSet ', networkcube.isTrackingSet())
     console.log('sessionId', sessionId)
     if ( !networkcube.isTrackingSet() && sessionId != 0){
-        setupConditionalLogging();
+        vistorian.setupConditionalLogging('traces/');
     }
 }
 
 if(networkcube.isTrackingEnabled())
 {
-    $('#trackingContainer').load('traces/questionnaires-dataview.html');
+    console.log('>> LOAD questionnaires')
+    $('#trackingContainer').load('./traces/questionnaires.html');
 } else {
     if($('#trackingButtonsDiv'))
     {
@@ -70,175 +71,340 @@ if(networkcube.isTrackingEnabled())
     }
 }
 
-function enableDisableTracking()
-{
-    if(networkcube.isTrackingEnabled())
-        {
-               setupConditionalLoggingDisable();
-        } else {
-               setupConditionalLogging(); 
-        }
-}
+// function enableDisableTracking()
+// {
+//     if(networkcube.isTrackingEnabled())
+//         {
+//                 vistorian.setupConditionalLoggingDisable('traces/');
+//         } else {
+//                vistorian.setupConditionalLogging('traces/'); 
+//         }
+// }
 
  
 
-function setupConditionalLogging() {
-        bootbox.confirm({
-            closeButton: true,
-            size: "large",
-            class:"text-left",
-            //position: "left",
-            //title: "Consent to tracking",
-            message: 
-            '<p><strong><big>Consent to tracking</big></strong>\
-            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-            <br> This allows us to understand how the Vistorian is used and to improve it.\
-            <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-            <br>No personal information will be collected or saved with the tracking data.\
-            <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-            <p>If you agree to be tracked we will start tracking, and\
-            <ul>\
-            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-            <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-            </ul>\
-            Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
-            <p>\
-            <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-            <p>Thank you for agreeing to participate in our research.\
-            <p>The Vistorian Team (vistorian@inria.fr)',
-        buttons: {
-            confirm: {
-                label: "I AGREE",
-                className:  "btn-success pull-right"
-            },
-            cancel: {
-                label:  "Cancel",
-                className:  "btn-warning pull-left"
-            }
-        },
-        callback: function (result) 
-        {
-            if (result == true)
-            {
-                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                $('#trackingContainer').load('traces/questionnaires-dataview.html');
-                $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-                console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
-                    /*bootbox.alert({
-                         message: "Thank you for reporting on your activity.",
-                         backdrop: true
-                     });*/
-                   if (showMessageAgain == null){
-                       bootbox.confirm({
-                            closeButton: true,
-                            //size: "small",
-                            class:"text-left",
-                            backdrop: true,
-                            message: 
-                            '<p><big>Thank you for reporting on your activity</big>\
-                             <p><input id="showMessageAgainInput" type="checkbox" name="ShowMessageAgain" onkeyup="localStorage.setItem(\'SHOW_MESSAGE_AGAIN\', document.getElementById(\'showMessageAgainInput\').value)"> &nbsp;Do not show this message again<br>',
-                             buttons: {
-                                 confirm: {
-                                     label: "OK",
-                                     className:  "btn-success pull-right"
-                                 },
-                                 cancel: {
-                                 label:  "Cancel",
-                                 className:  "btn-warning pull-left"
-                                 }
-                             },
-                            
-                        callback: function (result) {
-                            if ($('#showMessageAgainInput').is(':checked'))
-                                showMessageAgain = true;
-                            console.log("RESULT", localStorage.getItem("SHOW_MESSAGE_AGAIN"));
-                        }
-                    })
-                   }
-            }else{
-                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
-                if($('#trackingButtonsDiv'))
-                {
-                    $('#trackingButtonsDiv').remove()
-                }
-                $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
-            }
-        }
-    });
-}
+// <<<<<<< HEAD
+// function setupConditionalLogging() 
+// {
+//         bootbox.confirm({
+//             closeButton: true,
+//             size: "large",
+//             class:"text-left",
+//             //position: "left",
+//             //title: "Consent to tracking",
+//             message: 
+//             '<p><strong><big>Consent to tracking</big></strong>\
+//             <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+//             <br> This allows us to understand how the Vistorian is used and to improve it.\
+//             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+//             <br>No personal information will be collected or saved with the tracking data.\
+//             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+//             <p>If you agree to be tracked we will start tracking, and\
+//             <ul>\
+//             <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+//             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+//             </ul>\
+//             <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
+//             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+//             <p>Thank you for agreeing to participate in our research.\
+//             <p>The Vistorian Team (vistorian@inria.fr)',
+//         buttons: {
+//             confirm: {
+//                 label: "I Agree",
+//                 className:  "btn-success pull-right"
+//             },
+//             cancel: {
+//                 label:  "Cancel",
+//                 className:  "btn-warning pull-left"
+//             }
+//         },
+//         callback: function (result) 
+//         {
+//             if (result == true)
+//             {
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+//                 $('#trackingContainer').load('traces/questionnaires-dataview.html');
+//                 $('#enableDisableTrackingBtn')
+//                     .prop('value', 'Disable tracking and screenshots')
+//                     .prop('class', 'disable');
+
+//                 console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+//                 trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
+
+//                 /*bootbox.alert({
+//                         message: "Thank you for reporting on your activity.",
+//                         backdrop: true
+//                     });*/
+
+//                 // bb: removed this part as I don't think we need to thank the user again here. Saves us a click.
+//                 // bootbox.prompt({
+//                 //     closeButton: false,
+//                 //     class:"text-left",
+//                 //     title: "Thank you for reporting on your activity</p>",
+//                 //     backdrop: true,
+//                 //         buttons: {
+//                 //             confirm: {
+//                 //                 label: false,
+//                 //                 className:  "btn-success pull-right"
+//                 //             },
+//                 //             cancel: {
+//                 //             label:  false,
+//                 //             className:  "btn-warning pull-left"
+//                 //             }
+//                 //         },
+//                 //     inputType: 'checkbox',
+//                 //     inputOptions: [
+//                 //         {
+//                 //             text: '&nbsp;Do not show this message again',
+//                 //             value: '1',
+//                 //         }
+//                 //     ],
+//                 //     callback: function (result) {
+//                 //         console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+//                 //         trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
+//                 //     }
+//                 // })
+//             }else{
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+//                 if($('#trackingButtonsDiv'))
+//                 {
+//                     $('#trackingButtonsDiv').remove()
+//                 }
+//                 $('#enableDisableTrackingBtn')
+//                     .prop('value', 'Enable tracking and screenshots')
+//                     .prop('class', 'enable');
+//             }
+//         }
+//     });
+// }
        
-function setupConditionalLoggingDisable() {
-        bootbox.confirm({
-            closeButton: true,
-            size: "large",
-            class:"text-left",
-            //position: "left",
-            //title: "Consent to tracking",
-            message: 
-            '<p><strong><big>Disable tracking</big></strong>\
-            <p>Please confirm that you want Tracking to be disabled.\
-            <br>Once tracking is disabled no more tracking information will be captured.  Nothing will be sent to the server.\
-            <p>You will be able to restart tracking again (and getting screenshots) if you wish.\
-            <p>The data we gathered from your past use of the Victorian is de-identified and contains no personal information.\
-            <br>If you wish this data to be removed from the server please send a personal email to vistorian@inria.fr <vistorian@inria.fr>.\
-            <p>Thank you for participating in our study.\
-            <br>The Vistorian Team (vistorian@inria.fr)',
-        buttons: {
-            confirm: {
-                label: "CONFIRM",
-                className:  "btn-success pull-right"
-            },
-            cancel: {
-                label:  "Cancel",
-                className:  "btn-warning pull-left"
-            }
-        },
-        callback: function (result) 
-        {
-            if (result == false)
-            {
-                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                $('#trackingContainer').load('traces/questionnaires-dataview.html');
-                $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-            }else{
-                localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
-                if($('#trackingButtonsDiv'))
-                {
-                    $('#trackingButtonsDiv').remove()
-                }
-                $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
-                bootbox.confirm({
+// function setupConditionalLoggingDisable() {
+//         bootbox.confirm({
+//             closeButton: true,
+//             size: "large",
+//             class:"text-left",
+//             //position: "left",
+//             //title: "Consent to tracking",
+//             message: 
+//             '<p><strong><big>Disable tracking</big></strong>\
+//             <p>Please confirm that you want Tracking to be disabled.\
+//             <br>Once tracking is disabled no more tracking information will be captured.  Nothing will be sent to the server.\
+//             <p>You will be able to restart tracking again (and getting screenshots) if you wish.\
+//             <p>The data we gathered from your past use of the Victorian is de-identified and contains no personal information.\
+//             <br>If you wish this data to be removed from the server please send a personal email to vistorian@inria.fr <vistorian@inria.fr>.\
+//             <p>Thank you for participating in our study.\
+//             <br>The Vistorian Team (vistorian@inria.fr)',
+//         buttons: {
+//             confirm: {
+//                 label: "CONFIRM",
+//                 className:  "btn-success pull-right"
+//             },
+//             cancel: {
+//                 label:  "Cancel",
+//                 className:  "btn-warning pull-left"
+//             }
+//         },
+//         callback: function (result) 
+//         {
+//             if (result == false)
+//             {
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+//                 $('#trackingContainer').load('traces/questionnaires-dataview.html');
+//                 $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+//             }else{
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+//                 if($('#trackingButtonsDiv'))
+//                 {
+//                     $('#trackingButtonsDiv').remove()
+//                 }
+//                 $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+//                 // bb: removed as I don't think users need to give a reason. We do not care I think and I woudld not bug users too much.
+//                 // bootbox.prompt({
+//                 //       size: "large",
+//                 //       closeButton: false,
+//                 //       class:"text-left",
+//                 //       title: "&nbsp;",
+//                 //       backdrop: true,
+//                 //        buttons: {
+//                 //         confirm: {
+//                 //             label: "Send",
+//                 //             className:  "btn-success pull-right"
+//                 //         },
+//                 //         cancel: {
+//                 //             label:  "Cancel",
+//                 //             className:  "btn-warning pull-left"
+//                 //         }
+//                 //     },
+//                 //       callback: function(result) {
+//                 //           console.log(result);
+//                 //           //trace.event(null, 'DisableTracking', 'DisableTrackingReason', result);
+//                 //       }
+//                 //     }).find('.bootbox-body').prepend('<p>Please, describe the reason for disabling tracking:</p>');
+//             }
+//         }
+//     });
+// }
 
 
-                    closeButton: true,
-                    size: "large",
-                    class:"text-left",
-                    message: 
-                    '<p>Please, describe the reason for disabling tracking:\
-                    <p><textarea id="reasonDisablingInput" type="text" name="reasonDisabling" cols="50" onkeyup="localStorage.setItem(\'REASON_DISABLING\', document.getElementById(\'reasonDisablingInput\').value)">',
-                    backdrop: true,
-                    buttons: {
-                        confirm: {
-                            label: "SEND",
-                            className:  "btn-success pull-right"
-                        },
-                        cancel: {
-                            label:  "Cancel",
-                            className:  "btn-warning pull-left"
-                        }
-                    },
-                        callback: function(result) {
-                          if (result == true){
-                            localStorage.setItem("REASON_DISABLING", localStorage.getItem("REASON_DISABLING"));
-                            console.log('REASON_DISABLING: ', localStorage.getItem("REASON_DISABLING"));                          
-                      }
-                    });
-            }
-        }
-    });
-}
+// =======
+// function setupConditionalLogging() {
+//         bootbox.confirm({
+//             closeButton: true,
+//             size: "large",
+//             class:"text-left",
+//             //position: "left",
+//             //title: "Consent to tracking",
+//             message: 
+//             '<p><strong><big>Consent to tracking</big></strong>\
+//             <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+//             <br> This allows us to understand how the Vistorian is used and to improve it.\
+//             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+//             <br>No personal information will be collected or saved with the tracking data.\
+//             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+//             <p>If you agree to be tracked we will start tracking, and\
+//             <ul>\
+//             <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+//             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+//             </ul>\
+//             Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
+//             <p>\
+//             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+//             <p>Thank you for agreeing to participate in our research.\
+//             <p>The Vistorian Team (vistorian@inria.fr)',
+//         buttons: {
+//             confirm: {
+//                 label: "I AGREE",
+//                 className:  "btn-success pull-right"
+//             },
+//             cancel: {
+//                 label:  "Cancel",
+//                 className:  "btn-warning pull-left"
+//             }
+//         },
+//         callback: function (result) 
+//         {
+//             if (result == true)
+//             {
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+//                 $('#trackingContainer').load('traces/questionnaires-dataview.html');
+//                 $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+//                 console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+//                 trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
+//                     /*bootbox.alert({
+//                          message: "Thank you for reporting on your activity.",
+//                          backdrop: true
+//                      });*/
+//                    if (showMessageAgain == null){
+//                        bootbox.confirm({
+//                             closeButton: true,
+//                             //size: "small",
+//                             class:"text-left",
+//                             backdrop: true,
+//                             message: 
+//                             '<p><big>Thank you for reporting on your activity</big>\
+//                              <p><input id="showMessageAgainInput" type="checkbox" name="ShowMessageAgain" onkeyup="localStorage.setItem(\'SHOW_MESSAGE_AGAIN\', document.getElementById(\'showMessageAgainInput\').value)"> &nbsp;Do not show this message again<br>',
+//                              buttons: {
+//                                  confirm: {
+//                                      label: "OK",
+//                                      className:  "btn-success pull-right"
+//                                  },
+//                                  cancel: {
+//                                  label:  "Cancel",
+//                                  className:  "btn-warning pull-left"
+//                                  }
+//                              },
+                            
+//                         callback: function (result) {
+//                             if ($('#showMessageAgainInput').is(':checked'))
+//                                 showMessageAgain = true;
+//                             console.log("RESULT", localStorage.getItem("SHOW_MESSAGE_AGAIN"));
+//                         }
+//                     })
+//                    }
+//             }else{
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+//                 if($('#trackingButtonsDiv'))
+//                 {
+//                     $('#trackingButtonsDiv').remove()
+// //                 }
+// //                 $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+// //             }
+// //         }
+// //     });
+// // }
+       
+// function setupConditionalLoggingDisable() {
+//         bootbox.confirm({
+//             closeButton: true,
+//             size: "large",
+//             class:"text-left",
+//             //position: "left",
+//             //title: "Consent to tracking",
+//             message: 
+//             '<p><strong><big>Disable tracking</big></strong>\
+//             <p>Please confirm that you want Tracking to be disabled.\
+//             <br>Once tracking is disabled no more tracking information will be captured.  Nothing will be sent to the server.\
+//             <p>You will be able to restart tracking again (and getting screenshots) if you wish.\
+//             <p>The data we gathered from your past use of the Victorian is de-identified and contains no personal information.\
+//             <br>If you wish this data to be removed from the server please send a personal email to vistorian@inria.fr <vistorian@inria.fr>.\
+//             <p>Thank you for participating in our study.\
+//             <br>The Vistorian Team (vistorian@inria.fr)',
+//         buttons: {
+//             confirm: {
+//                 label: "CONFIRM",
+//                 className:  "btn-success pull-right"
+//             },
+//             cancel: {
+//                 label:  "Cancel",
+//                 className:  "btn-warning pull-left"
+//             }
+//         },
+//         callback: function (result) 
+//         {
+//             if (result == false)
+//             {
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+//                 $('#trackingContainer').load('traces/questionnaires-dataview.html');
+//                 $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+//             }else{
+//                 localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+//                 if($('#trackingButtonsDiv'))
+//                 {
+//                     $('#trackingButtonsDiv').remove()
+//                 }
+//                 $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+//                 bootbox.confirm({
+
+
+//                     closeButton: true,
+//                     size: "large",
+//                     class:"text-left",
+//                     message: 
+//                     '<p>Please, describe the reason for disabling tracking:\
+//                     <p><textarea id="reasonDisablingInput" type="text" name="reasonDisabling" cols="50" onkeyup="localStorage.setItem(\'REASON_DISABLING\', document.getElementById(\'reasonDisablingInput\').value)">',
+//                     backdrop: true,
+//                     buttons: {
+//                         confirm: {
+//                             label: "SEND",
+//                             className:  "btn-success pull-right"
+//                         },
+//                         cancel: {
+//                             label:  "Cancel",
+//                             className:  "btn-warning pull-left"
+//                         }
+//                     },
+//                         callback: function(result) {
+//                           if (result == true){
+//                             localStorage.setItem("REASON_DISABLING", localStorage.getItem("REASON_DISABLING"));
+//                             console.log('REASON_DISABLING: ', localStorage.getItem("REASON_DISABLING"));                          
+//                       }
+//                     });
+//             }
+//         }
+//     });
+// }
             
+// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
 // loads the list of available visualizations and displays them on the left
 function loadVisualizationList() {
     // create visualization links

@@ -1,13 +1,8 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var vistorian;
 (function (vistorian) {
     var head = $('head');
@@ -29,70 +24,67 @@ var vistorian;
         $("head").append(script);
     }
     var tables = [];
-    var showMessageAgain;
+    var showMessageAgain = null;
     var VTable = (function () {
         function VTable(name, data) {
             this.name = name;
             this.data = data;
         }
         return VTable;
-    }());
+    })();
     vistorian.VTable = VTable;
     var VTableSchema = (function () {
         function VTableSchema(name) {
             this.name = name;
         }
         return VTableSchema;
-    }());
+    })();
     vistorian.VTableSchema = VTableSchema;
     var VNodeSchema = (function (_super) {
         __extends(VNodeSchema, _super);
         function VNodeSchema() {
-            var _this = _super.call(this, 'userNodeSchema') || this;
-            _this.relation = [];
-            _this.location = -1;
-            _this.id = 0;
-            _this.label = -1;
-            _this.time = -1;
-            _this.nodeType = -1;
-            return _this;
+            _super.call(this, 'userNodeSchema');
+            this.relation = [];
+            this.location = -1;
+            this.id = 0;
+            this.label = -1;
+            this.time = -1;
+            this.nodeType = -1;
         }
         ;
         return VNodeSchema;
-    }(VTableSchema));
+    })(VTableSchema);
     vistorian.VNodeSchema = VNodeSchema;
     var VLinkSchema = (function (_super) {
         __extends(VLinkSchema, _super);
         function VLinkSchema() {
-            var _this = _super.call(this, 'userLinkSchema') || this;
-            _this.location_source = -1;
-            _this.location_target = -1;
-            _this.id = 0;
-            _this.source = -1;
-            _this.target = -1;
-            _this.weight = -1;
-            _this.time = -1;
-            _this.linkType = -1;
-            return _this;
+            _super.call(this, 'userLinkSchema');
+            this.location_source = -1;
+            this.location_target = -1;
+            this.id = 0;
+            this.source = -1;
+            this.target = -1;
+            this.weight = -1;
+            this.time = -1;
+            this.linkType = -1;
         }
         ;
         return VLinkSchema;
-    }(VTableSchema));
+    })(VTableSchema);
     vistorian.VLinkSchema = VLinkSchema;
     var VLocationSchema = (function (_super) {
         __extends(VLocationSchema, _super);
         function VLocationSchema() {
-            var _this = _super.call(this, 'userLocationSchema') || this;
-            _this.id = 0;
-            _this.label = 1;
-            _this.geoname = 2;
-            _this.longitude = 3;
-            _this.latitude = 4;
-            return _this;
+            _super.call(this, 'userLocationSchema');
+            this.id = 0;
+            this.label = 1;
+            this.geoname = 2;
+            this.longitude = 3;
+            this.latitude = 4;
         }
         ;
         return VLocationSchema;
-    }(VTableSchema));
+    })(VTableSchema);
     vistorian.VLocationSchema = VLocationSchema;
     var Network = (function () {
         function Network(id) {
@@ -102,7 +94,7 @@ var vistorian;
             this.userLinkSchema = new VLinkSchema();
         }
         return Network;
-    }());
+    })();
     vistorian.Network = Network;
     function loadCSV(files, callBack, sessionid) {
         var loadCount = 0;
@@ -234,6 +226,88 @@ var vistorian;
             callBack(locationsFound);
         }
     }
+    function updateEntryToLocationTableDariah(index, geoname, locationTable, locationSchema) {
+        geoname = geoname.trim();
+        fullGeoNames.push(geoname);
+        console.log('url', "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim());
+        var xhr = $.ajax({
+            url: "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim(),
+            dataType: 'xml'
+        })
+            .done(function (data, text, XMLHttpRequest) {
+            var data = x2js.xml2json(data);
+            var entry;
+            var length;
+            var rowIndex = XMLHttpRequest.uniqueId + 1;
+            var userLocationLabel = locationTable.data[rowIndex][locationSchema.label];
+            if (data.response.term != undefined) {
+                var validResults = [];
+                var result;
+                if (data.response.term[0] != undefined) {
+                    for (var i = 0; i < data.response.term.length; i++) {
+                        entry = data.response.term[i];
+                        if (entry == undefined)
+                            continue;
+                        if (entry.longitude != undefined
+                            && entry.latitude != undefined
+                            && typeof entry.longitude == 'string'
+                            && typeof entry.latitude == 'string') {
+                            validResults.push(entry);
+                        }
+                    }
+                }
+                else {
+                    validResults.push(data.response.term);
+                }
+                if (validResults.length == 0) {
+                    locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
+                    return;
+                }
+                if (validResults.length == 1) {
+                    locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
+                    return;
+                }
+                else {
+                    console.log('multiple results found');
+                    var geonameAttributes = fullGeoNames[rowIndex - 1];
+                    geonameAttributes = geonameAttributes.split(',');
+                    for (var j = 0; j < geonameAttributes.length; j++) {
+                        geonameAttributes[j] = geonameAttributes[j].trim();
+                    }
+                    var regionTerms;
+                    for (var i = 0; i < validResults.length; i++) {
+                        regionTerms = validResults[i].path.split('|');
+                        for (var j = 0; j < regionTerms.length; j++) {
+                            regionTerms[j] = regionTerms[j].trim();
+                        }
+                        if (geonameAttributes.length > 1 && regionTerms.length > 1) {
+                            for (var j = 1; j < geonameAttributes.length; j++) {
+                                for (var k = 1; k < regionTerms.length; k++) {
+                                    if (geonameAttributes[j] == regionTerms[k]) {
+                                        locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[i].longitude, validResults[i].latitude];
+                                        console.log('update', geoname, validResults[i].longitude, validResults[i].latitude);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
+                    console.log('update', geoname, validResults[0].longitude, validResults[0].latitude);
+                }
+            }
+            else {
+                if (geoname == '')
+                    return;
+                locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
+                console.log('update', geoname, undefined, undefined);
+            }
+        })
+            .always(function () {
+            requestsRunning--;
+        });
+        xhr['uniqueId'] = requestsRunning++;
+    }
     function updateEntryToLocationTableOSM(index, geoname, locationTable, locationSchema) {
         geoname = geoname.trim();
         fullGeoNames.push(geoname);
@@ -306,7 +380,7 @@ var vistorian;
         console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled());
         if (networkcube.isTrackingEnabled()) {
             $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-            $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+            $('#trackingContainer').load('../traces/questionnaires.html');
         }
         else {
             $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
@@ -319,39 +393,38 @@ var vistorian;
         $('#' + elementId).append('<br/><br/>');
     }
     vistorian.setHeader = setHeader;
-    function enableDisableTracking() {
+    function enableDisableTracking(relativePathToTracesDir) {
         if (networkcube.isTrackingEnabled()) {
-            setupConditionalLoggingDisable();
+            setupConditionalLoggingDisable(relativePathToTracesDir);
         }
         else {
-            setupConditionalLogging();
+            setupConditionalLogging(relativePathToTracesDir);
         }
     }
     vistorian.enableDisableTracking = enableDisableTracking;
-    function setupConditionalLogging() {
+    function setupConditionalLogging(relativePathToTracesDir) {
         bootbox.confirm({
             closeButton: true,
             size: "large",
             class: "text-left",
             message: '<p><strong><big>Consent to tracking</big></strong>\
-            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-            <br> This allows us to understand how the Vistorian is used and to improve it.\
-            <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-            <br>No personal information will be collected or saved with the tracking data.\
-            <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-            <p>If you agree to be tracked we will start tracking, and\
-            <ul>\
-            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-            <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-            </ul>\
-            Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
-            <p>\
-            <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-            <p>Thank you for agreeing to participate in our research.\
-            <p>The Vistorian Team (vistorian@inria.fr)',
+                <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+                <br> This allows us to understand how the Vistorian is used and to improve it.\
+                <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+                <br>No personal information will be collected or saved with the tracking data.\
+                <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+                <p>If you agree to be tracked we will start tracking, and\
+                <ul>\
+                <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+                <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+                </ul>\
+                <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
+                <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+                <p>Thank you for agreeing to participate in our research.\
+                <p>The Vistorian Team (vistorian@inria.fr)',
             buttons: {
                 confirm: {
-                    label: "I AGREE",
+                    label: "I Agree",
                     className: "btn-success pull-right"
                 },
                 cancel: {
@@ -362,46 +435,27 @@ var vistorian;
             callback: function (result) {
                 if (result == true) {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                    $('#trackingContainer').load('../traces/questionnaires-visualization.html');
-                    $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
+                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
+                    $('#enableDisableTrackingBtn')
+                        .prop('value', 'Disable tracking and screenshots')
+                        .prop('class', 'disable');
                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                    if (showMessageAgain == null) {
-                        bootbox.confirm({
-                            closeButton: true,
-                            class: "text-left",
-                            backdrop: true,
-                            message: '<p><big>Thank you for reporting on your activity</big>\
-                             <p><input id="showMessageAgainInput" type="checkbox" name="ShowMessageAgain" onkeyup="localStorage.setItem(\'SHOW_MESSAGE_AGAIN\', document.getElementById(\'showMessageAgainInput\').value)"> &nbsp;Do not show this message again<br>',
-                            buttons: {
-                                confirm: {
-                                    label: "OK",
-                                    className: "btn-success pull-right"
-                                },
-                                cancel: {
-                                    label: "Cancel",
-                                    className: "btn-warning pull-left"
-                                }
-                            },
-                            callback: function (result) {
-                                if ($('#showMessageAgainInput').is(':checked'))
-                                    showMessageAgain = true;
-                                console.log("RESULT", localStorage.getItem("SHOW_MESSAGE_AGAIN"));
-                            }
-                        });
-                    }
                 }
                 else {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                     if ($('#trackingButtonsDiv')) {
                         $('#trackingButtonsDiv').remove();
                     }
-                    $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
+                    $('#enableDisableTrackingBtn')
+                        .prop('value', 'Enable tracking and screenshots')
+                        .prop('class', 'enable');
                 }
             }
         });
     }
-    function setupConditionalLoggingDisable() {
+    vistorian.setupConditionalLogging = setupConditionalLogging;
+    function setupConditionalLoggingDisable(relativePathToTracesDir) {
         bootbox.confirm({
             closeButton: true,
             size: "large",
@@ -427,7 +481,8 @@ var vistorian;
             callback: function (result) {
                 if (result == false) {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                    $('#trackingContainer').load('../traces/questionnaires-visualization.html');
+                    console.log('>>> TRACKING ENABLED');
+                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
                     $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
                 }
                 else {
@@ -435,35 +490,14 @@ var vistorian;
                     if ($('#trackingButtonsDiv')) {
                         $('#trackingButtonsDiv').remove();
                     }
-                    $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
-                    bootbox.confirm({
-                        closeButton: true,
-                        size: "large",
-                        class: "text-left",
-                        message: '<p>Please, describe the reason for disabling tracking:\
-                    <p><textarea id="reasonDisablingInput" type="text" name="reasonDisabling" cols="50" onkeyup="localStorage.setItem(\'REASON_DISABLING\', document.getElementById(\'reasonDisablingInput\').value)">',
-                        backdrop: true,
-                        buttons: {
-                            confirm: {
-                                label: "SEND",
-                                className: "btn-success pull-right"
-                            },
-                            cancel: {
-                                label: "Cancel",
-                                className: "btn-warning pull-left"
-                            }
-                        },
-                        callback: function (result) {
-                            if (result == true) {
-                                localStorage.setItem("REASON_DISABLING", localStorage.getItem("REASON_DISABLING"));
-                                console.log('REASON_DISABLING: ', localStorage.getItem("REASON_DISABLING"));
-                            }
-                        }
-                    });
+                    $('#enableDisableTrackingBtn')
+                        .prop('value', 'Enable tracking and screenshots')
+                        .prop('class', 'enable');
                 }
             }
         });
     }
+    vistorian.setupConditionalLoggingDisable = setupConditionalLoggingDisable;
     function exportNetwork(network) {
         var blurb = network;
         var element = document.createElement('a');

@@ -48,8 +48,32 @@ def hello():
 def test():
     return "test OK"
 
+<<<<<<< HEAD
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    send_from = 'vistorian'
+    send_to = 'vanessa.serrano@iqs.url.edu'
+    send_cc = 'benj.bach@gmail.com'
+    send_subject = '[Vistorian] New user tracking registration'
+    send_note = '??'    
+    textBody = "Hi Vistorians, This is a tracking request from a new user. Their email address is " + request.form['email'].strip() + "."
+
+    msg = MIMEText('')
+    msg['Subject'] = send_subject
+    msg['From'] = send_from
+    msg['To'] = send_to
+    msg['CC'] = send_cc
+
+    s = smtplib.SMTP('smtp.inria.fr')
+    s.send_message(msg)
+    s.quit()
+    return response
+
+@app.route("/send", methods=['GET', 'POST'])
+=======
 
 @app.route("/", methods=['GET', 'POST'])
+>>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
 def send():
     try:
         send_from = request.form['from'].strip()
