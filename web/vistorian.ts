@@ -311,109 +311,109 @@ module vistorian {
     // }
 
     /// [bbach]: function deprecated since switched to open-street-map webservice.
-    // function updateEntryToLocationTableDariah(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
-    //     geoname = geoname.trim();
-    //     fullGeoNames.push(geoname);
-    //     // get coordinates for name: 
-    //     console.log('url', "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim())
-    //     var xhr = $.ajax({
-    //         url: "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim(),
-    //         dataType: 'xml'
-    //     })
-    //         .done(function(data, text, XMLHttpRequest) {
-    //             var data = x2js.xml2json(data);
-    //             var entry;
-    //             var length;
-    //             var rowIndex = XMLHttpRequest.uniqueId + 1;
+    function updateEntryToLocationTableDariah(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
+        geoname = geoname.trim();
+        fullGeoNames.push(geoname);
+        // get coordinates for name: 
+        console.log('url', "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim())
+        var xhr = $.ajax({
+            url: "http://ref.dariah.eu/tgnsearch/tgnquery2.xql?ac=" + geoname.split(',')[0].trim(),
+            dataType: 'xml'
+        })
+            .done(function(data, text, XMLHttpRequest) {
+                var data = x2js.xml2json(data);
+                var entry;
+                var length;
+                var rowIndex = XMLHttpRequest.uniqueId + 1;
 
-    //             var userLocationLabel = locationTable.data[rowIndex][locationSchema.label];
-    //             if (data.response.term != undefined) {
+                var userLocationLabel = locationTable.data[rowIndex][locationSchema.label];
+                if (data.response.term != undefined) {
 
-    //                 // get all results
-    //                 var validResults = []
-    //                 var result;
+                    // get all results
+                    var validResults = []
+                    var result;
 
-    //                 // console.log('data.response.term',data.response.term)
-    //                 if (data.response.term[0] != undefined) {
-    //                     for (var i = 0; i < data.response.term.length; i++) {
-    //                         entry = data.response.term[i];
-    //                         if (entry == undefined)
-    //                             continue;
-    //                         if (entry.longitude != undefined
-    //                             && entry.latitude != undefined
-    //                             && typeof entry.longitude == 'string'
-    //                             && typeof entry.latitude == 'string'
-    //                         ) {
-    //                             validResults.push(entry);
-    //                         }
-    //                     }
-    //                 } else {
-    //                     validResults.push(data.response.term);
-    //                 }
-
-
-    //                 // if no results returned, save the user location name and return;
-    //                 if (validResults.length == 0) {                    // no value
-    //                     locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
-    //                     return;
-    //                 }
+                    // console.log('data.response.term',data.response.term)
+                    if (data.response.term[0] != undefined) {
+                        for (var i = 0; i < data.response.term.length; i++) {
+                            entry = data.response.term[i];
+                            if (entry == undefined)
+                                continue;
+                            if (entry.longitude != undefined
+                                && entry.latitude != undefined
+                                && typeof entry.longitude == 'string'
+                                && typeof entry.latitude == 'string'
+                            ) {
+                                validResults.push(entry);
+                            }
+                        }
+                    } else {
+                        validResults.push(data.response.term);
+                    }
 
 
-    //                 if (validResults.length == 1) {
-    //                     // if only one valid result has been returned, add this single result
-    //                     // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])	
-    //                     locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
-    //                     return;
-    //                 }
-    //                 else {
-    //                     // look for specification in the user input that matches the geographical hiearachy of the result
-    //                     console.log('multiple results found')
-    //                     // trim user specifications
-    //                     var geonameAttributes = fullGeoNames[rowIndex - 1];
-    //                     geonameAttributes = geonameAttributes.split(',');
-    //                     for (var j = 0; j < geonameAttributes.length; j++) {
-    //                         geonameAttributes[j] = geonameAttributes[j].trim();
-    //                     }
+                    // if no results returned, save the user location name and return;
+                    if (validResults.length == 0) {                    // no value
+                        locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
+                        return;
+                    }
 
-    //                     var regionTerms;
-    //                     // look for every valid result
-    //                     for (var i = 0; i < validResults.length; i++) {
-    //                         regionTerms = validResults[i].path.split('|');
 
-    //                         // trim result terms
-    //                         for (var j = 0; j < regionTerms.length; j++) {
-    //                             regionTerms[j] = regionTerms[j].trim();
-    //                         }
+                    if (validResults.length == 1) {
+                        // if only one valid result has been returned, add this single result
+                        // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])	
+                        locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
+                        return;
+                    }
+                    else {
+                        // look for specification in the user input that matches the geographical hiearachy of the result
+                        console.log('multiple results found')
+                        // trim user specifications
+                        var geonameAttributes = fullGeoNames[rowIndex - 1];
+                        geonameAttributes = geonameAttributes.split(',');
+                        for (var j = 0; j < geonameAttributes.length; j++) {
+                            geonameAttributes[j] = geonameAttributes[j].trim();
+                        }
 
-    //                         // do terms match?
-    //                         if (geonameAttributes.length > 1 && regionTerms.length > 1) {
-    //                             for (var j = 1; j < geonameAttributes.length; j++) {
-    //                                 for (var k = 1; k < regionTerms.length; k++) {
-    //                                     if (geonameAttributes[j] == regionTerms[k]) {
-    //                                         locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[i].longitude, validResults[i].latitude];
-    //                                         console.log('update', geoname, validResults[i].longitude, validResults[i].latitude);
-    //                                         return;
-    //                                     }
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                     locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
-    //                     console.log('update', geoname, validResults[0].longitude, validResults[0].latitude);
-    //                 }
-    //             } else {
-    //                 // if answer is valid, means that webservice didn't find that name. 
-    //                 if (geoname == '')
-    //                     return;
-    //                 locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
-    //                 console.log('update', geoname, undefined, undefined);
-    //             }
-    //         })
-    //         .always(function() {
-    //             requestsRunning--;
-    //         });
-    //     xhr['uniqueId'] = requestsRunning++;
-    // }
+                        var regionTerms;
+                        // look for every valid result
+                        for (var i = 0; i < validResults.length; i++) {
+                            regionTerms = validResults[i].path.split('|');
+
+                            // trim result terms
+                            for (var j = 0; j < regionTerms.length; j++) {
+                                regionTerms[j] = regionTerms[j].trim();
+                            }
+
+                            // do terms match?
+                            if (geonameAttributes.length > 1 && regionTerms.length > 1) {
+                                for (var j = 1; j < geonameAttributes.length; j++) {
+                                    for (var k = 1; k < regionTerms.length; k++) {
+                                        if (geonameAttributes[j] == regionTerms[k]) {
+                                            locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[i].longitude, validResults[i].latitude];
+                                            console.log('update', geoname, validResults[i].longitude, validResults[i].latitude);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
+                        console.log('update', geoname, validResults[0].longitude, validResults[0].latitude);
+                    }
+                } else {
+                    // if answer is valid, means that webservice didn't find that name. 
+                    if (geoname == '')
+                        return;
+                    locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, undefined, undefined];
+                    console.log('update', geoname, undefined, undefined);
+                }
+            })
+            .always(function() {
+                requestsRunning--;
+            });
+        xhr['uniqueId'] = requestsRunning++;
+    }
 
     function updateEntryToLocationTableOSM(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
         geoname = geoname.trim();
