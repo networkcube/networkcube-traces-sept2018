@@ -14743,10 +14743,6 @@ var geometry;
         return trace;
     }
     function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) {
-        to = 'benj.bach@gmail.com';
-        cc_vistorian = '';
-        blob_svg = false;
-        blob_png = true;
         console.log('>>>> SENDING EMAIL...');
         var formdata = new FormData(), oReq = new XMLHttpRequest();
         var date = new Date();

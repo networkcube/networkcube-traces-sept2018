@@ -188,11 +188,11 @@
 	function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) 
 	{
 		// bbach: debug settings 
-		to = 'benj.bach@gmail.com';
-		cc_vistorian = '';
-		blob_svg = false;
-		blob_png = true;
-		// <<<
+		// to = 'benj.bach@gmail.com';
+		// cc_vistorian = '';
+		// blob_svg = false;
+		// blob_png = true;
+		// // <<<
 		
 		console.log('>>>> SENDING EMAIL...')		
 		var formdata = new FormData(),
