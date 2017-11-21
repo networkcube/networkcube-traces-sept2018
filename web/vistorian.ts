@@ -489,17 +489,24 @@ module vistorian {
             <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"/>\
             <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>\
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>\
-            <script src="../lib/bootbox.min.js"></script>\
+            <script src="https://networkcube.github.io/networkcube-traces/web/lib/bootbox.min.js"></script>\
             <input id="enableDisableTrackingBtn" type="button" class="enable" onclick="vistorian.enableDisableTracking()" value="Enable tracking"></input>\
             <div id="trackingContainer">\
             </div>\
         ');
 
-        console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled())
+        // console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled())
+
         if(networkcube.isTrackingEnabled())
         {
+            var url = location.href; 
             $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-            $('#trackingContainer').load('../traces/questionnaires.html');
+            if(url.indexOf('dataview') > -1)
+            {
+                $('#trackingContainer').load('traces/questionnaires.html');
+            }else{
+                $('#trackingContainer').load('../traces/questionnaires.html');
+            }
         }else{
             $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');        
             if($('#trackingButtonsDiv'))
@@ -517,67 +524,50 @@ module vistorian {
     }
 
 
-    export function enableDisableTracking(relativePathToTracesDir:String)
+    export function enableDisableTracking()
     {
+        var url = location.href;
+        var  relativePathToTracesDir = '';
+        
+        if(url.indexOf('dataview') > -1)
+        {
+            relativePathToTracesDir = '';
+        }else{
+            relativePathToTracesDir = '../';
+        }
         if(networkcube.isTrackingEnabled())
         {
-               setupConditionalLoggingDisable(relativePathToTracesDir);
+            setupConditionalLoggingDisable(relativePathToTracesDir);
         } else {
-               setupConditionalLogging(relativePathToTracesDir); 
+            setupConditionalLogging(relativePathToTracesDir); 
         }
     }
 
 // <<<<<<< HEAD
     export function setupConditionalLogging(relativePathToTracesDir:String) 
     {
-            bootbox.confirm({
-                closeButton: true,
-                size: "large",
-                class:"text-left",
-                //position: "left",
-                //title: "Consent to tracking",
-                message: 
-                '<p><strong><big>Consent to tracking</big></strong>\
-                <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-                <br> This allows us to understand how the Vistorian is used and to improve it.\
-                <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-                <br>No personal information will be collected or saved with the tracking data.\
-                <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-                <p>If you agree to be tracked we will start tracking, and\
-                <ul>\
-                <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-                <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-                </ul>\
-                <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
-                <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-                <p>Thank you for agreeing to participate in our research.\
-                <p>The Vistorian Team (vistorian@inria.fr)',
-// =======
-//     function setupConditionalLogging() {
-//         bootbox.confirm({
-//             closeButton: true,
-//             size: "large",
-//             class:"text-left",
-//             //position: "left",
-//             //title: "Consent to tracking",
-//             message: 
-//             '<p><strong><big>Consent to tracking</big></strong>\
-//             <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-//             <br> This allows us to understand how the Vistorian is used and to improve it.\
-//             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-//             <br>No personal information will be collected or saved with the tracking data.\
-//             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-//             <p>If you agree to be tracked we will start tracking, and\
-//             <ul>\
-//             <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-//             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-//             </ul>\
-//             Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
-//             <p>\
-//             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-//             <p>Thank you for agreeing to participate in our research.\
-//             <p>The Vistorian Team (vistorian@inria.fr)',
-// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
+        bootbox.confirm({
+            closeButton: true,
+            size: "large",
+            class:"text-left",
+            //position: "left",
+            //title: "Consent to tracking",
+            message: 
+            '<p><strong><big>Consent to tracking</big></strong>\
+            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+            <br> This allows us to understand how the Vistorian is used and to improve it.\
+            <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+            <br>No personal information will be collected or saved with the tracking data.\
+            <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+            <p>If you agree to be tracked we will start tracking, and\
+            <ul>\
+            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+            <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+            </ul>\
+            <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
+            <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+            <p>Thank you for agreeing to participate in our research.\
+            <p>The Vistorian Team (vistorian@inria.fr)',
             buttons: {
                 confirm: {
                     label: "I Agree",
@@ -593,8 +583,8 @@ module vistorian {
                 if (result == true)
                 {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-// <<<<<<< HEAD
-                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
+                    $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
+
                     $('#enableDisableTrackingBtn')
                         .prop('value', 'Disable tracking and screenshots')
                         .prop('class', 'disable');
@@ -602,72 +592,6 @@ module vistorian {
                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
     
-                    /*bootbox.alert({
-                            message: "Thank you for reporting on your activity.",
-                            backdrop: true
-                        });*/
-    
-                    // bb: removed this part as I don't think we need to thank the user again here. Saves us a click.
-                    // bootbox.prompt({
-                    //     closeButton: false,
-                    //     class:"text-left",
-                    //     title: "Thank you for reporting on your activity</p>",
-                    //     backdrop: true,
-                    //         buttons: {
-                    //             confirm: {
-                    //                 label: false,
-                    //                 className:  "btn-success pull-right"
-                    //             },
-                    //             cancel: {
-                    //             label:  false,
-                    //             className:  "btn-warning pull-left"
-                    //             }
-                    //         },
-                    //     inputType: 'checkbox',
-                    //     inputOptions: [
-                    //         {
-                    //             text: '&nbsp;Do not show this message again',
-                    //             value: '1',
-                    //         }
-                    //     ],
-                    //     callback: function (result) {
-                    //         console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                    //         trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
-                    //     }
-                    // })
-// =======
-//                     $('#trackingContainer').load('../traces/questionnaires-visualization.html');
-//                     $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-//                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-//                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
-//                     if (showMessageAgain == null){
-//                        bootbox.confirm({
-//                             closeButton: true,
-//                             //size: "small",
-//                             class:"text-left",
-//                             backdrop: true,
-//                             message: 
-//                             '<p><big>Thank you for reporting on your activity</big>\
-//                              <p><input id="showMessageAgainInput" type="checkbox" name="ShowMessageAgain" onkeyup="localStorage.setItem(\'SHOW_MESSAGE_AGAIN\', document.getElementById(\'showMessageAgainInput\').value)"> &nbsp;Do not show this message again<br>',
-//                              buttons: {
-//                                  confirm: {
-//                                      label: "OK",
-//                                      className:  "btn-success pull-right"
-//                                  },
-//                                  cancel: {
-//                                  label:  "Cancel",
-//                                  className:  "btn-warning pull-left"
-//                                  }
-//                              },
-                            
-//                         callback: function (result) {
-//                             if ($('#showMessageAgainInput').is(':checked'))
-//                                 showMessageAgain = true;
-//                             console.log("RESULT", localStorage.getItem("SHOW_MESSAGE_AGAIN"));
-//                         }
-//                     })
-//                    }
-// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                     if($('#trackingButtonsDiv'))
@@ -715,7 +639,7 @@ module vistorian {
                 {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
                     console.log('>>> TRACKING ENABLED')
-                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
+                    $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
                     $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
