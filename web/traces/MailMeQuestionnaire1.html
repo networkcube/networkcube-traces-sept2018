@@ -422,11 +422,11 @@
                             {
                               var svgString = window.parent.$('#visFrame').find('iframe').contents().find('#visSvg');
                               var d3Object = d3.select(svgString.get(0));
-  
+                              console.log('svgString', svgString)
                               networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
                               {
-                                //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
-                                trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
+                                console.log('BLOB', blob)
+                                trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
                                 networkcube.showMessage('Email send!', 3000);
                               }, 'white')
                             }
@@ -506,6 +506,8 @@
                               var d3Object = d3.select(svgString.get(0));
                               networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
                               {
+                                console.log('BLOB', blob)
+
                                 var ctx = canvas.getContext('2d');
                                 var img = new Image();
                                 img.onload = function()

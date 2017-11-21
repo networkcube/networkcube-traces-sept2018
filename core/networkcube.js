@@ -9096,6 +9096,7 @@ var networkcube;
     }
     function downloadPNGfromSVG(name, svgId) {
         var blob = getBlobFromSVG(name, svgId, saveAs);
+        s;
     }
     networkcube.downloadPNGfromSVG = downloadPNGfromSVG;
     function getBlobFromSVG(name, svgId, callback) {
@@ -9110,15 +9111,17 @@ var networkcube;
         var width = svgNode.getAttribute('width');
         var height = svgNode.getAttribute('height');
         if (width == null) {
-            width = window.innerWidth;
+            width = window.innerWidth + 1000;
         }
         if (height == null) {
-            height = window.innerHeight;
+            height = window.innerHeight + 1000;
         }
         getBlobFromSVGString(name, string, width, height, callback, backgroundColor);
     }
     networkcube.getBlobFromSVGNode = getBlobFromSVGNode;
     function getBlobFromSVGString(name, svgString, width, height, callback, backgroundColor) {
+        console.log('width', width);
+        console.log('height', height);
         var format = format ? format : 'png';
         var imgsrc = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
         var canvas = document.createElement("canvas");
