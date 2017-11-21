@@ -14609,6 +14609,9 @@ var geometry;
 (function () {
     var _traceq = _traceq || [];
     var traceUrl = "http://vizatt.saclay.inria.fr/";
+    if (location.protocol == "https:") {
+        traceUrl = "https://vizatt.saclay.inria.fr/";
+    }
     var _sending = null;
     var sessionId;
     var starting = true;
