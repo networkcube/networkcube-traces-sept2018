@@ -36,10 +36,8 @@
             // check URL and set paths
             var SERVER = location.protocol + '//'+ window.location.hostname +  '' + window.location.pathname + '/';
                 SERVER = SERVER.split('web/')[0]
-
-            $('#mailMeQuestionnaire_iFrame').attr('src', SERVER + '../traces/MailMeQuestionnaire1.html')
+            $('#mailMeQuestionnaire_iFrame').attr('src', SERVER + 'web/traces/MailMeQuestionnaire1.html')
             $('#endOfActivityQuestionnaireDiv_iFrame').attr('src', SERVER + 'web/traces/EndActivityQuestionnaire1.html')
-
             
             $(this).mousemove(function (e) 
             {

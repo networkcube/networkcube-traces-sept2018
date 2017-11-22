@@ -1,6 +1,5 @@
 /// <reference path="classes/storage.ts"/>
 /// <reference path="../core/networkcube.d.ts"/>
-
 /*
 Convenient class that provides an API to the vistorian "framework"
 and the user data.
@@ -8,19 +7,17 @@ This API should be used in every visualization.
 */
 
 // function vistorian(){
-
-// 	function getSchema(tableName){
-// 		// return getUrlVars()[tableName]
-// 	 //        .replace('[', '')
-// 	 //        .replace(']', '')
-// 	 //        .split(',')
-// 	  var schema = getUrlVars()['schema']
-// 	  schema = schema.replace(/%22/g, '"').replace(/%20/g, '_')
-// 	  schema = JSON.parse(schema);
-// 	  return schema;
-// 	}
+//     function getSchema(tableName){
+//         // return getUrlVars()[tableName]
+//      //        .replace('[', '')
+//      //        .replace(']', '')
+//      //        .split(',')
+//       var schema = getUrlVars()['schema']
+//       schema = schema.replace(/%22/g, '"').replace(/%20/g, '_')
+//       schema = JSON.parse(schema);
+//       return schema;
+//     }
 // }
-
 module vistorian {
 
     // LOADING FONTS:
@@ -37,7 +34,6 @@ module vistorian {
     head.append('<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>')
     head.append("<script src='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>")    
     // head.append("<script src='../lib/bootbox.min.js'></script>")
-
     // append('./lib/xml2json.js');
     function append(url: string) {
         var script = document.createElement('script');
@@ -52,7 +48,6 @@ module vistorian {
 
 
     // DATA TYPES
-
     export class VTable {
         name: string;
         data: any[];
@@ -133,7 +128,6 @@ module vistorian {
 
 
     // FUNCTIONS
-
     export function loadCSV(files: File[], callBack: Function, sessionid:string) {
 
         var loadCount = 0;
@@ -213,9 +207,8 @@ module vistorian {
         // var indexify = false;
         // test
         // if(Number(table.data[1][0]) == NaN){
-        // 	indexify = true;
-        // }	
-
+        //     indexify = true;
+        // }    
         var numCols: number = table.data[0].length;
         var emptyCols: number = 0;
         var row: any[]
@@ -246,15 +239,15 @@ module vistorian {
     }
 
 
-	/**
-	 * Checks the time column in the passed table against the entered
-	 * time format and returns an array of fields that do not match the
-	 * that time format.
-	 * @param  {Table}  table      [description]
-	 * @param  {number} timeCol    [description]
-	 * @param  {string} timeFormat [description]
-	 * @return {[type]}            [description]
-	 */
+    /**
+     * Checks the time column in the passed table against the entered
+     * time format and returns an array of fields that do not match the
+     * that time format.
+     * @param  {Table}  table      [description]
+     * @param  {number} timeCol    [description]
+     * @param  {string} timeFormat [description]
+     * @return {[type]}            [description]
+     */
     export function checkTime(table: VTable, timeCol: number, timeFormat: string): number[] {
         var timeString: string;
         var error: number[] = [];
@@ -309,7 +302,6 @@ module vistorian {
     // function updateEntryToLocationTable(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
     //     return updateEntryToLocationTableOSM(index, geoname, locationTable, locationSchema);
     // }
-
     /// [bbach]: function deprecated since switched to open-street-map webservice.
     function updateEntryToLocationTableDariah(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
         geoname = geoname.trim();
@@ -361,7 +353,7 @@ module vistorian {
 
                     if (validResults.length == 1) {
                         // if only one valid result has been returned, add this single result
-                        // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])	
+                        // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])    
                         locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
                         return;
                     }
@@ -496,19 +488,16 @@ module vistorian {
         ');
 
         // console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled())
-
         if(networkcube.isTrackingEnabled())
         {
             var url = location.href; 
             $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-
             if(url.indexOf('dataview') > -1)
             {
                 $('#trackingContainer').load('traces/questionnaires.html');
             }else{
                 $('#trackingContainer').load('../traces/questionnaires.html');
             }
-
         }else{
             $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');        
             if($('#trackingButtonsDiv'))
@@ -545,10 +534,9 @@ module vistorian {
         }
     }
 
-
+// <<<<<<< HEAD
     export function setupConditionalLogging(relativePathToTracesDir:String) 
     {
-
         bootbox.confirm({
             closeButton: true,
             size: "large",
@@ -571,7 +559,6 @@ module vistorian {
             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
             <p>Thank you for agreeing to participate in our research.\
             <p>The Vistorian Team (vistorian@inria.fr)',
-
             buttons: {
                 confirm: {
                     label: "I Agree",
@@ -592,7 +579,6 @@ module vistorian {
                     $('#enableDisableTrackingBtn')
                         .prop('value', 'Disable tracking and screenshots')
                         .prop('class', 'disable');
-    
     
                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
@@ -681,9 +667,7 @@ module vistorian {
                 }
 // =======
 //                     $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
-
 //                     bootbox.confirm({
-
 
 //                     closeButton: true,
 //                     size: "large",
@@ -747,7 +731,6 @@ module vistorian {
         //     nodes:nodes, 
         //     links:links
         // }
-
         var blurb = network;
             
         var element = document.createElement('a');
@@ -789,7 +772,6 @@ module vistorian {
 
         // if(normalizedLocationTable)       
         // displayLocationTable();
-
         var locationLabels: string[] = [];
         if (currentNetwork.userLocationTable != undefined) {
             for (var i = 1; i < currentNetwork.userLocationTable.data.length; i++) {
@@ -800,7 +782,6 @@ module vistorian {
 
 
         // CONVERT SINGLE-LINK TABLE 
-
         var nodeIds: number[] = [];
         var names: string[] = [];
         var nodeLocations: number[][] = [];
@@ -987,7 +968,6 @@ module vistorian {
         }
 
         // CHECK FOR SINGLE NODE-TABLE
-
         if (currentNetwork.userLinkTable == undefined) 
         {
             console.log('Create and fill link table')
@@ -1071,7 +1051,6 @@ module vistorian {
 
                     normalizedLinkTable.push(newRow);
                     // console.log('create edge row', newRow);
-
                 }
             }
             console.log('normalizedLinkTable', normalizedLinkTable)
@@ -1125,7 +1104,6 @@ module vistorian {
         console.log('locationTable', currentNetwork.networkCubeDataSet.locationTable)
 
         // console.log('[vistorian] network created', networkcubeDataSet);
-
         storage.saveNetwork(currentNetwork, sessionid);
 
         // networkcube.setDataManagerOptions({ keepOnlyOneSession: true });
