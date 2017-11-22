@@ -13,6 +13,6 @@
     },
     "files": [
         "./vistorian.ts",
-        "./dataview.ts",
+        "./dataview.ts"
     ]
 }
