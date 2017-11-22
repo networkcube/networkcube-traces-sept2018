@@ -1,7 +1,10 @@
 (function() {
 
-    var _traceq = _traceq || [];
-    var traceUrl = "http://vizatt.saclay.inria.fr/";
+	var _traceq = _traceq || [];
+	var traceUrl = "http://vizatt.saclay.inria.fr/";
+    if (location.protocol == "https:"){
+    	traceUrl = "https://vizatt.saclay.inria.fr/";
+	}
     var _sending = null;
     var sessionId;
     var starting = true;
@@ -188,11 +191,11 @@
 	function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) 
 	{
 		// bbach: debug settings 
-		to = 'benj.bach@gmail.com';
-		cc_vistorian = '';
-		blob_svg = false;
-		blob_png = true;
-		// <<<
+		// to = 'benj.bach@gmail.com';
+		// cc_vistorian = '';
+		// blob_svg = false;
+		// blob_png = true;
+		// // <<<
 		
 		console.log('>>>> SENDING EMAIL...')		
 		var formdata = new FormData(),

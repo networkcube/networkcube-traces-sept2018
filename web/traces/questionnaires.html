@@ -3,7 +3,6 @@
 <div id="trackingButtonsDiv">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
         <script src="https://networkcube.github.io/networkcube-traces/web/lib/bootbox.min.js"></script>
-        <!-- <script src="/lib/bootbox.min.js"></scriptcloseWindow();> -->
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"/>
         <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot</button>
         <button id="emailMeBtn" class="trackingButton" name="End" onclick="endOfActivityClicked()">Report end of the activity</button>
@@ -52,6 +51,7 @@
             });
         });
         function timerIncrement() {
+            console.log('>>> timerIncrement')
             idleTime = idleTime + 1;
             if (idleTime > 60 * IDLE_MINUTES ) {
                 showInactivityBox();
@@ -83,7 +83,9 @@
                         trace.event(null, "NoActivity", "NoActivityDialogBox", "DONE");
                     }else{
                         trace.event(null, "NoActivity", "NoActivityDialogBox", "BACK");
+                        
                     }
+                    idleInterval = setInterval(timerIncrement, 1000);
                 }
             });
         }
