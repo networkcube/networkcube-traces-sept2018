@@ -3,7 +3,7 @@
 <div id="trackingButtonsDiv">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
         <script src="https://networkcube.github.io/networkcube-traces/web/lib/bootbox.min.js"></script>
-        <!-- <script src="/lib/bootbox.min.js"></script> -->
+        <!-- <script src="/lib/bootbox.min.js"></scriptcloseWindow();> -->
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"/>
         <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot</button>
         <button id="emailMeBtn" class="trackingButton" name="End" onclick="endOfActivityClicked()">Report end of the activity</button>
@@ -38,7 +38,7 @@
             var SERVER = location.protocol + '//'+ window.location.hostname +  '' + window.location.pathname + '/';
                 SERVER = SERVER.split('web/')[0]
 
-            $('#mailMeQuestionnaire_iFrame').attr('src', SERVER + 'web/traces/MailMeQuestionnaire1.html')
+            $('#mailMeQuestionnaire_iFrame').attr('src', SERVER + '../traces/MailMeQuestionnaire1.html')
             $('#endOfActivityQuestionnaireDiv_iFrame').attr('src', SERVER + 'web/traces/EndActivityQuestionnaire1.html')
 
             

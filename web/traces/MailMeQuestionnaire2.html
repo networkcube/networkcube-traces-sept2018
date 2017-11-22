@@ -374,6 +374,7 @@
                         //window.history.back();
                         
                         sendEmail();
+                        closeWindow();
                         window.setTimeout(function() {
                           closeWindow();
                         }, 3000);
@@ -408,7 +409,7 @@
                           var message = "Hello,\n\nThis is your screenshot. You can find the file attached.\n\nBest,\nThe Vistorian team";
 
                           var format = localStorage.getItem('traces_format'); 
-                          console.log('format', format);             
+                          console.log('format', format);  
                           if(format && format == 'PNG')
                           {
                             // var svgString = networkcube.getSVGString(window.parent.$('#visSvg'));

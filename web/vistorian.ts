@@ -499,7 +499,8 @@ module vistorian {
         if(networkcube.isTrackingEnabled())
         {
             $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-            $('#trackingContainer').load('../traces/questionnaires.html');
+            //$('#trackingContainer').load('../traces/questionnaires.html');
+            $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
         }else{
             $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');        
             if($('#trackingButtonsDiv'))
@@ -527,7 +528,7 @@ module vistorian {
         }
     }
 
-// <<<<<<< HEAD
+
     export function setupConditionalLogging(relativePathToTracesDir:String) 
     {
             bootbox.confirm({
@@ -552,32 +553,7 @@ module vistorian {
                 <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
                 <p>Thank you for agreeing to participate in our research.\
                 <p>The Vistorian Team (vistorian@inria.fr)',
-// =======
-//     function setupConditionalLogging() {
-//         bootbox.confirm({
-//             closeButton: true,
-//             size: "large",
-//             class:"text-left",
-//             //position: "left",
-//             //title: "Consent to tracking",
-//             message: 
-//             '<p><strong><big>Consent to tracking</big></strong>\
-//             <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-//             <br> This allows us to understand how the Vistorian is used and to improve it.\
-//             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-//             <br>No personal information will be collected or saved with the tracking data.\
-//             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-//             <p>If you agree to be tracked we will start tracking, and\
-//             <ul>\
-//             <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-//             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-//             </ul>\
-//             Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
-//             <p>\
-//             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-//             <p>Thank you for agreeing to participate in our research.\
-//             <p>The Vistorian Team (vistorian@inria.fr)',
-// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
+
             buttons: {
                 confirm: {
                     label: "I Agree",
@@ -598,6 +574,7 @@ module vistorian {
                     $('#enableDisableTrackingBtn')
                         .prop('value', 'Disable tracking and screenshots')
                         .prop('class', 'disable');
+    
     
                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
