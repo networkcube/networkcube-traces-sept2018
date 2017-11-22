@@ -9096,7 +9096,6 @@ var networkcube;
     }
     function downloadPNGfromSVG(name, svgId) {
         var blob = getBlobFromSVG(name, svgId, saveAs);
-        s;
     }
     networkcube.downloadPNGfromSVG = downloadPNGfromSVG;
     function getBlobFromSVG(name, svgId, callback) {

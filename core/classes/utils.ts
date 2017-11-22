@@ -468,7 +468,7 @@ module networkcube {
     // downloads a screenshot on the desktop from the passed svg
     export function downloadPNGfromSVG(name:string, svgId:string)
     {
-        var blob = getBlobFromSVG(name, svgId, saveAs);s
+        var blob = getBlobFromSVG(name, svgId, saveAs);
     }
 
     // creates an image blob from the passed svg and calls the 
