@@ -575,7 +575,7 @@
                               canvas.toBlob(function (blob) 
                               {
                                 // bbach: blob is empty
-                                trace.sendmail(to, from, 'test', 'mymessage', true blob, null);
+                                trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                 // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
                                 networkcube.showMessage('Email send!', 3000);
                               }, 'image/png');
