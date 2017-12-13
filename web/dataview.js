@@ -11,7 +11,7 @@ var visualizations = [
     ['Map', 'map'],
 ];
 var messages = [];
-var showMessageAgain;
+var showMessageAgain = null;
 init();
 function init() {
     loadVisualizationList();
