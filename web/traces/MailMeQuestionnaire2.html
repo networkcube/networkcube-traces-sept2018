@@ -70,8 +70,8 @@
                     <fieldset style = "width: 750px; margin-top: 0px auto; position:relative">
                     
                     <!--<button type="button" onclick="closeWindow()" class="buttonClose" id="signup-close" style="position: absolute;right:245px;top:15px;outline:5px solid #fff" color = red>X</button>-->
-                    <button type="button" onclick="closeWindow()" class="buttonClose" style="position: absolute;right:10px;top:-5px;outline:5px solid #fff">
-                    <!--<img src="http://icons.iconarchive.com/icons/hopstarter/sleek-xp-basic/16/Close-2-icon.png"/>-->
+                    <button onclick="closeWindow()" style="position: absolute;right:5px;top:5px;outline:5px solid #fff">
+                    <img src="http://icons.iconarchive.com/icons/hopstarter/sleek-xp-basic/16/Close-2-icon.png"/>
                     </button>
                     <script>
                         function closeWindow()
@@ -249,7 +249,8 @@
                       {
                         // GET RESULTS FROM 1ST QUESTIONNAIRE
                         // Read stuff from local storage
-                        email = localStorage.getItem('traces_email', $('#emailInput').val())
+                        //email = localStorage.getItem('traces_email', $('#emailInput').val())
+                        email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
                         localStorage.getItem('traces_format')
                         localStorage.getItem('traces_addLegend')
                         localStorage.getItem('traces_sendCopyToVistorian')
@@ -318,7 +319,8 @@
                       {
                         // GET RESULTS FROM 1ST QUESTIONNAIRE
                         // Read stuff from local storage
-                        email = localStorage.getItem('traces_email', $('#emailInput').val())
+                        //email = localStorage.getItem('traces_email', $('#emailInput').val())
+                        email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
                         localStorage.getItem('traces_format')
                         localStorage.getItem('traces_addLegend')
                         localStorage.getItem('traces_sendCopyToVistorian')
