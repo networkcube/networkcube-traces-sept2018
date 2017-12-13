@@ -273,68 +273,9 @@
                     <p></p>
                     <div class="wrapper">
 
-                    <button class="button1" onclick="sendMailButtonClicked"><font size="3">Skip the questionnaire (Esc)</font></button>
-                    <button class="button2" onclick="continueBtnPressed"><font size="3">Continue</font></button>
                     <script>
-                        function sendMailButtonClicked()
-                        {
-                            // STORE DATA in LOCAL STORAGE
-                            //var email = document.getElementById('emailInput').value;
-                            var email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value;
-                            var emailtext = String(email);
-                            //localStorage.setItem('traces_email', $('#emailInput').val())
-                            //var MAILADRESS = $('#emailInput').val();
-                            //console.log(MAILADRESS)
-                            // var format = 'PNG'
-                            // if($('#radios-1').is(':checked'))
-                            //   format = 'SVG';
-                            var legend = null
-                            if($('#checkboxes-0').is(':checked'))
-                              legend = 'Add legend in separate file';
-                            var sendCopy = null
-                            if($('#checkboxes-1').is(':checked'))
-                              sendCopy = 'Send copy to the Vistorian team';
-                            //localStorage.setItem('traces_format', format)
-                            //var formattext = String(format);
-                            var legendtext = String(legend);
-                            var sendCopytext = String(sendCopy);
-                            localStorage.setItem('traces_addLegend', $('checkboxes-0').is(':checked'))
-                            localStorage.setItem('traces_sendCopyToVistorian', $('checkboxes-1').is(':checked'))
-                            localStorage.setItem('traces_button1', $('button1').is(':checked'))
-                            localStorage.setItem('traces_button2', $('button2').is(':checked'))
-                            localStorage.setItem('traces_button3', $('button3').is(':checked'))
-                            localStorage.setItem('traces_button4', $('button4').is(':checked'))
-                            localStorage.setItem('traces_button5', $('button5').is(':checked'))
 
-                            // SEND RESULTS TO THE SERVER
-                            trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', emailtext);
-                            //trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', formattext);
-                            trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', legendtext);
-                            trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', sendCopytext);
-                            var Context1;
-                            if(checkedButtons["button1"] == true){Context1 = 'Analyze data'; console.log(Context1); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context1);}
-                            var Context2;
-                            if(checkedButtons["button2"] == true){Context2 = 'Learn'; console.log(Context2); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context2);}
-                            var Context3;
-                            if(checkedButtons["button3"] == true){Context3 = 'Demo to others'; console.log(Context3); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context3);}
-                            var Context4;
-                            if(checkedButtons["button4"] == true){Context4 = 'Test the software'; console.log(Context4); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context4);}
-                            var Context5;
-                            if(checkedButtons["button5"] == true){Context5 = 'Other'; console.log(Context5); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context5);}
-                            var otherReason = document.getElementById('otherReasonInput').value;
-                                console.log(otherReason);
-                                trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', otherReason);
-
-                            // SEND EMAIL
-                            sendEmail();
-
-                            // Close window
-                            window.setTimeout(function() {
-                              closeWindow();
-                            }, 3000);
-                        }
-
-                        function continueBtnPressed()
+                        function continueButtonPressed()
                         { 
                             // STORE DATA in LOCAL STORAGE
                             //var email = document.getElementById('emailInput').value;
@@ -416,6 +357,66 @@
                               }, 3000);
                             }
                         }
+                        
+                        function sendMailButtonClicked()
+                        {
+                            // STORE DATA in LOCAL STORAGE
+                            //var email = document.getElementById('emailInput').value;
+                            var email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value;
+                            var emailtext = String(email);
+                            //localStorage.setItem('traces_email', $('#emailInput').val())
+                            //var MAILADRESS = $('#emailInput').val();
+                            //console.log(MAILADRESS)
+                            // var format = 'PNG'
+                            // if($('#radios-1').is(':checked'))
+                            //   format = 'SVG';
+                            var legend = null
+                            if($('#checkboxes-0').is(':checked'))
+                              legend = 'Add legend in separate file';
+                            var sendCopy = null
+                            if($('#checkboxes-1').is(':checked'))
+                              sendCopy = 'Send copy to the Vistorian team';
+                            //localStorage.setItem('traces_format', format)
+                            //var formattext = String(format);
+                            var legendtext = String(legend);
+                            var sendCopytext = String(sendCopy);
+                            localStorage.setItem('traces_addLegend', $('checkboxes-0').is(':checked'))
+                            localStorage.setItem('traces_sendCopyToVistorian', $('checkboxes-1').is(':checked'))
+                            localStorage.setItem('traces_button1', $('button1').is(':checked'))
+                            localStorage.setItem('traces_button2', $('button2').is(':checked'))
+                            localStorage.setItem('traces_button3', $('button3').is(':checked'))
+                            localStorage.setItem('traces_button4', $('button4').is(':checked'))
+                            localStorage.setItem('traces_button5', $('button5').is(':checked'))
+
+                            // SEND RESULTS TO THE SERVER
+                            trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', emailtext);
+                            //trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', formattext);
+                            trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', legendtext);
+                            trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', sendCopytext);
+                            var Context1;
+                            if(checkedButtons["button1"] == true){Context1 = 'Analyze data'; console.log(Context1); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context1);}
+                            var Context2;
+                            if(checkedButtons["button2"] == true){Context2 = 'Learn'; console.log(Context2); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context2);}
+                            var Context3;
+                            if(checkedButtons["button3"] == true){Context3 = 'Demo to others'; console.log(Context3); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context3);}
+                            var Context4;
+                            if(checkedButtons["button4"] == true){Context4 = 'Test the software'; console.log(Context4); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context4);}
+                            var Context5;
+                            if(checkedButtons["button5"] == true){Context5 = 'Other'; console.log(Context5); trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', Context5);}
+                            var otherReason = document.getElementById('otherReasonInput').value;
+                                console.log(otherReason);
+                                trace.event(null, 'MiniQuestionnaire', 'MailMeQuestionnaire1', otherReason);
+
+                            // SEND EMAIL
+                            sendEmail();
+
+                            // Close window
+                            window.setTimeout(function() {
+                              closeWindow();
+                            }, 3000);
+                        }
+
+                      
 
                         function sendEmail()
                         {   
@@ -647,6 +648,8 @@
                         // }
 
                     </script>
+                        <button class="button1" onclick="sendMailButtonClicked"><font size="3">Skip the questionnaire (Esc)</font></button>
+                        <button class="button2" onclick="continueButtonPressed()"><font size="3">Continue</font></button>                    
                       </button>
                     </div>
                     </fieldset>
