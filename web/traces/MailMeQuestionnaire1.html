@@ -426,7 +426,7 @@
                               networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
                               {
                                 console.log('BLOB', blob)
-                                trace.sendmail(to, from, 'test', 'mymessage', '', blob, null);
+                                trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                 // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
                                 networkcube.showMessage('Email send!', 3000);
                               }, 'white')
@@ -486,7 +486,7 @@
 
                               finalCanvas.toBlob(
                                 function (blob) {
-                                  trace.sendmail(to, from, 'test', 'mymessage', '', blob, null);
+                                  trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                   // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
                                   networkcube.showMessage('Email send!', 3000);
                                 }
@@ -524,7 +524,7 @@
                                     // downloadLink.href = window.webkitURL.createObjectURL(blob);
                                     // downloadLink.click();
                                     // console.log('SEND MAIL', blob, '<<<')
-                                    trace.sendmail(to, from, 'test', 'mymessage', '', blob, null);
+                                    trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                     networkcube.showMessage('Email send!', 3000);
                                   });
                                 }
@@ -547,7 +547,7 @@
                               canvas.toBlob(function (blob) 
                               {
                                 // bbach: blob is empty
-                                trace.sendmail(to, from, 'test', 'mymessage', '', blob, null);
+                                trace.sendmail(to, from, 'test', 'mymessage', true blob, null);
                                 // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
                                 networkcube.showMessage('Email send!', 3000);
                               }, 'image/png');

@@ -14766,7 +14766,8 @@ var geometry;
         console.log('datasetName:', datasetName);
         formdata.append("subject", '[Vistorian] Screenshot: ' + datasetName + ', ' + date.getDate());
         formdata.append("note", message + "\n\n(Your unique user ID is " + uid + ".)");
-        formdata.append("cc", cc_vistorian);
+        if (cc_vistorian)
+            formdata.append("cc", 'vistorian@inria.fr');
         if (blob_image)
             formdata.append("image", blob_image, "vistorian.png");
         if (blob_svg)

@@ -300,7 +300,7 @@
                         trace.event(null, 'MiniQuestionnaire', 'EndActivityQuestionnaire2', 'Comments=' + Commentstext);
                         console.log(">>>>COMENTS:",Comments);
                         if (Comments != ""){
-                          trace.sendmail("vanessa.serrano@iqs.url.edu", email, "[The Vistorian] Users comments or questions", Comments, "", null, null);
+                          trace.sendmail("vanessa.serrano@iqs.url.edu", email, "[The Vistorian] Users comments or questions", Comments, true, null, null);
                         }
                         
                         //window.history.back();
