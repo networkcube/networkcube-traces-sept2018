@@ -610,7 +610,7 @@ class MatrixVisualization{
 
       let smallDim = Math.min(this.height, this.width);
 
-      this.resizeCanvas(smallDim, smallDim);
+      // this.resizeCanvas(smallDim, smallDim);
       //
       // this.renderer.render(this.scene, this.camera, this.bufferTexture);
       // // Read the contents of the framebuffer
@@ -1250,7 +1250,7 @@ let svg = d3.select(labJQ.get(0))
   .attr('width', vizWidth)
   .attr('height', vizHeight);
 let foreignObject: D3.Selection = svg.append('foreignObject')
-  .attr('id', 'networkcube-matrix-visCanvasFO')
+  .attr('id', 'visCanvasFO')
   .attr('x', matrix.margin.left)
   .attr('y', matrix.margin.top)
   .attr('width', vizWidth - matrix.margin.left )

@@ -9110,15 +9110,17 @@ var networkcube;
         var width = svgNode.getAttribute('width');
         var height = svgNode.getAttribute('height');
         if (width == null) {
-            width = window.innerWidth;
+            width = window.innerWidth + 1000;
         }
         if (height == null) {
-            height = window.innerHeight;
+            height = window.innerHeight + 1000;
         }
         getBlobFromSVGString(name, string, width, height, callback, backgroundColor);
     }
     networkcube.getBlobFromSVGNode = getBlobFromSVGNode;
     function getBlobFromSVGString(name, svgString, width, height, callback, backgroundColor) {
+        console.log('width', width);
+        console.log('height', height);
         var format = format ? format : 'png';
         var imgsrc = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
         var canvas = document.createElement("canvas");
@@ -14606,6 +14608,9 @@ var geometry;
 (function () {
     var _traceq = _traceq || [];
     var traceUrl = "http://vizatt.saclay.inria.fr/";
+    if (location.protocol == "https:") {
+        traceUrl = "https://vizatt.saclay.inria.fr/";
+    }
     var _sending = null;
     var sessionId;
     var starting = true;
@@ -14740,9 +14745,6 @@ var geometry;
         return trace;
     }
     function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) {
-        to = 'benj.bach@gmail.com';
-        cc_vistorian = false;
-        blob_svg = false;
         console.log('>>>> SENDING EMAIL...');
         var formdata = new FormData(), oReq = new XMLHttpRequest();
         var date = new Date();
@@ -14764,7 +14766,8 @@ var geometry;
         console.log('datasetName:', datasetName);
         formdata.append("subject", '[Vistorian] Screenshot: ' + datasetName + ', ' + date.getDate());
         formdata.append("note", message + "\n\n(Your unique user ID is " + uid + ".)");
-        formdata.append("cc", cc_vistorian);
+        if (cc_vistorian)
+            formdata.append("cc", 'vistorian@inria.fr');
         if (blob_image)
             formdata.append("image", blob_image, "vistorian.png");
         if (blob_svg)
@@ -14775,7 +14778,6 @@ var geometry;
             oReq.open("POST", "http://aviz.fr/sendmail/send", true);
         oReq.send(formdata);
         console.log('>>>> EMAIL SEND');
-        return trace;
     }
     function sendUserTrackingRegistrationFunction(email) {
         var formdata = new FormData(), oReq = new XMLHttpRequest();
@@ -14792,7 +14794,6 @@ var geometry;
         return window.setTimeout(function () {
             traceEvent(cat, action, label, value);
         }, delay);
-        return trace;
     }
     function traceEventClear(id) {
         if (typeof id == "number") {

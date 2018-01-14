@@ -1,7 +1,10 @@
 (function() {
 
-    var _traceq = _traceq || [];
-    var traceUrl = "http://vizatt.saclay.inria.fr/";
+	var _traceq = _traceq || [];
+	var traceUrl = "http://vizatt.saclay.inria.fr/";
+    if (location.protocol == "https:"){
+    	traceUrl = "https://vizatt.saclay.inria.fr/";
+	}
     var _sending = null;
     var sessionId;
     var starting = true;
@@ -188,10 +191,11 @@
 	function sendMailFunction(to, from, subject, message, cc_vistorian, blob_image, blob_svg) 
 	{
 		// bbach: debug settings 
-		to = 'benj.bach@gmail.com';
-		cc_vistorian = false;
-		blob_svg = false;
-		// <<<
+		// to = 'benj.bach@gmail.com';
+		// cc_vistorian = '';
+		// blob_svg = false;
+		// blob_png = true;
+		// // <<<
 		
 		console.log('>>>> SENDING EMAIL...')		
 		var formdata = new FormData(),
@@ -220,9 +224,10 @@
 		console.log('datasetName:', datasetName)
 		formdata.append("subject", '[Vistorian] Screenshot: ' + datasetName + ', ' + date.getDate());
 		formdata.append("note", message + "\n\n(Your unique user ID is " + uid + ".)");
-		formdata.append("cc", cc_vistorian);
-		//if (cc_vistorian) 
-		//	formdata.append("CopyToVistorian", "Yes");
+		if (cc_vistorian) 
+			formdata.append("cc", 'vistorian@inria.fr');
+		// if (cc_vistorian) 
+		// 	formdata.append("CopyToVistorian", "Yes");
 		if (blob_image)
 			formdata.append("image",blob_image, "vistorian.png");
 		if (blob_svg)
@@ -234,7 +239,6 @@
 			oReq.open("POST", "http://aviz.fr/sendmail/send", true);
 		oReq.send(formdata);
 		console.log('>>>> EMAIL SEND')
-		return trace;
 	}
 
 	function sendUserTrackingRegistrationFunction(email) 
@@ -262,8 +266,6 @@
 		{
 			traceEvent(cat, action, label, value);
 		}, delay);
-		
-		return trace;
 	}
 
 	function traceEventClear(id) 

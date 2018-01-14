@@ -487,16 +487,18 @@ module networkcube {
         var height = svgNode.getAttribute('height') 
         if(width == null)
         {
-            width = window.innerWidth;
+            width = window.innerWidth + 1000;
         }
         if(height == null)
         {
-            height = window.innerHeight;
+            height = window.innerHeight + 1000;
         }
         getBlobFromSVGString(name, string, width, height, callback, backgroundColor)
     }
     export function getBlobFromSVGString(name:string, svgString:string, width:number, height:number, callback:Function, backgroundColor?:string)
     {
+        console.log('width', width)
+        console.log('height', height)
         // get SVG string
         // CREATE PNG
         var format = format ? format : 'png';

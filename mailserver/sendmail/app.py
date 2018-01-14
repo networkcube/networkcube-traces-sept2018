@@ -48,32 +48,45 @@ def hello():
 def test():
     return "test OK"
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    send_from = 'vistorian'
-    send_to = 'vanessa.serrano@iqs.url.edu'
+    send_from = 'vistorian@inria.fr'
+    send_to = 'benj.bach@gmail.com'
     send_cc = 'benj.bach@gmail.com'
     send_subject = '[Vistorian] New user tracking registration'
-    send_note = '??'    
-    textBody = "Hi Vistorians, This is a tracking request from a new user. Their email address is " + request.form['email'].strip() + "."
-
-    msg = MIMEText('')
+    send_note = "Hi Vistorians, This is a tracking request from a new user. Their email address is " + request.form['email'].strip() + "."
+        
+    msg = MIMEMultipart('')
     msg['Subject'] = send_subject
     msg['From'] = send_from
     msg['To'] = send_to
     msg['CC'] = send_cc
+    msg.preamble = send_note
 
+    note = MIMEText(send_note)
+    msg.attach(note)
+    
+    tos = msg.get_all('to', [])
+    ccs = msg.get_all('cc', [])
+    resent_tos = msg.get_all('resent-to', [])
+    resent_ccs = msg.get_all('resent-cc', [])
+    all_recipients = getaddresses(tos + ccs + resent_tos + resent_ccs)
+    # Send the email via our own SMTP server.
     s = smtplib.SMTP('smtp.inria.fr')
-    s.send_message(msg)
+    s.sendmail(send_from, all_recipients, msg.as_string())
     s.quit()
+   
+    response = "Mail sent!"
+    response = make_response(response)
+    response.headers['Access-Control-Allow-Origin'] = "*"
     return response
 
 @app.route("/send", methods=['GET', 'POST'])
-=======
+# =======
 
-@app.route("/", methods=['GET', 'POST'])
->>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
+# @app.route("/", methods=['GET', 'POST'])
+# >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
 def send():
     try:
         send_from = request.form['from'].strip()

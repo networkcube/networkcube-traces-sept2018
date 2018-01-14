@@ -67,9 +67,12 @@
 
 <body>
                     
-                    <fieldset style = "width: 750px; margin-top: 0px auto;">
+                    <fieldset style = "width: 750px; margin-top: 0px auto; position:relative">
                     
-                    <button type="button" onclick="closeWindow()" class="buttonClose" id="signup-close" style="position: absolute;right:245px;top:15px;outline:5px solid #fff" color = red>X</button>
+                    <!--<button type="button" onclick="closeWindow()" class="buttonClose" id="signup-close" style="position: absolute;right:245px;top:15px;outline:5px solid #fff" color = red>X</button>-->
+                    <button onclick="closeWindow()" style="position: absolute;right:5px;top:5px;outline:5px solid #fff">
+                    <img src="http://icons.iconarchive.com/icons/hopstarter/sleek-xp-basic/16/Close-2-icon.png"/>
+                    </button>
                     <script>
                         function closeWindow()
                         {
@@ -246,8 +249,9 @@
                       {
                         // GET RESULTS FROM 1ST QUESTIONNAIRE
                         // Read stuff from local storage
-                        email = localStorage.getItem('traces_email', $('#emailInput').val())
-                        localStorage.getItem('traces_format')
+                        //email = localStorage.getItem('traces_email', $('#emailInput').val())
+                        email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
+                        // localStorage.getItem('traces_format')
                         localStorage.getItem('traces_addLegend')
                         localStorage.getItem('traces_sendCopyToVistorian')
                         var Comments = document.getElementById('comments').value;
@@ -300,7 +304,7 @@
                         trace.event(null, 'MiniQuestionnaire', 'EndActivityQuestionnaire2', 'Comments=' + Commentstext);
                         console.log(">>>>COMENTS:",Comments);
                         if (Comments != ""){
-                          trace.sendmail("vanessa.serrano@iqs.url.edu", email, "[The Vistorian] Users comments or questions", Comments, "", null, null);
+                          trace.sendmail("vanessa.serrano@iqs.url.edu", email, "[The Vistorian] Users comments or questions", Comments, true, null, null);
                         }
                         
                         //window.history.back();
@@ -315,8 +319,9 @@
                       {
                         // GET RESULTS FROM 1ST QUESTIONNAIRE
                         // Read stuff from local storage
-                        email = localStorage.getItem('traces_email', $('#emailInput').val())
-                        localStorage.getItem('traces_format')
+                        //email = localStorage.getItem('traces_email', $('#emailInput').val())
+                        email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
+                        // localStorage.getItem('traces_format')
                         localStorage.getItem('traces_addLegend')
                         localStorage.getItem('traces_sendCopyToVistorian')
                         localStorage.getItem('traces_button1')
@@ -374,6 +379,7 @@
                         //window.history.back();
                         
                         sendEmail();
+                        closeWindow();
                         window.setTimeout(function() {
                           closeWindow();
                         }, 3000);
@@ -389,6 +395,7 @@
                           } else {
                             window.parent.$('#mailmeQuestionnaireDiv').find('iframe').attr('src', "traces/MailMeQuestionnaire1.html");
                           }
+                          window.parent.$('#mailmeQuestionnaireDiv').find('iframe').attr('visibility', 'hidden')
 
                           var cc_vistorian = '';
                             if(localStorage.setItem('traces_sendCopyToVistorian', $('checkboxes-1').is(':checked')))
@@ -407,20 +414,20 @@
 
                           var message = "Hello,\n\nThis is your screenshot. You can find the file attached.\n\nBest,\nThe Vistorian team";
 
-                          var format = localStorage.getItem('traces_format'); 
-                          console.log('format', format);             
-                          if(format && format == 'PNG')
-                          {
+                          // var format = localStorage.getItem('traces_format'); 
+                          // console.log('format', format);  
+                          // if(format && format == 'PNG')
+                          // {
                             // var svgString = networkcube.getSVGString(window.parent.$('#visSvg'));
-                            var svgString = window.parent.$('#visFrame').find('iframe'). contents().find('#visSvg');
-                            var d3Object = d3.select(svgString.get(0));
-                            networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
-                            {
-                              //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
-                              trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
-                              networkcube.showMessage('Email send!', 3000);
-                            })
-                          }
+                          var svgString = window.parent.$('#visFrame').find('iframe'). contents().find('#visSvg');
+                          var d3Object = d3.select(svgString.get(0));
+                          networkcube.getBlobFromSVGNode('vistorian-screenshot', d3Object.node(), function(blob, name)
+                          {
+                            //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
+                            trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
+                            networkcube.showMessage('Email send!', 3000);
+                          })
+                          // }
                         }
                         
                       //function sendEmail()

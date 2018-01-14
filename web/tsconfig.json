@@ -12,11 +12,7 @@
         "suppressImplicitAnyIndexErrors": true
     },
     "files": [
-        "../core/networkcube.d.ts",
-        "./classes/storage.ts",
-        "./classes/utils.ts",
         "./vistorian.ts",
-        "./dataview.ts",
-        "./scripts/jstorage.d.ts"
+        "./dataview.ts"
     ]
 }

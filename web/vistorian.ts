@@ -1,6 +1,5 @@
 /// <reference path="classes/storage.ts"/>
 /// <reference path="../core/networkcube.d.ts"/>
-
 /*
 Convenient class that provides an API to the vistorian "framework"
 and the user data.
@@ -8,19 +7,17 @@ This API should be used in every visualization.
 */
 
 // function vistorian(){
-
-// 	function getSchema(tableName){
-// 		// return getUrlVars()[tableName]
-// 	 //        .replace('[', '')
-// 	 //        .replace(']', '')
-// 	 //        .split(',')
-// 	  var schema = getUrlVars()['schema']
-// 	  schema = schema.replace(/%22/g, '"').replace(/%20/g, '_')
-// 	  schema = JSON.parse(schema);
-// 	  return schema;
-// 	}
+//     function getSchema(tableName){
+//         // return getUrlVars()[tableName]
+//      //        .replace('[', '')
+//      //        .replace(']', '')
+//      //        .split(',')
+//       var schema = getUrlVars()['schema']
+//       schema = schema.replace(/%22/g, '"').replace(/%20/g, '_')
+//       schema = JSON.parse(schema);
+//       return schema;
+//     }
 // }
-
 module vistorian {
 
     // LOADING FONTS:
@@ -37,7 +34,6 @@ module vistorian {
     head.append('<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>')
     head.append("<script src='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>")    
     // head.append("<script src='../lib/bootbox.min.js'></script>")
-
     // append('./lib/xml2json.js');
     function append(url: string) {
         var script = document.createElement('script');
@@ -52,7 +48,6 @@ module vistorian {
 
 
     // DATA TYPES
-
     export class VTable {
         name: string;
         data: any[];
@@ -133,7 +128,6 @@ module vistorian {
 
 
     // FUNCTIONS
-
     export function loadCSV(files: File[], callBack: Function, sessionid:string) {
 
         var loadCount = 0;
@@ -213,9 +207,8 @@ module vistorian {
         // var indexify = false;
         // test
         // if(Number(table.data[1][0]) == NaN){
-        // 	indexify = true;
-        // }	
-
+        //     indexify = true;
+        // }    
         var numCols: number = table.data[0].length;
         var emptyCols: number = 0;
         var row: any[]
@@ -246,15 +239,15 @@ module vistorian {
     }
 
 
-	/**
-	 * Checks the time column in the passed table against the entered
-	 * time format and returns an array of fields that do not match the
-	 * that time format.
-	 * @param  {Table}  table      [description]
-	 * @param  {number} timeCol    [description]
-	 * @param  {string} timeFormat [description]
-	 * @return {[type]}            [description]
-	 */
+    /**
+     * Checks the time column in the passed table against the entered
+     * time format and returns an array of fields that do not match the
+     * that time format.
+     * @param  {Table}  table      [description]
+     * @param  {number} timeCol    [description]
+     * @param  {string} timeFormat [description]
+     * @return {[type]}            [description]
+     */
     export function checkTime(table: VTable, timeCol: number, timeFormat: string): number[] {
         var timeString: string;
         var error: number[] = [];
@@ -309,7 +302,6 @@ module vistorian {
     // function updateEntryToLocationTable(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
     //     return updateEntryToLocationTableOSM(index, geoname, locationTable, locationSchema);
     // }
-
     /// [bbach]: function deprecated since switched to open-street-map webservice.
     function updateEntryToLocationTableDariah(index: number, geoname: string, locationTable: VTable, locationSchema: networkcube.LocationSchema) {
         geoname = geoname.trim();
@@ -361,7 +353,7 @@ module vistorian {
 
                     if (validResults.length == 1) {
                         // if only one valid result has been returned, add this single result
-                        // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])	
+                        // locationTable.data.push([locationTable.data.length-1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude])    
                         locationTable.data[rowIndex] = [rowIndex - 1, userLocationLabel, geoname, validResults[0].longitude, validResults[0].latitude];
                         return;
                     }
@@ -489,17 +481,23 @@ module vistorian {
             <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"/>\
             <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>\
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>\
-            <script src="../lib/bootbox.min.js"></script>\
+            <script src="https://networkcube.github.io/networkcube-traces/web/lib/bootbox.min.js"></script>\
             <input id="enableDisableTrackingBtn" type="button" class="enable" onclick="vistorian.enableDisableTracking()" value="Enable tracking"></input>\
             <div id="trackingContainer">\
             </div>\
         ');
 
-        console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled())
+        // console.log('networkcube.isTrackingEnabled()', networkcube.isTrackingEnabled())
         if(networkcube.isTrackingEnabled())
         {
+            var url = location.href; 
             $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-            $('#trackingContainer').load('../traces/questionnaires.html');
+            if(url.indexOf('dataview') > -1)
+            {
+                $('#trackingContainer').load('traces/questionnaires.html');
+            }else{
+                $('#trackingContainer').load('../traces/questionnaires.html');
+            }
         }else{
             $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');        
             if($('#trackingButtonsDiv'))
@@ -517,67 +515,50 @@ module vistorian {
     }
 
 
-    export function enableDisableTracking(relativePathToTracesDir:String)
+    export function enableDisableTracking()
     {
+        var url = location.href;
+        var  relativePathToTracesDir = '';
+        
+        if(url.indexOf('dataview') > -1)
+        {
+            relativePathToTracesDir = '';
+        }else{
+            relativePathToTracesDir = '../';
+        }
         if(networkcube.isTrackingEnabled())
         {
-               setupConditionalLoggingDisable(relativePathToTracesDir);
+            setupConditionalLoggingDisable(relativePathToTracesDir);
         } else {
-               setupConditionalLogging(relativePathToTracesDir); 
+            setupConditionalLogging(relativePathToTracesDir); 
         }
     }
 
 // <<<<<<< HEAD
     export function setupConditionalLogging(relativePathToTracesDir:String) 
     {
-            bootbox.confirm({
-                closeButton: true,
-                size: "large",
-                class:"text-left",
-                //position: "left",
-                //title: "Consent to tracking",
-                message: 
-                '<p><strong><big>Consent to tracking</big></strong>\
-                <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-                <br> This allows us to understand how the Vistorian is used and to improve it.\
-                <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-                <br>No personal information will be collected or saved with the tracking data.\
-                <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-                <p>If you agree to be tracked we will start tracking, and\
-                <ul>\
-                <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-                <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-                </ul>\
-                <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
-                <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-                <p>Thank you for agreeing to participate in our research.\
-                <p>The Vistorian Team (vistorian@inria.fr)',
-// =======
-//     function setupConditionalLogging() {
-//         bootbox.confirm({
-//             closeButton: true,
-//             size: "large",
-//             class:"text-left",
-//             //position: "left",
-//             //title: "Consent to tracking",
-//             message: 
-//             '<p><strong><big>Consent to tracking</big></strong>\
-//             <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
-//             <br> This allows us to understand how the Vistorian is used and to improve it.\
-//             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
-//             <br>No personal information will be collected or saved with the tracking data.\
-//             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
-//             <p>If you agree to be tracked we will start tracking, and\
-//             <ul>\
-//             <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
-//             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
-//             </ul>\
-//             Please enter your email: <input id="userEmailInput" type="text" name="userEmail" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)">\
-//             <p>\
-//             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
-//             <p>Thank you for agreeing to participate in our research.\
-//             <p>The Vistorian Team (vistorian@inria.fr)',
-// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
+        bootbox.confirm({
+            closeButton: true,
+            size: "large",
+            class:"text-left",
+            //position: "left",
+            //title: "Consent to tracking",
+            message: 
+            '<p><strong><big>Consent to tracking</big></strong>\
+            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+            <br> This allows us to understand how the Vistorian is used and to improve it.\
+            <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
+            <br>No personal information will be collected or saved with the tracking data.\
+            <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
+            <p>If you agree to be tracked we will start tracking, and\
+            <ul>\
+            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+            <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
+            </ul>\
+            <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
+            <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
+            <p>Thank you for agreeing to participate in our research.\
+            <p>The Vistorian Team (vistorian@inria.fr)',
             buttons: {
                 confirm: {
                     label: "I Agree",
@@ -593,8 +574,8 @@ module vistorian {
                 if (result == true)
                 {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-// <<<<<<< HEAD
-                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
+                    $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
+
                     $('#enableDisableTrackingBtn')
                         .prop('value', 'Disable tracking and screenshots')
                         .prop('class', 'disable');
@@ -602,72 +583,6 @@ module vistorian {
                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
     
-                    /*bootbox.alert({
-                            message: "Thank you for reporting on your activity.",
-                            backdrop: true
-                        });*/
-    
-                    // bb: removed this part as I don't think we need to thank the user again here. Saves us a click.
-                    // bootbox.prompt({
-                    //     closeButton: false,
-                    //     class:"text-left",
-                    //     title: "Thank you for reporting on your activity</p>",
-                    //     backdrop: true,
-                    //         buttons: {
-                    //             confirm: {
-                    //                 label: false,
-                    //                 className:  "btn-success pull-right"
-                    //             },
-                    //             cancel: {
-                    //             label:  false,
-                    //             className:  "btn-warning pull-left"
-                    //             }
-                    //         },
-                    //     inputType: 'checkbox',
-                    //     inputOptions: [
-                    //         {
-                    //             text: '&nbsp;Do not show this message again',
-                    //             value: '1',
-                    //         }
-                    //     ],
-                    //     callback: function (result) {
-                    //         console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                    //         trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
-                    //     }
-                    // })
-// =======
-//                     $('#trackingContainer').load('../traces/questionnaires-visualization.html');
-//                     $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
-//                     console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-//                     trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
-//                     if (showMessageAgain == null){
-//                        bootbox.confirm({
-//                             closeButton: true,
-//                             //size: "small",
-//                             class:"text-left",
-//                             backdrop: true,
-//                             message: 
-//                             '<p><big>Thank you for reporting on your activity</big>\
-//                              <p><input id="showMessageAgainInput" type="checkbox" name="ShowMessageAgain" onkeyup="localStorage.setItem(\'SHOW_MESSAGE_AGAIN\', document.getElementById(\'showMessageAgainInput\').value)"> &nbsp;Do not show this message again<br>',
-//                              buttons: {
-//                                  confirm: {
-//                                      label: "OK",
-//                                      className:  "btn-success pull-right"
-//                                  },
-//                                  cancel: {
-//                                  label:  "Cancel",
-//                                  className:  "btn-warning pull-left"
-//                                  }
-//                              },
-                            
-//                         callback: function (result) {
-//                             if ($('#showMessageAgainInput').is(':checked'))
-//                                 showMessageAgain = true;
-//                             console.log("RESULT", localStorage.getItem("SHOW_MESSAGE_AGAIN"));
-//                         }
-//                     })
-//                    }
-// >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                     if($('#trackingButtonsDiv'))
@@ -715,7 +630,7 @@ module vistorian {
                 {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
                     console.log('>>> TRACKING ENABLED')
-                    $('#trackingContainer').load(relativePathToTracesDir + '/questionnaires.html');
+                    $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
                     $('#enableDisableTrackingBtn').prop('value', 'Disable tracking and screenshots').prop('class', 'disable');
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
@@ -752,9 +667,7 @@ module vistorian {
                 }
 // =======
 //                     $('#enableDisableTrackingBtn').prop('value', 'Enable tracking and screenshots').prop('class', 'enable');
-
 //                     bootbox.confirm({
-
 
 //                     closeButton: true,
 //                     size: "large",
@@ -818,7 +731,6 @@ module vistorian {
         //     nodes:nodes, 
         //     links:links
         // }
-
         var blurb = network;
             
         var element = document.createElement('a');
@@ -860,7 +772,6 @@ module vistorian {
 
         // if(normalizedLocationTable)       
         // displayLocationTable();
-
         var locationLabels: string[] = [];
         if (currentNetwork.userLocationTable != undefined) {
             for (var i = 1; i < currentNetwork.userLocationTable.data.length; i++) {
@@ -871,7 +782,6 @@ module vistorian {
 
 
         // CONVERT SINGLE-LINK TABLE 
-
         var nodeIds: number[] = [];
         var names: string[] = [];
         var nodeLocations: number[][] = [];
@@ -1058,7 +968,6 @@ module vistorian {
         }
 
         // CHECK FOR SINGLE NODE-TABLE
-
         if (currentNetwork.userLinkTable == undefined) 
         {
             console.log('Create and fill link table')
@@ -1142,7 +1051,6 @@ module vistorian {
 
                     normalizedLinkTable.push(newRow);
                     // console.log('create edge row', newRow);
-
                 }
             }
             console.log('normalizedLinkTable', normalizedLinkTable)
@@ -1196,7 +1104,6 @@ module vistorian {
         console.log('locationTable', currentNetwork.networkCubeDataSet.locationTable)
 
         // console.log('[vistorian] network created', networkcubeDataSet);
-
         storage.saveNetwork(currentNetwork, sessionid);
 
         // networkcube.setDataManagerOptions({ keepOnlyOneSession: true });
