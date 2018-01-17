@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var vistorian;
 (function (vistorian) {
     var head = $('head');
@@ -24,67 +29,70 @@ var vistorian;
         $("head").append(script);
     }
     var tables = [];
-    var showMessageAgain = null;
+    var showMessageAgain;
     var VTable = (function () {
         function VTable(name, data) {
             this.name = name;
             this.data = data;
         }
         return VTable;
-    })();
+    }());
     vistorian.VTable = VTable;
     var VTableSchema = (function () {
         function VTableSchema(name) {
             this.name = name;
         }
         return VTableSchema;
-    })();
+    }());
     vistorian.VTableSchema = VTableSchema;
     var VNodeSchema = (function (_super) {
         __extends(VNodeSchema, _super);
         function VNodeSchema() {
-            _super.call(this, 'userNodeSchema');
-            this.relation = [];
-            this.location = -1;
-            this.id = 0;
-            this.label = -1;
-            this.time = -1;
-            this.nodeType = -1;
+            var _this = _super.call(this, 'userNodeSchema') || this;
+            _this.relation = [];
+            _this.location = -1;
+            _this.id = 0;
+            _this.label = -1;
+            _this.time = -1;
+            _this.nodeType = -1;
+            return _this;
         }
         ;
         return VNodeSchema;
-    })(VTableSchema);
+    }(VTableSchema));
     vistorian.VNodeSchema = VNodeSchema;
     var VLinkSchema = (function (_super) {
         __extends(VLinkSchema, _super);
         function VLinkSchema() {
-            _super.call(this, 'userLinkSchema');
-            this.location_source = -1;
-            this.location_target = -1;
-            this.id = 0;
-            this.source = -1;
-            this.target = -1;
-            this.weight = -1;
-            this.time = -1;
-            this.linkType = -1;
+            var _this = _super.call(this, 'userLinkSchema') || this;
+            _this.location_source = -1;
+            _this.location_target = -1;
+            _this.id = 0;
+            _this.source = -1;
+            _this.target = -1;
+            _this.weight = -1;
+            _this.time = -1;
+            _this.linkType = -1;
+            return _this;
         }
         ;
         return VLinkSchema;
-    })(VTableSchema);
+    }(VTableSchema));
     vistorian.VLinkSchema = VLinkSchema;
     var VLocationSchema = (function (_super) {
         __extends(VLocationSchema, _super);
         function VLocationSchema() {
-            _super.call(this, 'userLocationSchema');
-            this.id = 0;
-            this.label = 1;
-            this.geoname = 2;
-            this.longitude = 3;
-            this.latitude = 4;
+            var _this = _super.call(this, 'userLocationSchema') || this;
+            _this.id = 0;
+            _this.label = 1;
+            _this.geoname = 2;
+            _this.longitude = 3;
+            _this.latitude = 4;
+            return _this;
         }
         ;
         return VLocationSchema;
-    })(VTableSchema);
+    }(VTableSchema));
     vistorian.VLocationSchema = VLocationSchema;
     var Network = (function () {
         function Network(id) {
@@ -94,7 +102,7 @@ var vistorian;
             this.userLinkSchema = new VLinkSchema();
         }
         return Network;
-    })();
+    }());
     vistorian.Network = Network;
     function loadCSV(files, callBack, sessionid) {
         var loadCount = 0;
@@ -415,26 +423,34 @@ var vistorian;
         }
     }
     vistorian.enableDisableTracking = enableDisableTracking;
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email.toLowerCase());
+    }
     function setupConditionalLogging(relativePathToTracesDir) {
         bootbox.confirm({
             closeButton: true,
             size: "large",
             class: "text-left",
             message: '<p><strong><big>Consent to tracking</big></strong>\
-            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. the fact that you created a node link diagram or a matrix, or used filters, or the fact that you uploaded a new file).\
             <br> This allows us to understand how the Vistorian is used and to improve it.\
             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
             <br>No personal information will be collected or saved with the tracking data.\
             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
             <p>If you agree to be tracked we will start tracking, and\
             <ul>\
-            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions unless we have already done so.\
             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
             </ul>\
-            <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
+            <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"> <span id="email-error" style="color:white;">An email address is required</span></p>\
             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
             <p>Thank you for agreeing to participate in our research.\
-            <p>The Vistorian Team (vistorian@inria.fr)',
+            <p>The Vistorian Team (<a href="mailto:vistorian@inria.fr">vistorian@inria.fr</a>)\
+            <br><small>Benjamin Bach\
+            <br>Jean Daniel Fekete\
+            <br>Catherine Plaisant\
+            <br>Vanessa Serrano Molinero<small/>',
             buttons: {
                 confirm: {
                     label: "I Agree",
@@ -447,13 +463,23 @@ var vistorian;
             },
             callback: function (result) {
                 if (result == true) {
-                    localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                    $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
-                    $('#enableDisableTrackingBtn')
-                        .prop('value', 'Disable tracking and screenshots')
-                        .prop('class', 'disable');
-                    console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                    trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                    if (!validateEmail(localStorage.getItem("NETWORKCUBE_USEREMAIL"))) {
+                        bootbox.alert({
+                            message: "Please, enter a correct email!",
+                            size: 'big'
+                        });
+                        $('#email-error').css('color', 'red');
+                        return false;
+                    }
+                    else {
+                        localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+                        $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
+                        $('#enableDisableTrackingBtn')
+                            .prop('value', 'Disable tracking and screenshots')
+                            .prop('class', 'disable');
+                        console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                        trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                    }
                 }
                 else {
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
@@ -480,7 +506,11 @@ var vistorian;
             <p>The data we gathered from your past use of the Victorian is de-identified and contains no personal information.\
             <br>If you wish this data to be removed from the server please send a personal email to vistorian@inria.fr <vistorian@inria.fr>.\
             <p>Thank you for participating in our study.\
-            <br>The Vistorian Team (vistorian@inria.fr)',
+            <p>The Vistorian Team (<a href="mailto:vistorian@inria.fr">vistorian@inria.fr</a>)\
+            <br><small>Benjamin Bach\
+            <br>Jean Daniel Fekete\
+            <br>Catherine Plaisant\
+            <br>Vanessa Serrano Molinero<small/>',
             buttons: {
                 confirm: {
                     label: "CONFIRM",
