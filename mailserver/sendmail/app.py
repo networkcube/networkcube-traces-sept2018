@@ -3,10 +3,11 @@ from werkzeug.utils import secure_filename
 
 import os.path
 import smtplib
+import crypt
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
-from email.utils import getaddresses
+from email.utils import getaddresses, parseaddr
 
 app = Flask(__name__)
 
@@ -17,14 +18,70 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
 
 valid_dest = set()
+valid_passwd = {}
 
-with open('valid_emails.txt', 'r') as f:
-    for valid in f:
-        valid_dest.add(valid.rstrip('\n'))
+VALID_EMAILS_FILE = 'valid_emails.txt'
+PASSWD_FILE = 'passwd'
+
+def load_valid_emails():
+    try:
+        with open(VALID_EMAILS_FILE, 'r') as f:
+            for valid in f:
+                valid = valid.strip('\n')
+                if valid:
+                    valid_dest.add(valid)
+                    #print('Adding %s'%valid)
+    except FileNotFoundError:
+        with open(VALID_EMAILS_FILE, 'w') as f:
+            pass
+
+def load_passwords():
+    try:
+        with open(PASSWD_FILE, 'r') as f:
+            for passwd in f:
+                passwd = passwd.strip('\n')
+                fields = passwd.split(":")
+                if fields and fields[0] and fields[1]:
+                    valid_passwd[fields[0]] = fields[1]
+                    #print('Adding user %s'%fields[0])
+    except FileNotFoundError:
+        with open(PASSWD_FILE, 'w') as out:
+            out.write("jdf:jdQo0KARBewQQ\n")
+            valid_passwd["jdf"] = "jdQo0KARBewQQ"
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def valid_user(user, password):
+    return valid_passwd[user]==crypt.crypt(password, password)
+
+def add_valid_email(email):
+    email = email.strip()
+    if len(email) < 5:
+        raise ValueError("email %s too short"%email)
+    _, short = parseaddr(email)
+    if not short:
+        raise ValueError("email %s is invalid"%email)
+    email = short
+    if email in valid_dest:
+        raise KeyError("Email %s already valid"%email)
+    valid_dest.add(email)
+    #TODO lock the file
+    with open(VALID_EMAILS_FILE, 'a') as out:
+        out.write(email)
+        out.write('\n')
+
+def remove_valid_email(email):
+    email = email.strip()
+    valid_dest.remove(email)
+    #TODO lock the file
+    os.rename(VALID_EMAILS_FILE, VALID_EMAILS_FILE+"b")
+    with open(VALID_EMAILS_FILE, 'w') as out:
+        for e in sorted(valid_dest):
+            out.write(e)
+            out.write('\n')
 
 def hello():
     return '''
@@ -34,6 +91,7 @@ def hello():
     <form enctype=multipart/form-data method=post>
       <p>From: <input type=text name=from>
          To: <input type=text name=to>
+         cc: <input type=text name=cc>
          Subject: <input type=text name=subject>
          Note: <input type=text name=note>
          Copy to Vistorian? <input type=checkbox name=CopyToVistorian value=Yes>
@@ -43,11 +101,62 @@ def hello():
     </form>
     '''
 
+def add_valid_email_form(msg=""):
+    return '''
+    <!doctype html>
+    <title>Add Valid EMail</title>
+    <h1>Add Valid EMail</h1>
+    <strong>{msg}</strong>
+    <form method=post action="/addvalid">
+      <p><label for="from">From:</label> <input type="text" name="from"><br>
+         <label for="password">Password:</label> <input type="password" name="password"><br>
+         <label for="email">EMail:</label> <input type="email" name="email"><br>
+         <label for="rem">Remove:</label> <input type="checkbox" name="rem"><br>
+         <label for="list">List:</label> <input type="checkbox" name="list"><br>
+         <input type=submit>
+    </form>
+    '''.format(msg=msg)
+
+
 @app.route("/test", methods=['GET', 'POST'])
 def test():
     return "test OK"
 
-# <<<<<<< HEAD
+@app.route("/addvalid", methods=['GET', 'POST'])
+def addvalid():
+    try:
+        from_user = request.form['from'].strip()
+        password = request.form['password'].strip()
+        email = request.form['email'].strip()
+        remove = request.form.get('rem')
+        dolist = request.form.get('list')
+    #pylint:disable=broad-except
+    except Exception as e:
+        return add_valid_email_form()
+    try:
+        if not valid_user(from_user, password):
+            raise KeyError('Invalid user/password')
+        if remove:
+            #print('Removing %s'%email)
+            remove_valid_email(email)
+        else:
+            #print('Adding %s'%email)
+            add_valid_email(email)
+    #pylint:disable=broad-except
+    except Exception as e:
+        #print('Exception %s'%e)
+        return add_valid_email_form(str(e))
+
+    if dolist:
+        return '''
+        <!doctype html>
+        <title>List of Valid EMails</title>
+        <h1>List of Valid EMail</h1>''' + \
+        ",<br>".join([str(x) for x in sorted(valid_dest)]) + \
+        "</html>"
+    return "Done!"
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     send_from = 'vistorian@inria.fr'
@@ -82,10 +191,6 @@ def register():
     return response
 
 @app.route("/send", methods=['GET', 'POST'])
-# =======
-
-# @app.route("/", methods=['GET', 'POST'])
-# >>>>>>> 630897885bf7004b7e6d852249e894ccd064fcc9
 def send():
     try:
         send_from = request.form['from'].strip()
@@ -93,6 +198,7 @@ def send():
         send_cc = request.form['cc'].strip()
         send_subject = request.form['subject'].strip()
         send_note = request.form['note'].strip()
+    #pylint:disable=broad-except
     except Exception:
         return hello()
     if send_to not in valid_dest:
@@ -165,3 +271,5 @@ def send():
     return response
 
 
+load_valid_emails()
+load_passwords()
