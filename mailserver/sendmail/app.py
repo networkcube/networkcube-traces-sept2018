@@ -12,7 +12,7 @@ from email.utils import getaddresses, parseaddr
 app = Flask(__name__)
 
 UPLOAD_FOLDER = '/tmp'
-ALLOWED_EXTENSIONS = set(['png', 'svg'])
+ALLOWED_EXTENSIONS = set(['png', 'svg', 'csv', 'json'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
@@ -97,6 +97,7 @@ def hello():
          Copy to Vistorian? <input type=checkbox name=CopyToVistorian value=Yes>
          Image: <input type=file name=image>
          SVG: <input type=file name=svg>
+         Data: <input type=file name=data>
          <input type=submit>
     </form>
     '''
@@ -230,7 +231,20 @@ def send():
     else:
         send_svg = None
     
-    msg = MIMEMultipart()
+    if 'data' in request.files:
+        send_data = request.files['data']
+        if allowed_file(send_data.filename):
+            filename = secure_filename(send_data.filename)
+            print('Received the image %s' % filename)
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            send_data.save(filename)
+            send_data = filename
+        else:
+            send_data = None
+    else:
+        send_data = None
+
+        msg = MIMEMultipart()
     msg['Subject'] = send_subject
     msg['From'] = send_from
     msg['To'] = send_to
@@ -254,6 +268,18 @@ def send():
         with open(send_svg, 'rb') as fp:
             img = MIMEImage(fp.read(), _subtype="svg+xml")
         msg.attach(img)
+
+    if send_data is not None:
+        with open(send_data, 'rb') as fp:
+            if send_data.endswith('.json'):
+                img = MIMEImage(fp.read(), _subtype="application/json")
+            elif send_data.endswith('.csv'):
+                img = MIMEImage(fp.read(), _subtype="text/csv")
+            else:
+                # should not happen
+                img = None
+        if img is not None:
+            msg.attach(img)
 
     tos = msg.get_all('to', [])
     ccs = msg.get_all('cc', [])
