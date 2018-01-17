@@ -534,7 +534,11 @@ module vistorian {
         }
     }
 
-// <<<<<<< HEAD
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email.toLowerCase());
+    }
+
     export function setupConditionalLogging(relativePathToTracesDir:String) 
     {
         bootbox.confirm({
@@ -545,20 +549,25 @@ module vistorian {
             //title: "Consent to tracking",
             message: 
             '<p><strong><big>Consent to tracking</big></strong>\
-            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. when you create a node link diagram or a matrix, use filters, or when you upload a new file).\
+            <p>When Tracking is ON, the Vistorian <strong>logs your activity</strong> (e.g. the fact that you created a node link diagram or a matrix, or used filters, or the fact that you uploaded a new file).\
             <br> This allows us to understand how the Vistorian is used and to improve it.\
             <p>This tracking data will be saved on a secure INRIA server which is accessible only by the Vistorian team.\
             <br>No personal information will be collected or saved with the tracking data.\
             <br>Your research data remains on your computer and is not saved anywhere else. In other words no-one else can see your data unless you personally email a screenshot or file to someone.\
             <p>If you agree to be tracked we will start tracking, and\
             <ul>\
-            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions.\
+            <li><strong>Contact you </strong>by email with a detailed consent form and a questionnaire, and answer all your questions unless we have already done so.\
             <li><strong>Turn on the &#147Mail me a screenshot&#148 </strong>feature (which we hope will be useful to you, and allow us to see screenshots of the work you wish to share with us).\
             </ul>\
-            <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"></p>\
+            <p>Please enter your email: <input id="userEmailInput" type="text" name="userEmail" style="width:300px" onkeyup="localStorage.setItem(\'NETWORKCUBE_USEREMAIL\', document.getElementById(\'userEmailInput\').value)"> <span id="email-error" style="color:white;">An email address is required</span></p>\
             <p>You can turn tracking OFF at any time, and email us to request all your tracking data to be erased.\
             <p>Thank you for agreeing to participate in our research.\
-            <p>The Vistorian Team (vistorian@inria.fr)',
+            <p>The Vistorian Team (<a href="mailto:vistorian@inria.fr">vistorian@inria.fr</a>)\
+            <br><small>Benjamin Bach\
+            <br>Jean Daniel Fekete\
+            <br>Catherine Plaisant\
+            <br>Vanessa Serrano Molinero<small/>',
+            
             buttons: {
                 confirm: {
                     label: "I Agree",
@@ -573,16 +582,31 @@ module vistorian {
             {
                 if (result == true)
                 {
-                    localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
-                    $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
+                    if (!validateEmail(localStorage.getItem("NETWORKCUBE_USEREMAIL")))
+                     {
+                         //return false
+                         //return true;
+                         //status = true;
+                         //$('.bootbox.modal').modal('show');
+                         //alert("Please, enter your email!");
+                         bootbox.alert({
+                            message: "Please, enter a correct email!",
+                            size: 'big'
+                         });
+                         $('#email-error').css('color','red');
+                         return false;
+                     }else{
 
-                    $('#enableDisableTrackingBtn')
-                        .prop('value', 'Disable tracking and screenshots')
-                        .prop('class', 'disable');
-    
-                    console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                    trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
-    
+                        localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
+                        $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
+
+                        $('#enableDisableTrackingBtn')
+                            .prop('value', 'Disable tracking and screenshots')
+                            .prop('class', 'disable');
+        
+                        console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                        trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
+                    }
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
                     if($('#trackingButtonsDiv'))
@@ -613,7 +637,11 @@ module vistorian {
             <p>The data we gathered from your past use of the Victorian is de-identified and contains no personal information.\
             <br>If you wish this data to be removed from the server please send a personal email to vistorian@inria.fr <vistorian@inria.fr>.\
             <p>Thank you for participating in our study.\
-            <br>The Vistorian Team (vistorian@inria.fr)',
+            <p>The Vistorian Team (<a href="mailto:vistorian@inria.fr">vistorian@inria.fr</a>)\
+            <br><small>Benjamin Bach\
+            <br>Jean Daniel Fekete\
+            <br>Catherine Plaisant\
+            <br>Vanessa Serrano Molinero<small/>',
             buttons: {
                 confirm: {
                     label: "CONFIRM",
