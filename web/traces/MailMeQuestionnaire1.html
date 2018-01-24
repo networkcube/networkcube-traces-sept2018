@@ -3,6 +3,7 @@
   <script src="../../core/networkcube.js"></script>
   <script src="js/canvas-to-blob.min.js"></script>
   <script src="https://github.com/niklasvh/html2canvas/releases/download/v0.5.0-beta4/html2canvas.js"></script>
+ 
 <style>
 
     body{
@@ -49,7 +50,7 @@
 
     hr {
         display: block;
-        height: 1px;
+        height: 0.5px;
         border: 0;
         border-top: 1px solid #ccc;
         margin: 1em 0;
@@ -61,7 +62,7 @@
 <body>
           
                     
-                    <fieldset style = "width: 500px;  height: 600px; margin-top: 0px auto; position:relative">
+                    <fieldset style = "width: 450px;  height: 600px; margin-top: 0px auto; position:relative;">
                     
                     <!--<button type="button" onclick="closeWindow()" class="buttonClose" id="signup-close" style="position: absolute;right:225px;top:15px;outline:5px solid #fff"color = red>X</button>-->
                     <!--<button type="button" onclick="closeWindow()" class="buttonClose" id="signup-close" style="position:relative;
@@ -79,13 +80,14 @@
                     </script>
 
                     <h3> <font size="5">Mail me a screenshot</font></h3>
-                    <label>Your mail address is:
-                    <script> document.write(localStorage.NETWORKCUBE_USEREMAIL);
-                    </script>
-                    <br> If you want to modify it, Disable an Enable Tracking again and change your mail address.
+                    <label><font size="4">Your mail address is:</font>
+                    <!-- <script> document.write(localStorage.NETWORKCUBE_USEREMAIL); -->
+                   <font size="4" color="blue"><script> document.write(localStorage.NETWORKCUBE_USEREMAIL);
+                    </script></font>
+                    <br> <font size="4">If you want to modify it, Disable and Enable Tracking again and change your mail address.</font>
                     </label>
                     <!-- <label>Email address: </label><input type="text" size="70" value="" id="emailInput" value="<?php echo htmlspecialchars($_GET['lastname']); ?>"></input> -->
-                    <hr>
+                    <!--<hr>-->
                     <!-- Multiple Radios -->
                     <!--<div class="form-group">
                       <label class="col-md-4 control-label" for="radios" style="margin-left:0em;"><b><font size="4">Format</font></b></label>
@@ -104,8 +106,9 @@
                       </div>
                       </div>
                     </div> -->
-                    <p> </p>
+                    <!-- <p> </p> -->
                     <!-- Multiple Checkboxes -->
+                    <br></br>
                     <div class="form-group">
                       <label class="col-md-4 control-label" for="checkboxes"></label>
                       <div class="col-md-4">
@@ -123,24 +126,22 @@
                       </div>
                       </div>
                     </div>
-                    <hr>
-                    <h3>Feedback Questionnaire</h3>
-                    <p> <font size="4">Please help us understand the context of use:</font></p>
-
-                   
+                    <br>
+                    <!--<hr>-->
+                    <b><font size="4">Feedback Questionnaire</font></b>
+                    <br></br>               
                     <table> <td>
                     <fieldset style="border:1px dashed #555555; vertical-align:top; width: 550px;">
-
-                     <h3> <small><font size="4">In this work session with the Vistorian I wanted to:</font></small></h3>
-                     
-                     
+                     <font size="3">Please help us understand the context of use.</font>
+                     <br><font size="3">In this work session with the Vistorian I wanted to:</font></br>
+                     <p></p>
                      <div class="click">
 
                           <button id="button1" type="button" style="height:25px;width:125px" class="myBtn" 
                             ondblclick="doubleClick(1)" onclick="toggleButton('button1')">
                             <label for="my-checkbox"><font size="2">Analyze data</font></label>
                           </button>
-                          <p></p>
+                          <br></br>
 
                           <button id="button2" type="button" style="height:25px;width:125px"
                             ondblclick="doubleClick(2)" onclick="toggleButton('button2')">
@@ -264,7 +265,7 @@
                     <td> 
                         <fieldset style="text-align:top; border:none; background-color:#f5f5f0;margin-top: 0px auto; width: 190px;">
                         <p><font size="2">To select a single answer and submit it: double click on the answer</font></p>
-                        <p style="margin-top: -15px;"><font size="2">Ore select multiple answers then click on the CONTINUE button</font></p>
+                        <p style="margin-top: -15px;"><font size="2">Or select multiple answers then click on the CONTINUE button</font></p>
                         </fieldset> 
                     </td>
                     </table>
