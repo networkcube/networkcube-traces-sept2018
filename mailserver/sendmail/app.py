@@ -204,8 +204,8 @@ def send():
         return hello()
     if send_to not in valid_dest:
         return "Invalid destination: "+send_to #+" valids:"+",".join(list(valid_dest))
-    # if 'CopyToVistorian' in request.form:
-    #     send_cc = "vistorian@inria.fr"
+    if 'CopyToVistorian' in request.form:
+        send_cc = "vistorian@inria.fr"
     if 'image' in request.files:
         send_image = request.files['image']
         if allowed_file(send_image.filename):
