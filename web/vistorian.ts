@@ -481,7 +481,7 @@ module vistorian {
             <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"/>\
             <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>\
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>\
-            <script src="https://networkcube.github.io/networkcube-traces/web/lib/bootbox.min.js"></script>\
+            <script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>\
             <input id="enableDisableTrackingBtn" type="button" class="enable" onclick="vistorian.enableDisableTracking()" value="Enable tracking"></input>\
             <div id="trackingContainer">\
             </div>\
