@@ -161,8 +161,7 @@ def addvalid():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     send_from = 'vistorian@inria.fr'
-    send_to = 'benj.bach@gmail.com'
-    send_cc = 'benj.bach@gmail.com'
+    send_to = 'vistorian@inria.fr'
     send_subject = '[Vistorian] New user tracking registration'
     send_note = "Hi Vistorians, This is a tracking request from a new user. Their email address is " + request.form['email'].strip() + "."
         
@@ -170,17 +169,16 @@ def register():
     msg['Subject'] = send_subject
     msg['From'] = send_from
     msg['To'] = send_to
-    msg['CC'] = send_cc
     msg.preamble = send_note
 
     note = MIMEText(send_note)
     msg.attach(note)
     
     tos = msg.get_all('to', [])
-    ccs = msg.get_all('cc', [])
+    # ccs = msg.get_all('cc', [])
     resent_tos = msg.get_all('resent-to', [])
-    resent_ccs = msg.get_all('resent-cc', [])
-    all_recipients = getaddresses(tos + ccs + resent_tos + resent_ccs)
+    # resent_ccs = msg.get_all('resent-cc', [])
+    all_recipients = getaddresses(tos + resent_tos)
     # Send the email via our own SMTP server.
     s = smtplib.SMTP('smtp.inria.fr')
     s.sendmail(send_from, all_recipients, msg.as_string())
