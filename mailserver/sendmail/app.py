@@ -9,6 +9,11 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.utils import getaddresses, parseaddr
 
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = '/tmp'
