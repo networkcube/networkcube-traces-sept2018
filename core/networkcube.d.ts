@@ -22,6 +22,7 @@ declare var LZString: {
 };
 declare var BSpline: (points: any, degree: any, copy: any) => void;
 declare var saveAs: any;
+/*! @source http://purl.eligrey.com/github/canvas-toBlob.js/blob/master/canvas-toBlob.js */
 declare module colorSchemes {
     var schema1: string[];
     var schema2: string[];
@@ -57,8 +58,8 @@ declare module networkcube {
         y1: number;
         y2: number;
         constructor(x1: number, y1: number, x2: number, y2: number);
-        width: number;
-        height: number;
+        readonly width: number;
+        readonly height: number;
         isPoint(): boolean;
     }
     function inBox(x: any, y: any, box: Box): boolean;
@@ -147,8 +148,8 @@ declare module networkcube {
     class Link extends BasicElement {
         constructor(id: number, graph: DynamicGraph);
         linkType(): string;
-        source: Node;
-        target: Node;
+        readonly source: Node;
+        readonly target: Node;
         nodePair(): NodePair;
         directed(): boolean;
         other(n: Node): Node;
@@ -158,8 +159,8 @@ declare module networkcube {
     }
     class NodePair extends BasicElement {
         constructor(id: number, graph: DynamicGraph);
-        source: Node;
-        target: Node;
+        readonly source: Node;
+        readonly target: Node;
         links(): LinkQuery;
         nodeType(): string;
         presentIn(start: Time, end?: Time): boolean;
@@ -198,7 +199,7 @@ declare module networkcube {
         add(element: number): void;
         addAll(elements: number[]): void;
         addAllUnique(elements: number[]): void;
-        length: number;
+        readonly length: number;
         size(): number;
         ids(): number[];
         removeDuplicates(): Query;
@@ -222,7 +223,7 @@ declare module networkcube {
         add(element: string): void;
         addAll(elements: string[]): void;
         addAllUnique(elements: string[]): void;
-        length: number;
+        readonly length: number;
         size(): number;
         toArray(): string[];
         forEach(f: Function): StringQuery;
@@ -423,8 +424,8 @@ declare module networkcube {
         linkAttr(attr: string, id: number): any;
         pairAttr(attr: string, id: number): any;
         timeAttr(attr: string, id: number): any;
-        startTime: Time;
-        endTime: Time;
+        readonly startTime: Time;
+        readonly endTime: Time;
         highlight(action: string, idCompound?: IDCompound): void;
         selection(action: string, idCompound: IDCompound, selectionId?: number): void;
         addToAttributeArraysSelection(selection: Selection, type: string, id: number): void;
@@ -482,7 +483,7 @@ declare module networkcube {
     }
     class AttributeArray {
         id: number[];
-        length: number;
+        readonly length: number;
     }
     class NodeArray extends AttributeArray {
         id: number[];
@@ -857,7 +858,7 @@ declare module glutils {
         push(e: any): WebGLElementQuery;
         getData(i: any): any;
         getVisual(i: any): any;
-        length: number;
+        readonly length: number;
         filter(f: Function): WebGLElementQuery;
         attr(name: string, v: any): WebGLElementQuery;
         style(name: string, v: any): WebGLElementQuery;
