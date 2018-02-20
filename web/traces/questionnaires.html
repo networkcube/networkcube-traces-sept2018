@@ -5,16 +5,14 @@
 <div id="trackingButtonsDiv">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-        <script src="//www.openjs.com/scripts/events/keyboard_shortcuts/shortcut.js"></script>
-        <!--<script src="lib/shortcut.js"></script>-->
+        <!--<script src="//www.openjs.com/scripts/events/keyboard_shortcuts/shortcut.js"></script>-->
+        <script src="lib/shortcut.js"></script>
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"/>
-        <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot (Alt+m)</button>
+        <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot (Ctrl+m)</button>
         <button id="emailMeBtn" class="trackingButton" name="End" onclick="endOfActivityClicked()">Report end of the activity</button>
         <script type="text/javascript">
 
-        shortcut.add("Alt+m", function() {
-            mailmeButtonClicked();
-        });   
+         
 
             function mailmeButtonClicked()
             {
@@ -26,6 +24,11 @@
                 trace.event(null, "MiniQuestionnaires", "EndActivityQuestionnaire1");
                 $("#endOfActivityQuestionnaireDiv").css("visibility", "visible")
             }
+
+            shortcut.add("ctrl+m", function() {
+                mailmeButtonClicked();
+            });  
+
         </script>
         <div id="mailmeQuestionnaireDiv" style="visibility:hidden; position:fixed; top:0; left:0; width:100%; height:100%; z-index:10">
             <div style="background-color:#000; opacity:.5; position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1"></div>
