@@ -1,4 +1,3 @@
-import './color'
 import {BasicElement, GraphElementQuery,
         Link, LinkQuery,
         Node, NodeQuery,

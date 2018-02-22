@@ -7,6 +7,7 @@ import {BasicElement, GraphElementQuery,
         Time, TimeQuery,
         ArrayTimeSeries, ScalarTimeSeries} from './queries'
 import * as moment from 'moment'
+import * as d3 from 'd3'
 
 //namespace networkcube {
 
@@ -446,7 +447,7 @@ import * as moment from 'moment'
         var fileNameToSaveAs = name + '_' + new Date().toUTCString() + '.png';
         var downloadLink = document.createElement("a")
         downloadLink.download = fileNameToSaveAs;
-        downloadLink.href = window.webkitURL.createObjectURL(blob);
+        downloadLink.href = window.URL.createObjectURL(blob);
         downloadLink.click();
     } 
 
@@ -467,12 +468,12 @@ import * as moment from 'moment'
     // downloads a screenshot on the desktop from the passed svg
     export function downloadPNGfromSVG(name:string, svgId:string)
     {
-        var blob = getBlobFromSVG(name, svgId, saveAs);
+        var blob = getBlobFromSVG(name, svgId);
     }
 
     // creates an image blob from the passed svg and calls the 
     // callback function with the blob as parameter
-    export function getBlobFromSVG(name:string, svgId:string, callback:Function)
+    export function getBlobFromSVG(name:string, svgId:string, callback?:Function)
     {
         var width = $('#'+svgId).width(); 
         var height = $('#'+svgId).height();
@@ -635,7 +636,7 @@ import * as moment from 'moment'
             // Extract CSS Rules
             var extractedCSSText = "";
             for (var i = 0; i < document.styleSheets.length; i++) {
-                var s = document.styleSheets[i];
+                var s = <CSSStyleSheet>document.styleSheets[i];
                 
                 try {
                     if(!s.cssRules) continue;
@@ -646,8 +647,9 @@ import * as moment from 'moment'
     
                 var cssRules = s.cssRules;
                 for (var r = 0; r < cssRules.length; r++) {
-                    if ( contains( cssRules[r].selectorText, selectorTextArr ) )
-                        extractedCSSText += cssRules[r].cssText;
+                    var rule = <CSSStyleRule>cssRules[r];
+                    if ( contains(rule.selectorText, selectorTextArr ) )
+                        extractedCSSText += rule.cssText;
                 }
             }
             

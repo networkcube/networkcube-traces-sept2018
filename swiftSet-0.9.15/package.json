@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/jabney/swiftSet/issues"
   },
-  "homepage": "https://github.com/jabney/swiftSet#readme"
+  "homepage": "https://github.com/jabney/swiftSet#readme",
+  "typings": "./swiftSet.d.ts"
 }

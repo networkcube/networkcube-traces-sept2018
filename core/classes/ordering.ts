@@ -1,5 +1,7 @@
 import {DynamicGraph} from './dynamicgraph'
-import {Link, Time} from './queries'
+import {Node, Link, Time} from './queries'
+import * as science from 'science'
+import * as reorder from 'reorder.js'
 
 //namespace networkcube{
 	
@@ -15,7 +17,7 @@ import {Link, Time} from './queries'
         var similarityMatrix:number[][] = [];
         var order:number[] = graph.nodes().ids();
 
-		var distance = config.distance ? config.distance : science.stats.distance.manhattan;
+        var distance = config.distance ? config.distance : science.stats.distance.manhattan;
         var nodes = config.nodes ? config.nodes : graph.nodes().toArray();
         var links = config.links ? config.links : graph.links().toArray();
         var start = config.start ? config.start : graph.startTime;
@@ -57,8 +59,10 @@ import {Link, Time} from './queries'
         
         // console.log('similarityMatrix', similarityMatrix)
         // Reorder
-        var leafOrder = reorder.leafOrder()
-			.distance(distance)(similarityMatrix);
+        var leafOrder = reorder
+                .optimal_leaf_order()
+		.distance(distance)
+                .reorder(similarityMatrix);
 			
         // console.log(leafOrder);
         leafOrder.forEach(function (lo, i) {

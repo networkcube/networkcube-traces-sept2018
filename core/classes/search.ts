@@ -1,5 +1,6 @@
 import {DynamicGraph} from './dynamicgraph'
 import {IDCompound} from './utils'
+import {Link, Node, Location} from './queries'
 //namespace networkcube{
 	
 		
@@ -14,20 +15,20 @@ import {IDCompound} from './utils'
 			console.log('search term', term)
 			if(!type || type == 'node')
 				result.nodeIds = result.nodeIds.concat(dgraph.nodes().filter(
-					(e:networkcube.Node)=>
+					(e:Node)=>
 						e.label().toLowerCase().indexOf(term) > -1
 						|| e.nodeType().toLowerCase().indexOf(term) > -1       
 					).ids());				
 			if(!type || type == 'link')
 				result.linkIds = result.linkIds.concat(dgraph.links().filter(
-					(e:networkcube.Link)=>
+					(e:Link)=>
 						e.source.label().toLowerCase().indexOf(term) > -1
 						|| e.target.label().toLowerCase().indexOf(term) > -1
 						|| e.linkType().indexOf(term) > -1
 					).ids());				
 			if(!type || type == 'locations')
 				result.locationIds = result.locationIds.concat(dgraph.locations().filter(
-					(e:networkcube.Location)=>
+					(e:Location)=>
 						e.label().toLowerCase().indexOf(term) > -1       
 					).ids());				
 		}

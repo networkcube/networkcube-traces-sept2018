@@ -17,7 +17,7 @@ declare namespace swiftSet {
         size(): number;
         has(value: any): boolean;
         items(): any[];
-        each((item: Function)=>void): void;
+        each(item: (v: any)=>void): void;
         copy(): Set;
         clear(newvalues: any[]): Set;
         union(other: Set): Set;
@@ -32,7 +32,7 @@ declare namespace swiftSet {
         equals(other: any[]): boolean;        
     }
 
-    function Set(a: Array, key?: Any): Set;
+    function Set(a: any[], key?: any): Set;
     function pushUid(fn: ()=>number): void;
     function popUid(): void;
     function union(a: any[], b: any[]): any[];

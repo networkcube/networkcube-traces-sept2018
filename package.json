@@ -9,6 +9,7 @@
   "scripts": {
     "pretsc": "mkdir -p dist && rm -rf dist/*/** && cp package.json dist/",
     "tsc": "tsc",
+    "build": "npm run tsc && browserify core/classes/index.ts -p tsify -d -s vl  | exorcist dist/networkcube.js.map > dist/networkcube.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,12 +32,16 @@
   },
   "dependencies": {
     "d3": "^4.10.0",
+    "exorcist": "^1.0.1",
     "jquery": "^1.10.33",
     "lz-string": "^1.3.32",
     "moment": "^2.20.1",
+    "netclustering": "file:netClustering-0.1.0",
+    "reorder.js": "^1.0.3",
+    "science": "^1.9.3",
     "swiftset": "file:swiftSet-0.9.15",
-    "swiftset.js": "file:swiftSet-0.9.15",
     "trace": "file:trace-0.0.1",
+    "tsify": "^3.0.4",
     "tslib": "^1.9.0"
   }
 }

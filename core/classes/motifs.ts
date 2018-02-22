@@ -1,5 +1,7 @@
-import * as Set from 'swiftSet'
+import * as Set from 'swiftset'
 import {Link, Node, Time, Motif, MotifTemplate} from './queries'
+import {DynamicGraph} from './dynamicgraph'
+import * as netClustering from 'netclustering'
 //namespace networkcube{
     
 
@@ -71,7 +73,7 @@ import {Link, Node, Time, Motif, MotifTemplate} from './queries'
         return motifs;
     }
 
-    export function findCliques(nodes, config?:Object){
+    export function findCliques(nodes, config?:any){
         var cliques=[];
         // var p=[];
         var p = nodes.slice();
@@ -82,7 +84,7 @@ import {Link, Node, Time, Motif, MotifTemplate} from './queries'
         var x =[];
 
         if(!config)
-            var config:Object = {}
+            var config:any = {}
 
         if(config.links == undefined)
             config.links = nodes[0].g.links().toArray();
@@ -225,9 +227,9 @@ import {Link, Node, Time, Motif, MotifTemplate} from './queries'
         return motifs;
     }
 
-    export function findStars(nodes:Node[], config?:Object){
+    export function findStars(nodes:Node[], config?:any){
         if(!config)
-            var config:Object = {}
+            var config:any = {}
 
         if(config.minLinkCount == undefined)
             config.minLinkCount = 5;
@@ -274,10 +276,10 @@ import {Link, Node, Time, Motif, MotifTemplate} from './queries'
     }
     
     // returns triangles
-    export function findTriangles(nodes:Node[], config?:Object):Motif[]{
+    export function findTriangles(nodes:Node[], config?:any):Motif[]{
 
          if(!config)
-            var config:Object = {}
+            var config:any = {}
         
         if(config.links == undefined)
             config.links = nodes[0].g.links().toArray();
@@ -285,7 +287,7 @@ import {Link, Node, Time, Motif, MotifTemplate} from './queries'
 
 
         var motifs:Motif[] = [];
-        var g:DynamicNetwork = nodes[0].g;
+        var g:DynamicGraph = nodes[0].g;
 
         var l:Link;
         var s:Node, t:Node

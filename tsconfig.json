@@ -12,21 +12,10 @@
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
         "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
+        "sourceMap": true
     },
     "include": [
-        "core/classes/datamanager.ts",
-        "core/classes/motifs.ts",
-        "core/classes/analytics.ts",
-        "core/classes/importers.ts",
-        "core/classes/colors.ts",
-        "core/classes/dynamicgraph.ts",
-        "core/classes/messenger.ts",
-        "core/classes/queries.ts",
-        "core/classes/utils.ts",
-        "core/classes/ordering.ts",
-        "core/classes/search.ts",
-        "core/classes/main.ts"
+        "core/classes/*.ts"
     ]
 }
 
