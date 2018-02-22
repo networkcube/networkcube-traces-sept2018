@@ -1,8 +1,10 @@
-module networkcube{
+import * as Set from 'swiftSet'
+import {Link, Node, Time, Motif, MotifTemplate} from './queries'
+//namespace networkcube{
     
 
-    export function findTemplate(nodes:networkcube.Node[], 
-        template:networkcube.MotifTemplate, 
+    export function findTemplate(nodes:Node[], 
+        template:MotifTemplate, 
         config?:Object){
 
         var nodeCount = template.nodes.length;
@@ -141,7 +143,7 @@ module networkcube{
         var r, p, x, p2, x2;
         var step;
         var newStep
-        var v:networkcube.Node;
+        var v:Node;
         var count=0;
         while(stack.length > 0){
             count++;
@@ -175,7 +177,7 @@ module networkcube{
      
                 newStep = [r]
 
-                p = setOps.intersection(p2, v.neighbors().toArray())
+                p = Set.intersection(p2, v.neighbors().toArray())
                 p2 = []
                 for(var i=0 ; i <p.length ; i++){
                     if(p2.indexOf(p[i])==-1)
@@ -183,7 +185,7 @@ module networkcube{
                 }
                 newStep.push(p2)
 
-                x = setOps.intersection(x2, v.neighbors().toArray())
+                x = Set.intersection(x2, v.neighbors().toArray())
                 x2 = []
                 for(var i=0 ; i <x.length ; i++){
                     if(x2.indexOf(x[i])==-1)
@@ -246,7 +248,7 @@ module networkcube{
         for(var i=0 ; i < nodes.length ; i++){
             n = nodes[i];
             lls = n.links().toArray();
-            lls = setOps.intersection(lls, config.links);
+            lls = Set.intersection(lls, config.links);
             if(lls.length <= config.minLinkCount) 
                 continue
 
@@ -296,26 +298,26 @@ module networkcube{
         for(var i=0 ; i < config.links.length ; i++ ){
             s = config.links[i].source; 
             ns = s.neighbors().toArray();      
-            ns = setOps.intersection(ns,nodes);
+            ns = Set.intersection(ns,nodes);
             if(ns.length == 0)
                 continue;
             t = config.links[i].target;
             nt = t.neighbors().toArray();                    
-            nt = setOps.intersection(nt,nodes);
+            nt = Set.intersection(nt,nodes);
             if(nt.length == 0)
                 continue;
-            common = setOps.intersection(ns,nt);
+            common = Set.intersection(ns,nt);
             // remove s and t from common neighbors
-            common = setOps.difference(common, [s,t])
+            common = Set.difference(common, [s,t])
             if(common.length == 0)
                 continue;
 
             // create triangle motifs
             for(var j=0 ; j <common.length ; j++){
                 n = common[j];
-                ll1 = setOps.intersection(g.linksBetween(s,n).toArray(), config.links);
+                ll1 = Set.intersection(g.linksBetween(s,n).toArray(), config.links);
                 if(ll1.length == 0) continue;
-                ll2 = setOps.intersection(g.linksBetween(t,n).toArray(), config.links);
+                ll2 = Set.intersection(g.linksBetween(t,n).toArray(), config.links);
                 if(ll2.length == 0) continue;
                 
                 ll1 = ll1.concat(ll2);
@@ -334,4 +336,4 @@ module networkcube{
     
         
         
-}
+//}

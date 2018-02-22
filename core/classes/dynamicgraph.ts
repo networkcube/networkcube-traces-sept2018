@@ -1,11 +1,17 @@
-/// <reference path="./colors.ts" />
-/// <reference path="../scripts/moment.d.ts" />
-/// <reference path="./utils.ts" />
-/// <reference path="./datamanager.ts" />
-/// <reference path="../scripts/d3.d.ts" />
-/// <reference path="./queries.ts" />
+import './color'
+import {BasicElement, GraphElementQuery,
+        Link, LinkQuery,
+        Node, NodeQuery,
+        NodePair, NodePairQuery,
+        Location, LocationQuery,
+        Time, TimeQuery,
+        ArrayTimeSeries, ScalarTimeSeries} from './queries'
+import {IDCompound, copyPropsShallow, copyTimeSeries, compareTypesDeep, isValidIndex, sortNumber, array, doubleArray} from './utils'
+import {DataManager, DataSet} from './datamanager'
+import * as d3 from 'd3'
+import * as moment from 'moment'
 
-module networkcube {
+//namespace networkcube {
 
     export var GRANULARITY: string[] = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'year', 'decade', 'century', 'millenium'];
 
@@ -34,7 +40,7 @@ module networkcube {
     export class DynamicGraph {
 
         // BOOKMARK_COLORS: string[] = colorSchemes.schema5;
-        BOOKMARK_COLORS = d3.scale.category10();
+        BOOKMARK_COLORS: (i: number)=>string; // = d3.scale.category10();
         selectionColor_pointer: number = 0;
 
         //data: DataSet;
@@ -569,7 +575,7 @@ module networkcube {
                 // In fact, those structures are created on-demand, i.e. 
                 // the first time they are needed. 
                 // Here, we only create the meta-structure
-                for(var g=0 ; g <= networkcube.GRANULARITY.length; g++){
+                for(var g=0 ; g <= GRANULARITY.length; g++){
                     this.timeObjects.push([])
                 }
             } 
@@ -907,7 +913,7 @@ module networkcube {
                         this.nodePairArrays.id.push(nodePairId);
                         this.nodePairArrays.source.push(t);
                         this.nodePairArrays.target.push(s);
-                        this.nodePairArrays.links.push(networkcube.doubleArray(this._times.length));
+                        this.nodePairArrays.links.push(doubleArray(this._times.length));
                     }
                     // add link only, if not already exist
                     if (this.nodePairArrays.links[nodePairId].indexOf(linkId) == -1) {
@@ -1861,7 +1867,7 @@ module networkcube {
 
     export class TimeArray extends AttributeArray {
         id: number[] = [];
-        momentTime: Moment[] = [];         // moment object
+        momentTime: moment.Moment[] = [];         // moment object
         label:string[] = []
         unixTime: number[] = [];         // unix time object
         selections: Selection[][] = [];
@@ -1935,4 +1941,4 @@ module networkcube {
         }
     }
 
-}
+//}

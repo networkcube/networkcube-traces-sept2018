@@ -1,10 +1,12 @@
-/// <reference path="./dynamicgraph.ts" />
-/// <reference path="./utils.ts" />
-/// <reference path="./search.ts" />
-/// <reference path="../scripts/jquery.d.ts" />
+import {IDCompound, makeIdCompound, ElementCompound} from './utils'
+import {DataManager, DataSet, DataManagerOptions} from './datamanager'
+import {DynamicGraph, Selection} from './dynamicgraph'
+import {getDynamicGraph} from './main'
+import {Time} from './queries'
 
+import * as trace from 'trace'
 
-module networkcube {
+//namespace networkcube {
 
     export var MESSAGE_HIGHLIGHT = 'highlight';
     export var MESSAGE_SELECTION = 'selection';
@@ -69,9 +71,11 @@ module networkcube {
     export class Message {
         id: number;
         type: string;
+        body: any;
         constructor(type: string) {
             this.id = Math.random();
             this.type = type;
+            this.body = null;
         }
     }
 
@@ -80,7 +84,7 @@ module networkcube {
     /////////////////////////////
 
 
-    export function sendMessage(type:string, body:Object){
+    export function sendMessage(type:string, body:any){
         var m = new Message(type)
         m.body = body;
         distributeMessage(m, true);        
@@ -109,7 +113,7 @@ module networkcube {
     // HIGHLIGHT
     export function highlight(action: string, elementCompound?: ElementCompound): void {
 
-        var g: DynamicGraph = networkcube.getDynamicGraph();
+        var g: DynamicGraph = getDynamicGraph();
         var idCompound: IDCompound = makeIdCompound(elementCompound);
 
 
@@ -162,7 +166,7 @@ module networkcube {
     // SELECTION MESSAGES
 
     export function selection(action: string, compound: ElementCompound, selectionId?: number): void {
-        var g:DynamicGraph = networkcube.getDynamicGraph();
+        var g:DynamicGraph = getDynamicGraph();
         if(!selectionId)
             selectionId = g.currentSelection_id;
         var selection = g.getSelection(selectionId)
@@ -227,7 +231,7 @@ module networkcube {
 
         trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_CREATE, );
 
-        var g:DynamicGraph = networkcube.getDynamicGraph();
+        var g:DynamicGraph = getDynamicGraph();
         var b = g.createSelection(type);
         b.name = name;
         var m = new CreateSelectionMessage(b)
@@ -253,7 +257,7 @@ module networkcube {
 
         trace.event(null, 'toolFunctionUse', MESSAGE_SELECTION_SET_CURRENT, );
 
-        var g: DynamicGraph = networkcube.getDynamicGraph();
+        var g: DynamicGraph = getDynamicGraph();
         // g.setCurrentSelection(b.id);
         var m = new SetCurrentSelectionIdMessage(b);
         // callHandler(m);
@@ -396,7 +400,7 @@ module networkcube {
     {
         trace.event(null, 'toolFunctionUse', MESSAGE_SEARCH_RESULT, term);
 
-        var idCompound:IDCompound = searchForTerm(term, networkcube.getDynamicGraph(), type);
+        var idCompound:IDCompound = searchForTerm(term, getDynamicGraph(), type);
         distributeMessage(new SearchResultMessage(term, idCompound));
     }
     
@@ -432,7 +436,7 @@ module networkcube {
         if (MESSENGER_PROPAGATE){
             localStorage[MESSAGE_KEY] = JSON.stringify(
                 message,
-                function(k, v) { return networkcube.dgraphReplacer(k, v); });
+                function(k, v) { return dgraphReplacer(k, v); });
         }
     }
 
@@ -444,7 +448,7 @@ module networkcube {
         var dgraph: DynamicGraph = getDynamicGraph();
         var m: Message = <Message>JSON.parse(
             s,
-            function(k, v) { return networkcube.dgraphReviver(dgraph, k, v); });
+            function(k, v) { return dgraphReviver(dgraph, k, v); });
         // console.log('\tMessage type', m.type, m.id)
 
         if (!m || m.id == previousMessageId) {
@@ -456,7 +460,7 @@ module networkcube {
 
 
     function processMessage(m: Message) {
-        var graph = networkcube.getDynamicGraph();
+        var graph = getDynamicGraph();
 
         // console.log('[Messenger] process message', m)
         if (messageHandler[m.type]) {
@@ -604,5 +608,5 @@ module networkcube {
             messageHandler[message.type](message);
         }
     }   
-}
+//}
 

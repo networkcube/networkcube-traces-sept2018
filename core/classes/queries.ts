@@ -1,7 +1,8 @@
-/// <reference path="./utils.ts" />    
-/// <reference path="./dynamicGraph.ts" />
+import {attributeSort} from './utils'
+import {DynamicGraph, Selection} from './dynamicgraph'
+import * as moment from 'moment'
 
-module networkcube {
+//namespace networkcube {
 
     //// OBJECTS
     /** Basic class for every object in networkcube with an ID. 
@@ -145,8 +146,8 @@ module networkcube {
         // SPECIFIC ATTRIBUTE QUERIES
 
         /** @returns the moment object associated to this time object. */
-        time(): Moment { return this.attr('momentTime'); }
-        moment(): Moment { return this.attr('momentTime'); }
+        time(): moment.Moment { return this.attr('momentTime'); }
+        moment(): moment.Moment { return this.attr('momentTime'); }
 
         label():String {return this.attr('label')}
 
@@ -513,9 +514,9 @@ module networkcube {
                 }
             }
         }
-        contains(element: number): boolean {
-            return this._elements.indexOf(element) > -1;
-        }
+        // contains(element: number): boolean {
+        //     return this._elements.indexOf(element) > -1;
+        // }
 
         addUnique(element: number): void {
             if (this._elements.indexOf(element) == -1)
@@ -806,7 +807,7 @@ module networkcube {
 
         constructor(elements: any[], g: DynamicGraph) {
             super(elements, g);
-            if(elements.length > 0 && elements[0] instanceof networkcube.Node){
+            if(elements.length > 0 && elements[0] instanceof Node){
                 this._elements = []
                 for(var i=0 ; i<elements.length ; i++){
                     this._elements.push(elements[i].id());
@@ -920,7 +921,7 @@ module networkcube {
         
         constructor(elements: any[], g: DynamicGraph) {
             super(elements, g);
-            if(elements.length > 0 && elements[0] instanceof networkcube.Link){
+            if(elements.length > 0 && elements[0] instanceof Link){
                 this._elements = []
                 for(var i=0 ; i<elements.length ; i++){
                     this._elements.push(elements[i].id());
@@ -1052,7 +1053,7 @@ module networkcube {
         constructor(elements: any[], g: DynamicGraph) {
             super(elements, g);
             this.elementType = 'nodePair';
-            if(elements.length > 0 && elements[0] instanceof networkcube.NodePair){
+            if(elements.length > 0 && elements[0] instanceof NodePair){
                 this._elements = []
                 for(var i=0 ; i<elements.length ; i++){
                     this._elements.push(elements[i].id());
@@ -1137,7 +1138,7 @@ module networkcube {
         constructor(elements: any[], g: DynamicGraph) {
             super(elements, g);
             this.elementType = 'time';
-            if(elements.length > 0 && elements[0] instanceof networkcube.Time){
+            if(elements.length > 0 && elements[0] instanceof Time){
                 this._elements = []
                 for(var i=0 ; i<elements.length ; i++){
                     this._elements.push(elements[i].id());
@@ -1246,7 +1247,7 @@ module networkcube {
         constructor(elements: any[], g: DynamicGraph) {
             super(elements, g);
             this.elementType = 'location';
-            if(elements.length > 0 && elements[0] instanceof networkcube.Location){
+            if(elements.length > 0 && elements[0] instanceof Location){
                 this._elements = []
                 for(var i=0 ; i<elements.length ; i++){
                     this._elements = elements[i].id();
@@ -1398,4 +1399,4 @@ module networkcube {
             this.motifs.push(m);
         }
     }
-}
+//}

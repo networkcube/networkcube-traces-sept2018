@@ -1,12 +1,25 @@
-/// <reference path="./datamanager.ts" />
-/// <reference path="./dynamicgraph.ts" />
-/// <reference path="./utils.ts" />
-/// <reference path="../scripts/jquery.d.ts" />
+import './color'
+import {BasicElement, GraphElementQuery,
+        Link, LinkQuery,
+        Node, NodeQuery,
+        NodePair, NodePairQuery,
+        Location, LocationQuery,
+        Time, TimeQuery,
+        ArrayTimeSeries, ScalarTimeSeries} from './queries'
+import {IDCompound, copyPropsShallow, copyTimeSeries, compareTypesDeep,
+        isValidIndex, sortNumber, array, doubleArray,
+       getUrlVars} from './utils'
+import {DataManager, DataSet, DataManagerOptions} from './datamanager'
+import {DynamicGraph, Selection} from './dynamicgraph'
+
+import * as d3 from 'd3'
+import * as moment from 'moment'
+import * as setOps from 'swiftset'
 
 /** A collection of Networkcube's  global function availeble
  * through networkcube.myFunc()
  * */
-module networkcube {
+//namespace networkcube {
 
     // must agree with var of same name in DynamicGraph.initDynamicGraph()
     export var TIME_FORMAT: string = 'YYYY-MM-DD hh:mm:ss';
@@ -72,7 +85,7 @@ module networkcube {
 
     export function getDynamicGraph(dataName?: string, session?: string): DynamicGraph {
         var so = setOps;
-        uidMethod = so.pushUid(function() {
+        so.pushUid(function() {
             return this._id;
         });
         
@@ -108,9 +121,9 @@ module networkcube {
     }
 
     // create a tab that shows one of the specified visualizations at a time
-    export function createTabVisualizations(parentId:string, visSpec:Object[], session:string, dataName:string, 
+    export function createTabVisualizations(parentId:string, visSpec:any[], session:string, dataName:string, 
         width: number,
-        height: number, visParams?:Object){
+        height: number, visParams?:any){
 
         var parent = $('#'+parentId);
         
@@ -178,7 +191,7 @@ module networkcube {
     // with the data set dataname
     export function createVisualizationIFrame(parentId: string, visUri: string, session: string, dataName: string,
         width: number,
-        height: number, visParams?:Object) {
+        height: number, visParams?:any) {
 
         // console.log('[networkcube] Create iframe ', visType);
         $('#' + parentId)
@@ -249,4 +262,4 @@ module networkcube {
         // console.log('isTrackingSet', value)
         return value === null ? false : true;
     }
-}
+//}

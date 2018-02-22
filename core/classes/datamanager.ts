@@ -1,7 +1,9 @@
-/// <reference path="./dynamicgraph.ts"/>
-/// <reference path="../scripts/lz-string.d.ts" />
+import {DynamicGraph} from './dynamicgraph'
+import {isValidIndex} from './utils'
+import * as LZString from 'lz-string'
 
-module networkcube {
+
+//namespace networkcube {
 
     export interface DataManagerOptions {
         keepOnlyOneSession?: boolean;
@@ -432,4 +434,4 @@ module networkcube {
                 this.radius = radius;
         }
     }
-}
+//}

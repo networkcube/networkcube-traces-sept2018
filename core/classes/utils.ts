@@ -1,6 +1,14 @@
-/// <reference path='../scripts/three.d.ts' />
-/// <reference path='./dynamicgraph.ts' />
-module networkcube {
+import {DynamicGraph, LinkType} from './dynamicgraph'
+import {BasicElement, GraphElementQuery,
+        Link, LinkQuery,
+        Node, NodeQuery,
+        NodePair, NodePairQuery,
+        Location, LocationQuery,
+        Time, TimeQuery,
+        ArrayTimeSeries, ScalarTimeSeries} from './queries'
+import * as moment from 'moment'
+
+//namespace networkcube {
 
 
     export function getPriorityColor(element: BasicElement): string {
@@ -62,7 +70,7 @@ module networkcube {
         return array;
     }
 
-    export function isBefore(t1: Time, t2: networkcube.Time): boolean {
+    export function isBefore(t1: Time, t2: Time): boolean {
         return t1.time < t2.time;
     }
     export function isAfter(t1: Time, t2: Time): boolean {
@@ -253,15 +261,6 @@ module networkcube {
     }
 
 
-    //     export function toScreen(x: number, y: number) {
-    //         var vector = new THREE.Vector3();
-    //         var projector = new THREE.Projector();
-    //         projector.projectVector(vector.setFromMatrixPosition(object.matrixWorld), camera);
-    // 
-    //         vector.x = (vector.x * widthHalf) + widthHalf;
-    //         vector.y = - (vector.y * heightHalf) + heightHalf;
-    //     }
-
     export function sortNumber(a, b) {
         return a - b;
     }
@@ -415,7 +414,7 @@ module networkcube {
     } 
     
 
-    export function formatTimeAtGranularity(time:networkcube.Time, granualarity: number) {
+    export function formatTimeAtGranularity(time:Time, granualarity: number) {
         var momentTime = moment(time.unixTime())
         switch (granualarity) {
             case 0: return momentTime.millisecond();
@@ -730,4 +729,4 @@ module networkcube {
     }
 
 
-}
+//}

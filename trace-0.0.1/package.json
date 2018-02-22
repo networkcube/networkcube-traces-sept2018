@@ -1,0 +1,12 @@
+{
+  "name": "trace",
+  "version": "0.0.1",
+  "description": "Function for sending traces of activity",
+  "main": "trace.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jean-Daniel Fekete <Jean-Daniel.Fekete@inria.fr> (http://www.aviz.fr/~fekete)",
+  "license": "ISC",
+  "typings": "./trace.d.ts"
+}

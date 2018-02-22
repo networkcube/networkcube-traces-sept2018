@@ -1,0 +1,6 @@
+
+export = swiftSet;
+export as namespace swiftSet;
+
+declare namespace swiftSet {
+}

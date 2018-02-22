@@ -1,6 +1,7 @@
-/// <reference path="./dynamicgraph.ts" />
+import {DynamicGraph} from './dynamicgraph'
+import {Link, Time} from './queries'
 
-module networkcube{
+//namespace networkcube{
 	
 	/**
     * Calculates an ordering for the passed graph and time span
@@ -77,4 +78,4 @@ module networkcube{
 	    algorithm:string[];
 	    distance:string[];
     }
-}
+//}

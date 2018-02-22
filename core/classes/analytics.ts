@@ -1,6 +1,7 @@
 /// <reference path="./dynamicgraph.ts" />
+import {Motif} from './queries'
 
-module networkcube{
+//namespace networkcube{
     
     export function findDegree(nodes:Node[]):Motif[]{
         var motifs:Motif[] = [];
@@ -91,4 +92,4 @@ module networkcube{
     
     
     
-}
+//}

@@ -1,6 +1,6 @@
-/// <reference path='./dynamicgraph.ts' />
-
-module networkcube{
+import {DynamicGraph} from './dynamicgraph'
+import {IDCompound} from './utils'
+//namespace networkcube{
 	
 		
 	export function searchForTerm(term:string, dgraph:DynamicGraph, type?:string):IDCompound{
@@ -54,4 +54,4 @@ module networkcube{
 		}	
 	}
 	
-}
+//}

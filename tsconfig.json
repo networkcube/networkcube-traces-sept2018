@@ -1,33 +1,32 @@
 {
     "version": "1.5.0-alpha",
     "compilerOptions": {
+        "outDir": "./dist/classes",
+        "target": "es5",
         "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es5",
-        "declaration": false,
+        "declaration": true,
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "allowSyntheticDefaultImports": true
-        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
         "sourceMap": true,
     },
-    "files": [
-        "core/classes/dynamicgraph.ts",
+    "include": [
         "core/classes/datamanager.ts",
         "core/classes/motifs.ts",
         "core/classes/analytics.ts",
         "core/classes/importers.ts",
         "core/classes/colors.ts",
+        "core/classes/dynamicgraph.ts",
         "core/classes/messenger.ts",
         "core/classes/queries.ts",
         "core/classes/utils.ts",
         "core/classes/ordering.ts",
         "core/classes/search.ts",
-        "core/classes/main.ts",
-        "core/helper/glutils.ts"
+        "core/classes/main.ts"
     ]
 }
 
