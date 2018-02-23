@@ -1,4 +1,5 @@
-/// <reference path="../../core/networkcube.d.ts"/>
+/// <reference path="../../dist/networkcube.d.ts"/>
+
 
     var COLOR_DEFAULT_LINK = '#999999';
     var COLOR_DEFAULT_NODE = '#333333';
@@ -29,12 +30,12 @@
     positions['forceDirected'] = [];
         
     // get dynamic graph
-    var dgraph:networkcube.DynamicGraph = networkcube.getDynamicGraph();
+    var dgraph:DynamicGraph = getDynamicGraph();
     var times = dgraph.times().toArray();
     var time_start = times[0];
     var time_end = times[times.length-1];
     
-    var nodes:networkcube.Node[] = dgraph.nodes().toArray();
+    var nodes:Node[] = dgraph.nodes().toArray();
     var nodesOrderedByDegree = dgraph.nodes().toArray().sort((n1,n2)=> n2.neighbors().length - n1.neighbors().length);
     
     var nodePairs = dgraph.nodePairs();
@@ -53,25 +54,25 @@
         dgraph.links().weights().max()
     ]);
     
-    networkcube.setDefaultEventListener(updateEvent);
+    setDefaultEventListener(updateEvent);
     
     
   
     // MENU
     var menuDiv = d3.select('#menuDiv');
-    networkcube.makeSlider(menuDiv, 'Link Opacity', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_OPACITY, 0, 1, function(value:number){
+    makeSlider(menuDiv, 'Link Opacity', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_OPACITY, 0, 1, function(value:number){
         LINK_OPACITY = value;
         updateLinks();   
     })
-    networkcube.makeSlider(menuDiv, 'Node Size', SLIDER_WIDTH, SLIDER_HEIGHT, NODE_SIZE, .01, 3, function(value:number){
+    makeSlider(menuDiv, 'Node Size', SLIDER_WIDTH, SLIDER_HEIGHT, NODE_SIZE, .01, 3, function(value:number){
         NODE_SIZE = value;
         updateNodeSize();   
     })
-    networkcube.makeSlider(menuDiv, 'Edge Gap', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_GAP, 0, 10, function(value:number){
+    makeSlider(menuDiv, 'Edge Gap', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_GAP, 0, 10, function(value:number){
         LINK_GAP = value;
         updateLayout();   
     })
-    networkcube.makeSlider(menuDiv, 'Link Width', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_WIDTH, 0, 10, function(value:number){
+    makeSlider(menuDiv, 'Link Width', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_WIDTH, 0, 10, function(value:number){
         LINK_WIDTH = value;
         linkWeightScale.range([0,LINK_WIDTH]);
         updateLinks();   
@@ -106,9 +107,9 @@
             .attr('width', width)
             .attr('height', TIMELINE_HEIGHT)
 
-    var timeSlider:networkcube.TimeSlider = new TimeSlider(dgraph, width-50);
+    var timeSlider:TimeSlider = new TimeSlider(dgraph, width-50);
     timeSlider.appendTo(timeSvg);
-    networkcube.addEventListener('timeRange', timeChangedHandler)
+    addEventListener('timeRange', timeChangedHandler)
 
 
     
@@ -196,7 +197,7 @@
             for(var i=0 ; i <nodes.length ; i++){
                 coords.push({x:nodes[i].x, y:nodes[i].y})
             }
-            networkcube.sendMessage('layout', {coords:coords})
+            sendMessage('layout', {coords:coords})
         })
         .start()
 
@@ -224,11 +225,11 @@
                     var currentSelection = this.dgraph.getCurrentSelection();
                     for(var j=0 ; j<selections.length ; j++){
                         if(selections[j] == currentSelection){
-                            networkcube.selection('remove', <networkcube.ElementCompound>{nodes: [d]});
+                            selection('remove', <ElementCompound>{nodes: [d]});
                             return;
                         }
                     }
-                    networkcube.selection('add', <networkcube.ElementCompound>{nodes: [d]});
+                    selection('add', <ElementCompound>{nodes: [d]});
                 }) 
             
                 
@@ -264,21 +265,21 @@
                 .attr('d', (d)=> lineFunction(d.path))
                 .style('opacity', LINK_OPACITY)
                 .on('mouseover', (d,i)=>{
-                    networkcube.highlight('set', <networkcube.ElementCompound>{links: [d]})
+                    highlight('set', <ElementCompound>{links: [d]})
                 })
                 .on('mouseout', d=>{
-                    networkcube.highlight('reset')
+                    highlight('reset')
                 })
                 .on('click', d=>{
                     var selections = d.getSelections();
                     var currentSelection = this.dgraph.getCurrentSelection();
                     for(var j=0 ; j<selections.length ; j++){
                         if(selections[j] == currentSelection){
-                            networkcube.selection('remove', <networkcube.ElementCompound>{links: [d]});
+                            selection('remove', <ElementCompound>{links: [d]});
                             return;
                         }
                     }
-                    networkcube.selection('add', <networkcube.ElementCompound>{links: [d]});                        
+                    selection('add', <ElementCompound>{links: [d]});                        
                 })
                                  
                 
@@ -321,7 +322,7 @@
     function getLabelHeight(n){
         return 18;
     }
-    function getNodeRadius(n:networkcube.Node){
+    function getNodeRadius(n:Node){
         return Math.sqrt(n.links().length) * NODE_SIZE + 1;
     }
     
@@ -391,10 +392,10 @@
     /////////////////////
     
     function mouseOverNode(n){
-        networkcube.highlight('set', {nodes:[n]})
+        highlight('set', {nodes:[n]})
     }
     function mouseOutNode(n){
-        networkcube.highlight('reset')
+        highlight('reset')
     }
 
 
@@ -404,7 +405,7 @@
     //// UPDATES ////
     /////////////////
     
-    function timeChangedHandler(m:networkcube.TimeRangeMessage){
+    function timeChangedHandler(m:TimeRangeMessage){
 
         for(var i= 0 ; i < times.length ; i++){
             if(times[i].unixTime() > m.startUnix){
@@ -428,7 +429,7 @@
     }
 
     
-    function updateEvent(m:networkcube.Message){
+    function updateEvent(m:Message){
         updateLinks();
         updateNodes();
     }
@@ -447,7 +448,7 @@
                 if(d.isHighlighted()){
                     color = COLOR_HIGHLIGHT;
                 }else{
-                    color = networkcube.getPriorityColor(d);            
+                    color = getPriorityColor(d);            
                 }
                 if(!color)
                     color = COLOR_DEFAULT_NODE;
@@ -475,7 +476,7 @@
                 if(d.isHighlighted()){
                     color = COLOR_HIGHLIGHT;
                 }else{
-                    color = networkcube.getPriorityColor(d);
+                    color = getPriorityColor(d);
                 }
                 if(!color)
                     color = COLOR_DEFAULT_NODE;
@@ -494,7 +495,7 @@
     function updateLinks(){
         visualLinks
             .style('stroke', function(d){
-                var color = networkcube.getPriorityColor(d);            
+                var color = getPriorityColor(d);            
                 if(!color)
                     color = COLOR_DEFAULT_LINK;
                 return color;
@@ -521,8 +522,8 @@
     }
     
     function calculateCurvedLinks(){
-        var path, dir, offset, offset2, multiLink:networkcube.NodePair;
-        var links:networkcube.Link[];
+        var path, dir, offset, offset2, multiLink:NodePair;
+        var links:Link[];
         for(var i=0 ; i<dgraph.nodePairs().length ; i++)
         {
             multiLink = dgraph.nodePair(i);
@@ -610,7 +611,7 @@
         
     //     var selectedNodes = []
     //     for(var i=0 ; i <nodes.length ; i++){
-    //         if(networkcube.isPointInPolyArray(lassoPoints, [nodes[i].x, nodes[i].y]))
+    //         if(isPointInPolyArray(lassoPoints, [nodes[i].x, nodes[i].y]))
     //             selectedNodes.push(nodes[i])
     //     }   
     //     console.log('Selected nodes:', selectedNodes.length)
@@ -626,7 +627,7 @@
     //     }   
     //     console.log('Selected links:', selectedLinks.length)
     //     if(selectedNodes.length > 0){
-    //         networkcube.selection('set', {nodes:selectedNodes, links:selectedLinks})
+    //         selection('set', {nodes:selectedNodes, links:selectedLinks})
     //     }
     // }
 

@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "pretsc": "mkdir -p dist && rm -rf dist/*/** && cp package.json dist/",
+    "pretsc": "rm core/networkcube.*",
     "tsc": "tsc",
     "build": "npm run tsc && browserify core/classes/index.ts -p tsify -d -s vl  | exorcist dist/networkcube.js.map > dist/networkcube.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,6 +31,8 @@
     "browserify": "^16.1.0"
   },
   "dependencies": {
+    "@types/three": "^0.89.10",
+    "bspline": "file:BSpline-0.0.1",
     "d3": "^4.10.0",
     "exorcist": "^1.0.1",
     "jquery": "^1.10.33",
@@ -40,6 +42,7 @@
     "reorder.js": "^1.0.3",
     "science": "^1.9.3",
     "swiftset": "file:swiftSet-0.9.15",
+    "three": "^0.90.0",
     "trace": "file:trace-0.0.1",
     "tsify": "^3.0.4",
     "tslib": "^1.9.0"

@@ -19,7 +19,7 @@ var TIMELINE_HEIGHT = 50;
 var currentLayout = 'forceDirected';
 var positions = new Object();
 positions['forceDirected'] = [];
-var dgraph = networkcube.getDynamicGraph();
+var dgraph = getDynamicGraph();
 var times = dgraph.times().toArray();
 var time_start = times[0];
 var time_end = times[times.length - 1];
@@ -35,21 +35,21 @@ linkWeightScale.domain([
     0,
     dgraph.links().weights().max()
 ]);
-networkcube.setDefaultEventListener(updateEvent);
+setDefaultEventListener(updateEvent);
 var menuDiv = d3.select('#menuDiv');
-networkcube.makeSlider(menuDiv, 'Link Opacity', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_OPACITY, 0, 1, function (value) {
+makeSlider(menuDiv, 'Link Opacity', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_OPACITY, 0, 1, function (value) {
     LINK_OPACITY = value;
     updateLinks();
 });
-networkcube.makeSlider(menuDiv, 'Node Size', SLIDER_WIDTH, SLIDER_HEIGHT, NODE_SIZE, .01, 3, function (value) {
+makeSlider(menuDiv, 'Node Size', SLIDER_WIDTH, SLIDER_HEIGHT, NODE_SIZE, .01, 3, function (value) {
     NODE_SIZE = value;
     updateNodeSize();
 });
-networkcube.makeSlider(menuDiv, 'Edge Gap', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_GAP, 0, 10, function (value) {
+makeSlider(menuDiv, 'Edge Gap', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_GAP, 0, 10, function (value) {
     LINK_GAP = value;
     updateLayout();
 });
-networkcube.makeSlider(menuDiv, 'Link Width', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_WIDTH, 0, 10, function (value) {
+makeSlider(menuDiv, 'Link Width', SLIDER_WIDTH, SLIDER_HEIGHT, LINK_WIDTH, 0, 10, function (value) {
     LINK_WIDTH = value;
     linkWeightScale.range([0, LINK_WIDTH]);
     updateLinks();
@@ -77,7 +77,7 @@ var timeSvg = d3.select('#timelineDiv')
     .attr('height', TIMELINE_HEIGHT);
 var timeSlider = new TimeSlider(dgraph, width - 50);
 timeSlider.appendTo(timeSvg);
-networkcube.addEventListener('timeRange', timeChangedHandler);
+addEventListener('timeRange', timeChangedHandler);
 $('#visDiv').append('<svg id="visSvg" width="' + (width - 20) + '" height="' + (height - 20) + '"></svg>');
 var mouseStart;
 var panOffsetLocal = [0, 0];
@@ -147,7 +147,7 @@ layout = d3.layout.force()
     for (var i = 0; i < nodes.length; i++) {
         coords.push({ x: nodes[i].x, y: nodes[i].y });
     }
-    networkcube.sendMessage('layout', { coords: coords });
+    sendMessage('layout', { coords: coords });
 })
     .start();
 showMessage('Calculating<br/>layout');
@@ -169,11 +169,11 @@ function init() {
         var currentSelection = _this.dgraph.getCurrentSelection();
         for (var j = 0; j < selections.length; j++) {
             if (selections[j] == currentSelection) {
-                networkcube.selection('remove', { nodes: [d] });
+                selection('remove', { nodes: [d] });
                 return;
             }
         }
-        networkcube.selection('add', { nodes: [d] });
+        selection('add', { nodes: [d] });
     });
     nodeLabelOutlines = labelLayer.selectAll('.nodeLabelOutlines')
         .data(nodes)
@@ -200,21 +200,21 @@ function init() {
         .attr('d', function (d) { return lineFunction(d.path); })
         .style('opacity', LINK_OPACITY)
         .on('mouseover', function (d, i) {
-        networkcube.highlight('set', { links: [d] });
+        highlight('set', { links: [d] });
     })
         .on('mouseout', function (d) {
-        networkcube.highlight('reset');
+        highlight('reset');
     })
         .on('click', function (d) {
         var selections = d.getSelections();
         var currentSelection = _this.dgraph.getCurrentSelection();
         for (var j = 0; j < selections.length; j++) {
             if (selections[j] == currentSelection) {
-                networkcube.selection('remove', { links: [d] });
+                selection('remove', { links: [d] });
                 return;
             }
         }
-        networkcube.selection('add', { links: [d] });
+        selection('add', { links: [d] });
     });
     updateLinks();
     updateNodes();
@@ -300,10 +300,10 @@ function isHidingNode(n1, n2) {
     return n1w < n2.x && n1e > n2.x && n1n < n2.y && n1s > n2.y;
 }
 function mouseOverNode(n) {
-    networkcube.highlight('set', { nodes: [n] });
+    highlight('set', { nodes: [n] });
 }
 function mouseOutNode(n) {
-    networkcube.highlight('reset');
+    highlight('reset');
 }
 function timeChangedHandler(m) {
     for (var i = 0; i < times.length; i++) {
@@ -341,7 +341,7 @@ function updateNodes() {
             color = COLOR_HIGHLIGHT;
         }
         else {
-            color = networkcube.getPriorityColor(d);
+            color = getPriorityColor(d);
         }
         if (!color)
             color = COLOR_DEFAULT_NODE;
@@ -366,7 +366,7 @@ function updateNodes() {
             color = COLOR_HIGHLIGHT;
         }
         else {
-            color = networkcube.getPriorityColor(d);
+            color = getPriorityColor(d);
         }
         if (!color)
             color = COLOR_DEFAULT_NODE;
@@ -382,7 +382,7 @@ function updateNodes() {
 function updateLinks() {
     visualLinks
         .style('stroke', function (d) {
-        var color = networkcube.getPriorityColor(d);
+        var color = getPriorityColor(d);
         if (!color)
             color = COLOR_DEFAULT_LINK;
         return color;
@@ -416,7 +416,8 @@ function calculateCurvedLinks() {
                 { x: multiLink.source.x, y: multiLink.source.y },
                 { x: multiLink.source.x, y: multiLink.source.y },
                 { x: multiLink.target.x, y: multiLink.target.y },
-                { x: multiLink.target.x, y: multiLink.target.y }];
+                { x: multiLink.target.x, y: multiLink.target.y }
+            ];
         }
         else {
             links = multiLink.links().toArray();
@@ -435,7 +436,8 @@ function calculateCurvedLinks() {
             else {
                 dir = {
                     x: multiLink.target.x - multiLink.source.x,
-                    y: multiLink.target.y - multiLink.source.y };
+                    y: multiLink.target.y - multiLink.source.y
+                };
                 offset = stretchVector([-dir.y, dir.x], LINK_GAP);
                 offset2 = stretchVector([dir.x, dir.y], LINK_GAP);
                 for (var j = 0; j < links.length; j++) {
@@ -445,7 +447,8 @@ function calculateCurvedLinks() {
                             y: (multiLink.source.y + offset2[1] + (j - links.length / 2 + .5) * offset[1]) },
                         { x: multiLink.target.x - offset2[0] + (j - links.length / 2 + .5) * offset[0],
                             y: (multiLink.target.y - offset2[1] + (j - links.length / 2 + .5) * offset[1]) },
-                        { x: multiLink.target.x, y: multiLink.target.y }];
+                        { x: multiLink.target.x, y: multiLink.target.y }
+                    ];
                 }
             }
         }

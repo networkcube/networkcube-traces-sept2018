@@ -1,9 +1,9 @@
 {
     "version": "1.5.0-alpha",
     "compilerOptions": {
-        "outDir": "./dist/classes",
-        "target": "es5",
-        "module": "commonjs",
+        "out": "./core/networkcube.js",
+        "target": "es6",
+        "module": "amd",
         "moduleResolution": "node",
         "declaration": true,
         "noImplicitAny": false,
@@ -14,8 +14,19 @@
         "allowSyntheticDefaultImports": true,
         "sourceMap": true
     },
-    "include": [
-        "core/classes/*.ts"
+    "files": [
+        "core/classes/analytics.ts",
+        "core/classes/colors.ts",
+        "core/classes/datamanager.ts",
+        "core/classes/dynamicgraph.ts",
+        "core/classes/main.ts",
+        "core/classes/messenger.ts",
+        "core/classes/motifs.ts",
+        "core/classes/ordering.ts",
+        "core/classes/queries.ts",
+        "core/classes/search.ts",
+        "core/classes/utils.ts",
+        "core/helper/glutils.ts",
     ]
 }
 

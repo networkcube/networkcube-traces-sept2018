@@ -1,9 +1,7 @@
+import * as THREE from 'three'
+import * as BSpline from 'bspline'
+
 module glutils {
-
-
-
-
-
 
     export function makeAlphaBuffer(array: number[], stretch: number) {
         var buffer: Float32Array = new Float32Array(array.length * stretch); // three components per vertex
@@ -176,22 +174,25 @@ module glutils {
         }
     }
 
-
+    var fontMap = new Map<string, THREE.Font>();
 
     export function createText(string: string, x: number, y: number, z: number, size: number, color, weight: string = 'normal', align: string = 'left'): THREE.Mesh {
+        var font = fontMap.get('helvetiker_'+weight);
+
         var textGeom: THREE.TextGeometry = new THREE.TextGeometry(string, {
             size: size,
             height: 1,
-            weight: weight,
+            // weight: weight, FONTS don't work that way, see 
+            // https://threejs.org/docs/#api/geometries/TextGeometry
             curveSegments: 1,
-            font: 'helvetiker'
+            font: font
         })
         var textMaterial = new THREE.MeshBasicMaterial({ color: color });
         var label: THREE.Mesh = new THREE.Mesh(textGeom, textMaterial)
 
         if (align == 'right') {
             label.geometry.computeBoundingBox();
-            var bounds: THREE.BoundingBox3D = label.geometry.boundingBox;
+            var bounds: THREE.Box3 = label.geometry.boundingBox;
             x -= bounds.max.x - bounds.min.x;
         }
 
@@ -230,7 +231,7 @@ module glutils {
 
         elementQueries:WebGLElementQuery[] = []
 
-        constructor(params?:Object){
+        constructor(params?:any){
             txtCanvas = document.createElement("canvas");
             txtCanvas.setAttribute('id', 'textCanvas');
         }
@@ -264,16 +265,16 @@ module glutils {
         ///////////////////////
   
         enableZoom(b?:boolean){
+            function mouseWheel(event){
+                event.preventDefault();
+                
+                webgl.camera.zoom += event.wheelDelta/1000;
+                webgl.camera.zoom = Math.max (0.1, webgl.camera.zoom)
+                webgl.camera.updateProjectionMatrix();
+                webgl.render();
+            }
             if(b){
                 window.addEventListener("mousewheel", mouseWheel, false);
-                function mouseWheel(event){
-                    event.preventDefault();
-                    
-                    webgl.camera.zoom += event.wheelDelta/1000;
-                    webgl.camera.zoom = Math.max (0.1, webgl.camera.zoom)
-                    webgl.camera.updateProjectionMatrix();
-                    webgl.render();
-                }
             }else{
                 window.addEventListener("mousewheel", mouseWheel, false);
             }
@@ -293,7 +294,7 @@ module glutils {
     }
     
     var webgl;
-    export function initWebGL(parentId:string, width:number, height:number, params?:Object):WebGL{
+    export function initWebGL(parentId:string, width:number, height:number, params?:any):WebGL{
         
         webgl = new WebGL(params);
         
@@ -361,10 +362,10 @@ module glutils {
     
     
     export class WebGLElementQuery{
-        dataElements:Object[] = [];
-        visualElements:Object[] = [];
+        dataElements:any[] = [];
+        visualElements:any[] = [];
         mesh:THREE.Mesh;
-        children:Object[] = []
+        children:any[] = []
         scene:THREE.Scene;
         mouseOverHandler:Function;
         mouseMoveHandler:Function;
@@ -396,7 +397,7 @@ module glutils {
             this.scene = webgl.scene;
         }
         
-        data(arr:Object[]):WebGLElementQuery{
+        data(arr:any[]):WebGLElementQuery{
             this.dataElements = arr.slice(0);
             return this;
         }
@@ -469,7 +470,8 @@ module glutils {
                 }
             }else{
                 for(var i=0 ; i <l ; i++){ 
-                    this.setAttr(this.visualElements[i], name, v instanceof Function?v(this.dataElements[i], i):v, i);
+                    this.setAttr(this.visualElements[i],
+                                 name, v instanceof Function?v(this.dataElements[i], i):v, i);
                     if(this.visualElements[i].hasOwnProperty('wireframe')){
                         this.setAttr(this.visualElements[i].wireframe, name, v instanceof Function?v(this.dataElements[i], i):v, i);                        
                     }
@@ -512,11 +514,13 @@ module glutils {
                     addBufferedCirlce(vertexPositionBuffer, this.x[i],this.y[i], this.z[i], this.r[i] , vertexColorBuffer, [c.r, c.g, c.b, this.opacity[i]])
                 }
             }
-            var geometry = this.mesh.geometry;
-            geometry.addAttribute('position', new THREE.BufferAttribute(makeBuffer3f(vertexPositionBuffer), 3));
-            geometry.addAttribute('customColor', new THREE.BufferAttribute(makeBuffer4f(vertexColorBuffer), 4));
-            geometry.needsUpdate = true;
-            geometry.verticesNeedUpdate = true;
+            var geometry = <THREE.BufferGeometry>this.mesh.geometry;
+            geometry.addAttribute('position',
+                                  new THREE.BufferAttribute(makeBuffer3f(vertexPositionBuffer), 3));
+            geometry.addAttribute('customColor',
+                                  new THREE.BufferAttribute(makeBuffer4f(vertexColorBuffer), 4));
+            //geometry.needsUpdate = true;
+            //geometry.verticesNeedUpdate = true;
             this.mesh.material.needsUpdate = true;
             
             this.updateAttributes = false;
@@ -583,9 +587,9 @@ module glutils {
                 case 'scaleY': element.scale.y = v;  break;
                 default: console.error('Attribute', attr, 'does not exist.')     
             }
-            element.geometry.verticesNeedUpdate = true;
-            element.geometry.elementsNeedUpdate = true;
-            element.geometry.lineDistancesNeedUpdate = true;
+            //element.geometry.verticesNeedUpdate = true;
+            //element.geometry.elementsNeedUpdate = true;
+            //element.geometry.lineDistancesNeedUpdate = true;
         }
         
         removeAll(){
@@ -644,7 +648,7 @@ module glutils {
     }
 
     // var textCtx
-    function setText(mesh:any, text:string, parConfig?:Object){
+    function setText(mesh:any, text:string, parConfig?:any){
         var config = parConfig;            
         if(config == undefined){
             config = {};
@@ -689,7 +693,7 @@ module glutils {
 
     }
 
-    // function setText(mesh:any, text:string, parConfig?:Object){
+    // function setText(mesh:any, text:string, parConfig?:any){
     //     var SIZE = 10
     //     var MARGIN = 2
         
@@ -749,18 +753,21 @@ module glutils {
     //     // return mesh;
     // }
 
-    
     function setX1(mesh:THREE.Line, v){
-        mesh.geometry.vertices[0].x = v
+        var geometry = <THREE.Geometry>mesh.geometry;
+        geometry.vertices[0].x = v
     }
     function setY1(mesh:THREE.Line, v){
-        mesh.geometry.vertices[0].y = v
+        var geometry = <THREE.Geometry>mesh.geometry;
+        geometry.vertices[0].y = v
     }
     function setX2(mesh:THREE.Line, v){
-        mesh.geometry.vertices[1].x = v
+        var geometry = <THREE.Geometry>mesh.geometry;
+        geometry.vertices[1].x = v
     }
     function setY2(mesh:THREE.Line, v){
-        mesh.geometry.vertices[1].y = v
+        var geometry = <THREE.Geometry>mesh.geometry;
+        geometry.vertices[1].y = v
     }
     
     
@@ -788,7 +795,7 @@ module glutils {
     }
     class GroupElement{
         position = {x: 0, y:0, z: 0};
-        children:Object = [];
+        children:any = [];
     }
         
     function createCirclesNoShader(dataElements:any[], scene:THREE.Scene){
@@ -832,10 +839,10 @@ module glutils {
             customColor: { type: 'c', value: [] }
         }
         var shaderMaterial: THREE.ShaderMaterial = new THREE.ShaderMaterial({
-            attributes: attributes,
+            defines: attributes,
             vertexShader: vertexShaderProgram,
             fragmentShader: fragmentShaderProgram,
-            linewidth: 2
+            lineWidth: 2
         });
         shaderMaterial.blending = THREE.NormalBlending;
         shaderMaterial.depthTest = true;
@@ -857,8 +864,8 @@ module glutils {
             query.y.push(0)
             query.z.push(0)
             query.r.push(0)
-            query.fill.push('0x000000')
-            query.stroke.push('0x000000')
+            query.fill.push(0x000000)
+            query.stroke.push(0x000000)
             query.strokewidth.push(1)
             query.opacity.push(1)
         }
@@ -1067,15 +1074,16 @@ module glutils {
         return visualElements;     
     }
     
-    function createPath(mesh:THREE.Line, points:Object[]){
-        mesh.geometry.vertices = []
+    function createPath(mesh:THREE.Line, points:any[]){
+        var geometry = <THREE.Geometry>this.mesh.geometry;
+        geometry.vertices = []
         for(var i=0 ; i < points.length ; i++){
-            mesh.geometry.vertices.push(new THREE.Vector3(points[i].x ,points[i].y, 0));
+            geometry.vertices.push(new THREE.Vector3(points[i].x ,points[i].y, 0));
         }
-        mesh.geometry.verticesNeedUpdate = true;
+        geometry.verticesNeedUpdate = true;
     }
     
-    function createPolygon(mesh:THREE.Mesh, points:Object[]){
+    function createPolygon(mesh:THREE.Mesh, points:any[]){
         var vectors = []
         var shape = new THREE.Shape(points);
         mesh.geometry = new THREE.ShapeGeometry(shape);
@@ -1292,10 +1300,10 @@ module glutils {
                 
         intersect(selection:WebGLElementQuery, mousex, mousey):any[]{
             switch(selection.shape){
-                case 'circle': return this.intersectCircles(selection); break;
-                case 'rect': return this.intersectRects(selection); break;
-                case 'path': return this.intersectPaths(selection); break;
-                case 'text': return this.intersectRects(selection); break;
+                case 'circle': return this.intersectCircles(selection); 
+                case 'rect': return this.intersectRects(selection); 
+                case 'path': return this.intersectPaths(selection); 
+                case 'text': return this.intersectRects(selection); 
             }
             return []    
         }

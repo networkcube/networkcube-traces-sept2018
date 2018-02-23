@@ -1,0 +1,20 @@
+{
+  "name": "bspline",
+  "version": "0.0.1",
+  "description": "A simple and fast uniform-knot BSpline curve implementation by javascript.",
+  "main": "BSpline.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tagussan/BSpline.git"
+  },
+  "author": "Jean-Daniel Fekete <Jean-Daniel.Fekete@inria.fr> (http://www.aviz.fr/~fekete)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tagussan/BSpline/issues"
+  },
+  "homepage": "https://github.com/Tagussan/BSpline#readme",
+  "typings": "./BSplit.d.ts"
+}

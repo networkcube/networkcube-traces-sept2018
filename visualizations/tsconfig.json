@@ -12,9 +12,6 @@
         "suppressImplicitAnyIndexErrors": true
     },
     "files": [
-        "nodelink/nodelink.ts",
-        "map/map.ts",
-        "matrix/matrix.ts",
-        "dynamicego/dynamicego.ts"
+        "nodelink/nodelink.ts"
     ]
 }
