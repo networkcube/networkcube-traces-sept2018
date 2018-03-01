@@ -3,8 +3,8 @@
     "compilerOptions": {
         "target": "es5",
         "declaration": true,
-        // "noImplicitUseStrict": true,
-        // "alwaysStrict": false,
+        "noImplicitUseStrict": true,
+        "alwaysStrict": false,
         // "noStrictGenericChecks": true,
         // "strict": false,
         // "strictNullChecks": false,
