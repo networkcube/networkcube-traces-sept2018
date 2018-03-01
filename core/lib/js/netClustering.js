@@ -14,7 +14,7 @@
 /*jslint browser: true, devel: true, regexp: true, white: true */
 /*
 */
-"use strict";
+// "use strict";
 
 var netClustering = {
     version: "0.1"
