@@ -14,7 +14,7 @@
 /*! @source http://purl.eligrey.com/github/canvas-toBlob.js/blob/master/canvas-toBlob.js */
 
 (function(view) {
-"use strict";
+// "use strict";
 var
 	  Uint8Array = view.Uint8Array
 	, HTMLCanvasElement = view.HTMLCanvasElement

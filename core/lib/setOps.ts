@@ -3,7 +3,7 @@
 // Set operations union, intersection, symmetric difference,
 // relative complement, equals. Set operations are fast.
 (function(so) {
-'use strict';
+// 'use strict';
   
   var uidList = [], uid;
 
