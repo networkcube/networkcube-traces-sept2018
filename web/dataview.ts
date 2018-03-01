@@ -63,6 +63,7 @@ function init() {
 if(networkcube.isTrackingEnabled())
 {
     console.log('>> LOAD questionnaires')
+    //$('#trackingContainer').load('./traces/questionnaires.html');
     $('#trackingContainer').load('./traces/questionnaires.html');
 } else {
     if($('#trackingButtonsDiv'))

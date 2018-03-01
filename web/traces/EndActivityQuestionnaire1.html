@@ -38,6 +38,17 @@
         cursor: pointer;
       } 
 
+      .button3 {
+        background-color: gray;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+      } 
+
     .buttonClose {
         background-color: #cc0000;
         border: none;
@@ -114,7 +125,9 @@
                           <button id="button5" type="button" style="height:25px;width:125px"
                             ondblclick="doubleClick(5)" onclick="toggleButton('button5')">
                             <label for="my-checkbox"><font size="2">Other</font></label>
-                          </button>&nbsp;You will be able to describe it later
+                          <!--</button>&nbsp;You will be able to describe it later-->
+                          </button>&nbsp;Please, explain: <textarea id="otherReasonInput" type="text" name="otherReason" cols="50" rows="3" onkeyup="localStorage.setItem(\'NETWORKCUBE_OTHERREASON\', document.getElementById(\'otherReasonInput\').value)"></textarea>
+
                           <p></p>                      
                           <script>
 
@@ -191,7 +204,8 @@
                     <p></p>
                     <div class="wrapper">
 
-                    <button class="button1" onclick="submitQuestionnaireResults()"><font size="3">Skip the questionnaire (Esc)</font></button>
+                    <button class="button3" onclick="closeWindow()"><font size="3">Cancel</font></button>
+                    <button class="button1" onclick="submitQuestionnaireResults()"><font size="3">Skip the questionnaire</font></button>
                     <button class="button2" onclick="continueBtnPressed()"><font size="3">Continue</font></button>
                     <script>
 
