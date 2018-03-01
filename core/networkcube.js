@@ -1,4 +1,14 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 !function (a, b) { "object" == typeof module && "object" == typeof module.exports ? module.exports = a.document ? b(a, !0) : function (a) { if (!a.document)
     throw new Error("jQuery requires a window with a document"); return b(a); } : b(a); }("undefined" != typeof window ? window : this, function (a, b) {
     var c = [], d = c.slice, e = c.concat, f = c.push, g = c.indexOf, h = {}, i = h.toString, j = h.hasOwnProperty, k = {}, l = "1.11.1", m = function (a, b) { return new m.fn.init(a, b); }, n = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, o = /^-ms-/, p = /-([\da-z])/gi, q = function (a, b) { return b.toUpperCase(); };
@@ -17733,23 +17743,32 @@ var networkcube;
         return arrayClone;
     }
     networkcube.copyTimeSeries = copyTimeSeries;
-    class Box {
-        constructor(x1, y1, x2, y2) {
+    var Box = (function () {
+        function Box(x1, y1, x2, y2) {
             this.x1 = Math.min(x1, x2);
             this.x2 = Math.max(x1, x2);
             this.y1 = Math.min(y1, y2);
             this.y2 = Math.max(y1, y2);
         }
-        get width() {
-            return this.x2 - this.x1;
-        }
-        get height() {
-            return this.y2 - this.y1;
-        }
-        isPoint() {
+        Object.defineProperty(Box.prototype, "width", {
+            get: function () {
+                return this.x2 - this.x1;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Box.prototype, "height", {
+            get: function () {
+                return this.y2 - this.y1;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Box.prototype.isPoint = function () {
             return (this.width == 0) && (this.height == 0);
-        }
-    }
+        };
+        return Box;
+    }());
     networkcube.Box = Box;
     function inBox(x, y, box) {
         return (x > box.x1
@@ -17778,25 +17797,27 @@ var networkcube;
         return a - b;
     }
     networkcube.sortNumber = sortNumber;
-    class ElementCompound {
-        constructor() {
+    var ElementCompound = (function () {
+        function ElementCompound() {
             this.nodes = [];
             this.links = [];
             this.times = [];
             this.nodePairs = [];
             this.locations = [];
         }
-    }
+        return ElementCompound;
+    }());
     networkcube.ElementCompound = ElementCompound;
-    class IDCompound {
-        constructor() {
+    var IDCompound = (function () {
+        function IDCompound() {
             this.nodeIds = [];
             this.linkIds = [];
             this.timeIds = [];
             this.nodePairIds = [];
             this.locationIds = [];
         }
-    }
+        return IDCompound;
+    }());
     networkcube.IDCompound = IDCompound;
     function cloneCompound(compound) {
         var result = new IDCompound();
@@ -17831,16 +17852,16 @@ var networkcube;
         var result = new IDCompound;
         if (elements != undefined) {
             if (elements.nodes) {
-                result.nodeIds = elements.nodes.map((n, i) => n.id());
+                result.nodeIds = elements.nodes.map(function (n, i) { return n.id(); });
             }
             if (elements.links) {
-                result.linkIds = elements.links.map((n, i) => n.id());
+                result.linkIds = elements.links.map(function (n, i) { return n.id(); });
             }
             if (elements.times) {
-                result.timeIds = elements.times.map((n, i) => n.id());
+                result.timeIds = elements.times.map(function (n, i) { return n.id(); });
             }
             if (elements.nodePairs) {
-                result.nodePairIds = elements.nodePairs.map((n, i) => n.id());
+                result.nodePairIds = elements.nodePairs.map(function (n, i) { return n.id(); });
             }
         }
         return result;
@@ -17850,16 +17871,16 @@ var networkcube;
         var result = new ElementCompound;
         if (elements != undefined) {
             if (elements.nodeIds) {
-                result.nodes = elements.nodeIds.map((id, i) => g.node(id));
+                result.nodes = elements.nodeIds.map(function (id, i) { return g.node(id); });
             }
             if (elements.linkIds) {
-                result.links = elements.linkIds.map((id, i) => g.link(id));
+                result.links = elements.linkIds.map(function (id, i) { return g.link(id); });
             }
             if (elements.timeIds) {
-                result.times = elements.timeIds.map((id, i) => g.time(id));
+                result.times = elements.timeIds.map(function (id, i) { return g.time(id); });
             }
             if (elements.nodePairIds) {
-                result.nodePairs = elements.nodePairIds.map((id, i) => g.nodePair(id));
+                result.nodePairs = elements.nodePairIds.map(function (id, i) { return g.nodePair(id); });
             }
         }
         return result;
@@ -18116,35 +18137,35 @@ var networkcube;
 })(networkcube || (networkcube = {}));
 var networkcube;
 (function (networkcube) {
-    class BasicElement {
-        constructor(id, type, dynamicGraph) {
+    var BasicElement = (function () {
+        function BasicElement(id, type, dynamicGraph) {
             this._id = id;
             this.type = type;
             this.g = dynamicGraph;
         }
-        id() {
+        BasicElement.prototype.id = function () {
             return this._id;
-        }
-        attr(attr) {
+        };
+        BasicElement.prototype.attr = function (attr) {
             return this.g.attr(attr, this._id, this.type);
-        }
-        getSelections() {
+        };
+        BasicElement.prototype.getSelections = function () {
             return this.g.attributeArrays[this.type].selections[this._id];
-        }
-        addToSelection(b) {
+        };
+        BasicElement.prototype.addToSelection = function (b) {
             this.g.attributeArrays[this.type].selections[this._id].push(b);
-        }
-        removeFromSelection(b) {
+        };
+        BasicElement.prototype.removeFromSelection = function (b) {
             var arr = this.g.attributeArrays[this.type].selections[this._id];
             for (var i = 0; i < arr.length; i++) {
                 if (arr[i] == b)
                     this.g.attributeArrays[this.type].selections[this._id].splice(i, 1);
             }
-        }
-        inSelection(s) {
+        };
+        BasicElement.prototype.inSelection = function (s) {
             return this.getSelections().indexOf(s) > -1;
-        }
-        isSelected(selection) {
+        };
+        BasicElement.prototype.isSelected = function (selection) {
             if (!selection)
                 return this.getSelections().length > 0;
             var selections = this.g.attributeArrays[this.type].selections[this._id];
@@ -18156,14 +18177,14 @@ var networkcube;
                     return true;
             }
             return false;
-        }
-        isHighlighted() {
+        };
+        BasicElement.prototype.isHighlighted = function () {
             return this.g.isHighlighted(this._id, this.type);
-        }
-        isFiltered() {
+        };
+        BasicElement.prototype.isFiltered = function () {
             return this.g.isFiltered(this._id, this.type);
-        }
-        isVisible() {
+        };
+        BasicElement.prototype.isVisible = function () {
             var selections = this.getSelections();
             if (selections.length == 0)
                 return true;
@@ -18172,8 +18193,8 @@ var networkcube;
                     return false;
             }
             return true;
-        }
-        presentIn(start, end) {
+        };
+        BasicElement.prototype.presentIn = function (start, end) {
             var presence = this.attr('presence');
             if (!end)
                 end = start;
@@ -18182,40 +18203,44 @@ var networkcube;
                     return true;
             }
             return false;
-        }
-    }
+        };
+        return BasicElement;
+    }());
     networkcube.BasicElement = BasicElement;
-    class Time extends BasicElement {
-        constructor(id, dynamicGraph) {
-            super(id, 'time', dynamicGraph);
+    var Time = (function (_super) {
+        __extends(Time, _super);
+        function Time(id, dynamicGraph) {
+            return _super.call(this, id, 'time', dynamicGraph) || this;
         }
-        time() { return this.attr('momentTime'); }
-        moment() { return this.attr('momentTime'); }
-        label() { return this.attr('label'); }
-        unixTime() { return this.attr('unixTime'); }
-        links() {
+        Time.prototype.time = function () { return this.attr('momentTime'); };
+        Time.prototype.moment = function () { return this.attr('momentTime'); };
+        Time.prototype.label = function () { return this.attr('label'); };
+        Time.prototype.unixTime = function () { return this.attr('unixTime'); };
+        Time.prototype.links = function () {
             return new LinkQuery(this.attr('links'), this.g);
-        }
-        year() { return this.time().year(); }
-        month() { return this.time().month(); }
-        week() { return this.time().week(); }
-        day() { return this.time().day(); }
-        hour() { return this.time().hour(); }
-        minute() { return this.time().minute(); }
-        second() { return this.time().second(); }
-        millisecond() { return this.time().millisecond(); }
-        format(format) {
+        };
+        Time.prototype.year = function () { return this.time().year(); };
+        Time.prototype.month = function () { return this.time().month(); };
+        Time.prototype.week = function () { return this.time().week(); };
+        Time.prototype.day = function () { return this.time().day(); };
+        Time.prototype.hour = function () { return this.time().hour(); };
+        Time.prototype.minute = function () { return this.time().minute(); };
+        Time.prototype.second = function () { return this.time().second(); };
+        Time.prototype.millisecond = function () { return this.time().millisecond(); };
+        Time.prototype.format = function (format) {
             return this.time().format(format);
-        }
-    }
+        };
+        return Time;
+    }(BasicElement));
     networkcube.Time = Time;
-    class Node extends BasicElement {
-        constructor(id, graph) {
-            super(id, 'node', graph);
+    var Node = (function (_super) {
+        __extends(Node, _super);
+        function Node(id, graph) {
+            return _super.call(this, id, 'node', graph) || this;
         }
-        label() { return '' + this.attr('label'); }
-        nodeType() { return this.attr('nodeType'); }
-        neighbors(t1, t2) {
+        Node.prototype.label = function () { return '' + this.attr('label'); };
+        Node.prototype.nodeType = function () { return this.attr('nodeType'); };
+        Node.prototype.neighbors = function (t1, t2) {
             if (t2 != undefined) {
                 return new NodeQuery(this.attr('neighbors').period(t1, t2).toFlatArray(true), this.g);
             }
@@ -18223,8 +18248,8 @@ var networkcube;
                 return new NodeQuery(this.attr('neighbors').get(t1), this.g);
             }
             return new NodeQuery(this.attr('neighbors').toFlatArray(), this.g);
-        }
-        inNeighbors(t1, t2) {
+        };
+        Node.prototype.inNeighbors = function (t1, t2) {
             if (t2 != undefined) {
                 return new NodeQuery(this.attr('inNeighbors').period(t1, t2).toFlatArray(true), this.g);
             }
@@ -18232,8 +18257,8 @@ var networkcube;
                 return new NodeQuery(this.attr('inNeighbors').get(t1), this.g);
             }
             return new NodeQuery(this.attr('inNeighbors').toFlatArray(true), this.g);
-        }
-        outNeighbors(t1, t2) {
+        };
+        Node.prototype.outNeighbors = function (t1, t2) {
             if (t2 != undefined) {
                 return new NodeQuery(this.attr('outNeighbors').period(t1, t2).toFlatArray(true), this.g);
             }
@@ -18241,8 +18266,8 @@ var networkcube;
                 return new NodeQuery(this.attr('outNeighbors').get(t1), this.g);
             }
             return new NodeQuery(this.attr('outNeighbors').toFlatArray(), this.g);
-        }
-        links(t1, t2) {
+        };
+        Node.prototype.links = function (t1, t2) {
             if (t2 != undefined) {
                 return new LinkQuery(this.attr('links').period(t1, t2).toFlatArray(true), this.g);
             }
@@ -18250,8 +18275,8 @@ var networkcube;
                 return new LinkQuery(this.attr('links').get(t1), this.g);
             }
             return new LinkQuery(this.attr('links').toFlatArray(true), this.g);
-        }
-        inLinks(t1, t2) {
+        };
+        Node.prototype.inLinks = function (t1, t2) {
             if (t2 != undefined) {
                 return new LinkQuery(this.attr('inLinks').period(t1, t2).toFlatArray(true), this.g);
             }
@@ -18259,8 +18284,8 @@ var networkcube;
                 return new LinkQuery(this.attr('inLinks').get(t1), this.g);
             }
             return new LinkQuery(this.attr('inLinks').toFlatArray(true), this.g);
-        }
-        outLinks(t1, t2) {
+        };
+        Node.prototype.outLinks = function (t1, t2) {
             if (t2 != undefined) {
                 return new LinkQuery(this.attr('outLinks').period(t1, t2).toFlatArray(true), this.g);
             }
@@ -18268,8 +18293,8 @@ var networkcube;
                 return new LinkQuery(this.attr('outLinks').get(t1), this.g);
             }
             return new LinkQuery(this.attr('outLinks').toFlatArray(true), this.g);
-        }
-        locations(t1, t2) {
+        };
+        Node.prototype.locations = function (t1, t2) {
             if (t2 != undefined) {
                 return new LocationQuery(this.attr('locations').period(t1, t2).toArray(), this.g);
             }
@@ -18277,8 +18302,8 @@ var networkcube;
                 return new LocationQuery([this.attr('locations').get(t1)], this.g);
             }
             return new LocationQuery(this.attr('locations').toArray(), this.g);
-        }
-        locationSerie(t1, t2) {
+        };
+        Node.prototype.locationSerie = function (t1, t2) {
             var serie;
             if (t2 != undefined)
                 serie = this.attr('locations').period(t1, t2);
@@ -18292,8 +18317,8 @@ var networkcube;
                 serie2.set(this.g.time(parseInt(t)), this.g.location(serie[t]));
             }
             return serie2;
-        }
-        linksBetween(n) {
+        };
+        Node.prototype.linksBetween = function (n) {
             var links = this.links().toArray();
             var finalLinks = [];
             var l;
@@ -18303,72 +18328,95 @@ var networkcube;
                     finalLinks.push(l);
             }
             return new LinkQuery(finalLinks, this.g);
-        }
-    }
+        };
+        return Node;
+    }(BasicElement));
     networkcube.Node = Node;
-    class Link extends BasicElement {
-        constructor(id, graph) {
-            super(id, 'link', graph);
+    var Link = (function (_super) {
+        __extends(Link, _super);
+        function Link(id, graph) {
+            return _super.call(this, id, 'link', graph) || this;
         }
-        linkType() { return this.attr('linkType'); }
-        get source() { return this.g._nodes[this.attr('source')]; }
-        get target() { return this.g._nodes[this.attr('target')]; }
-        nodePair() { return this.g._nodePairs[this.attr('nodePair')]; }
-        directed() { return this.attr('directed'); }
-        other(n) {
+        Link.prototype.linkType = function () { return this.attr('linkType'); };
+        Object.defineProperty(Link.prototype, "source", {
+            get: function () { return this.g._nodes[this.attr('source')]; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Link.prototype, "target", {
+            get: function () { return this.g._nodes[this.attr('target')]; },
+            enumerable: true,
+            configurable: true
+        });
+        Link.prototype.nodePair = function () { return this.g._nodePairs[this.attr('nodePair')]; };
+        Link.prototype.directed = function () { return this.attr('directed'); };
+        Link.prototype.other = function (n) {
             return this.source == n ? this.target : this.source;
-        }
-        weights(start, end) {
+        };
+        Link.prototype.weights = function (start, end) {
             if (start == undefined)
                 return new NumberQuery(this.attr('weights').toArray());
             if (end == undefined)
                 return new NumberQuery([this.attr('weights').get(start)]);
             return new NumberQuery(this.attr('weights').period(start, end).toArray());
-        }
-        presentIn(start, end) {
+        };
+        Link.prototype.presentIn = function (start, end) {
             var presence = this.weights(start, end).toArray();
             return presence.length > 0;
-        }
-        times() {
+        };
+        Link.prototype.times = function () {
             return new TimeQuery(this.attr('presence'), this.g);
-        }
-    }
+        };
+        return Link;
+    }(BasicElement));
     networkcube.Link = Link;
-    class NodePair extends BasicElement {
-        constructor(id, graph) {
-            super(id, 'nodePair', graph);
+    var NodePair = (function (_super) {
+        __extends(NodePair, _super);
+        function NodePair(id, graph) {
+            return _super.call(this, id, 'nodePair', graph) || this;
         }
-        get source() { return this.g._nodes[this.attr('source')]; }
-        get target() { return this.g._nodes[this.attr('target')]; }
-        links() { return new LinkQuery(this.attr('links'), this.g); }
-        nodeType() { return this.attr('nodeType'); }
-        presentIn(start, end) {
+        Object.defineProperty(NodePair.prototype, "source", {
+            get: function () { return this.g._nodes[this.attr('source')]; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(NodePair.prototype, "target", {
+            get: function () { return this.g._nodes[this.attr('target')]; },
+            enumerable: true,
+            configurable: true
+        });
+        NodePair.prototype.links = function () { return new LinkQuery(this.attr('links'), this.g); };
+        NodePair.prototype.nodeType = function () { return this.attr('nodeType'); };
+        NodePair.prototype.presentIn = function (start, end) {
             for (var i = 0; i < this.links.length; i++) {
                 if (this.links[i].presentIn(start, end))
                     return true;
             }
             return false;
-        }
-    }
+        };
+        return NodePair;
+    }(BasicElement));
     networkcube.NodePair = NodePair;
-    class Location extends BasicElement {
-        constructor(id, graph) {
-            super(id, 'location', graph);
+    var Location = (function (_super) {
+        __extends(Location, _super);
+        function Location(id, graph) {
+            return _super.call(this, id, 'location', graph) || this;
         }
-        label() { return this.attr('label') + ''; }
-        longitude() { return this.attr('longitude'); }
-        latitude() { return this.attr('latitude'); }
-        x() { return this.attr('x'); }
-        y() { return this.attr('y'); }
-        z() { return this.attr('z'); }
-        radius() { return this.attr('radius'); }
-    }
+        Location.prototype.label = function () { return this.attr('label') + ''; };
+        Location.prototype.longitude = function () { return this.attr('longitude'); };
+        Location.prototype.latitude = function () { return this.attr('latitude'); };
+        Location.prototype.x = function () { return this.attr('x'); };
+        Location.prototype.y = function () { return this.attr('y'); };
+        Location.prototype.z = function () { return this.attr('z'); };
+        Location.prototype.radius = function () { return this.attr('radius'); };
+        return Location;
+    }(BasicElement));
     networkcube.Location = Location;
-    class ScalarTimeSeries {
-        constructor() {
+    var ScalarTimeSeries = (function () {
+        function ScalarTimeSeries() {
             this.serie = {};
         }
-        period(t1, t2) {
+        ScalarTimeSeries.prototype.period = function (t1, t2) {
             var t1id = t1.id();
             var t2id = t2.id();
             var s = new ScalarTimeSeries();
@@ -18379,19 +18427,19 @@ var networkcube;
                 }
             }
             return s;
-        }
-        set(t, element) {
+        };
+        ScalarTimeSeries.prototype.set = function (t, element) {
             this.serie[t.id()] = element;
-        }
-        get(t) {
+        };
+        ScalarTimeSeries.prototype.get = function (t) {
             if (this.serie[t.id()] == undefined)
                 return;
             return this.serie[t.id()];
-        }
-        size() {
+        };
+        ScalarTimeSeries.prototype.size = function () {
             return this.toArray().length;
-        }
-        toArray(removeDuplicates) {
+        };
+        ScalarTimeSeries.prototype.toArray = function (removeDuplicates) {
             if (removeDuplicates == undefined)
                 removeDuplicates = false;
             var a = [];
@@ -18407,14 +18455,15 @@ var networkcube;
                 }
             }
             return a;
-        }
-    }
+        };
+        return ScalarTimeSeries;
+    }());
     networkcube.ScalarTimeSeries = ScalarTimeSeries;
-    class ArrayTimeSeries {
-        constructor() {
+    var ArrayTimeSeries = (function () {
+        function ArrayTimeSeries() {
             this.serie = {};
         }
-        period(t1, t2) {
+        ArrayTimeSeries.prototype.period = function (t1, t2) {
             var t1id = t1.id();
             var t2id = t1.id();
             var s = new ArrayTimeSeries();
@@ -18425,26 +18474,26 @@ var networkcube;
                 }
             }
             return s;
-        }
-        add(t, element) {
+        };
+        ArrayTimeSeries.prototype.add = function (t, element) {
             if (t == undefined) {
                 return;
             }
             if (!this.serie[t._id])
                 this.serie[t._id] = [];
             this.serie[t._id].push(element);
-        }
-        get(t) {
+        };
+        ArrayTimeSeries.prototype.get = function (t) {
             return this.serie[t._id];
-        }
-        toArray() {
+        };
+        ArrayTimeSeries.prototype.toArray = function () {
             var a = [];
             for (var prop in this.serie) {
                 a.push(this.serie[prop]);
             }
             return a;
-        }
-        toFlatArray(removeDuplicates) {
+        };
+        ArrayTimeSeries.prototype.toFlatArray = function (removeDuplicates) {
             if (removeDuplicates == undefined)
                 removeDuplicates = false;
             var a = [];
@@ -18456,11 +18505,12 @@ var networkcube;
                 }
             }
             return a;
-        }
-    }
+        };
+        return ArrayTimeSeries;
+    }());
     networkcube.ArrayTimeSeries = ArrayTimeSeries;
-    class Query {
-        constructor(elements) {
+    var Query = (function () {
+        function Query(elements) {
             this._elements = [];
             if (elements) {
                 for (var i = 0; i < elements.length; i++) {
@@ -18469,37 +18519,41 @@ var networkcube;
                 }
             }
         }
-        contains(element) {
+        Query.prototype.contains = function (element) {
             return this._elements.indexOf(element) > -1;
-        }
-        addUnique(element) {
+        };
+        Query.prototype.addUnique = function (element) {
             if (this._elements.indexOf(element) == -1)
                 this._elements.push(element);
-        }
-        add(element) {
+        };
+        Query.prototype.add = function (element) {
             this._elements.push(element);
-        }
-        addAll(elements) {
+        };
+        Query.prototype.addAll = function (elements) {
             for (var i = 0; i < elements.length; i++) {
                 if (elements[i] != undefined)
                     this._elements.push(elements[i]);
             }
-        }
-        addAllUnique(elements) {
+        };
+        Query.prototype.addAllUnique = function (elements) {
             for (var i = 0; i < elements.length; i++) {
                 this.addUnique(elements[i]);
             }
-        }
-        get length() {
-            return this._elements.length;
-        }
+        };
+        Object.defineProperty(Query.prototype, "length", {
+            get: function () {
+                return this._elements.length;
+            },
+            enumerable: true,
+            configurable: true
+        });
         ;
-        size() { return this._elements.length; }
+        Query.prototype.size = function () { return this._elements.length; };
         ;
-        ids() {
+        Query.prototype.ids = function () {
             return this._elements;
-        }
-        removeDuplicates() {
+        };
+        Query.prototype.removeDuplicates = function () {
             var elements = this._elements.slice(0);
             this._elements = [];
             for (var i = 0; i < elements.length; i++) {
@@ -18507,8 +18561,8 @@ var networkcube;
                     this._elements.push(elements[i]);
             }
             return this;
-        }
-        generic_intersection(q) {
+        };
+        Query.prototype.generic_intersection = function (q) {
             var intersection = [];
             for (var i = 0; i < this._elements.length; i++) {
                 for (var j = 0; j < q._elements.length; j++) {
@@ -18518,30 +18572,35 @@ var networkcube;
                 }
             }
             return new Query(intersection);
-        }
-    }
+        };
+        return Query;
+    }());
     networkcube.Query = Query;
-    class NumberQuery extends Query {
-        clone() {
-            return this._elements.slice(0);
+    var NumberQuery = (function (_super) {
+        __extends(NumberQuery, _super);
+        function NumberQuery() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-        min() {
+        NumberQuery.prototype.clone = function () {
+            return this._elements.slice(0);
+        };
+        NumberQuery.prototype.min = function () {
             var min = this._elements[0];
             for (var i = 1; i < this._elements.length; i++) {
                 if (this._elements[i] != undefined)
                     min = Math.min(min, this._elements[i]);
             }
             return min;
-        }
-        max() {
+        };
+        NumberQuery.prototype.max = function () {
             var max = this._elements[0];
             for (var i = 1; i < this._elements.length; i++) {
                 if (this._elements[i] != undefined)
                     max = Math.max(max, this._elements[i]);
             }
             return max;
-        }
-        mean() {
+        };
+        NumberQuery.prototype.mean = function () {
             var v = 0;
             var count = 0;
             for (var i = 0; i < this._elements.length; i++) {
@@ -18551,8 +18610,8 @@ var networkcube;
                 }
             }
             return v / count;
-        }
-        sum() {
+        };
+        NumberQuery.prototype.sum = function () {
             var sum = 0;
             for (var i = 0; i < this._elements.length; i++) {
                 if (typeof this._elements[i] == 'number') {
@@ -18560,69 +18619,77 @@ var networkcube;
                 }
             }
             return sum;
-        }
-        toArray() {
+        };
+        NumberQuery.prototype.toArray = function () {
             return this._elements.slice(0);
-        }
-        get(index) {
+        };
+        NumberQuery.prototype.get = function (index) {
             return this._elements[index];
-        }
-        forEach(f) {
+        };
+        NumberQuery.prototype.forEach = function (f) {
             for (var i = 0; i < this._elements.length; i++) {
                 f(this._elements[i], i);
             }
             return this;
-        }
-    }
+        };
+        return NumberQuery;
+    }(Query));
     networkcube.NumberQuery = NumberQuery;
-    class StringQuery {
-        constructor(elements) {
+    var StringQuery = (function () {
+        function StringQuery(elements) {
             if (elements)
                 this._elements = elements.slice(0);
         }
-        contains(element) {
+        StringQuery.prototype.contains = function (element) {
             return this._elements.indexOf(element) > -1;
-        }
-        addUnique(element) {
+        };
+        StringQuery.prototype.addUnique = function (element) {
             if (this._elements.indexOf(element) == -1)
                 this._elements.push(element);
-        }
-        add(element) {
+        };
+        StringQuery.prototype.add = function (element) {
             this._elements.push(element);
-        }
-        addAll(elements) {
+        };
+        StringQuery.prototype.addAll = function (elements) {
             for (var i = 0; i < elements.length; i++) {
                 if (elements[i] != undefined)
                     this._elements.push(elements[i]);
             }
-        }
-        addAllUnique(elements) {
+        };
+        StringQuery.prototype.addAllUnique = function (elements) {
             for (var i = 0; i < elements.length; i++) {
                 this.addUnique(elements[i]);
             }
-        }
-        get length() { return this._elements.length; }
+        };
+        Object.defineProperty(StringQuery.prototype, "length", {
+            get: function () { return this._elements.length; },
+            enumerable: true,
+            configurable: true
+        });
         ;
-        size() { return this._elements.length; }
+        StringQuery.prototype.size = function () { return this._elements.length; };
         ;
-        toArray() {
+        StringQuery.prototype.toArray = function () {
             return this._elements.slice(0);
-        }
-        forEach(f) {
+        };
+        StringQuery.prototype.forEach = function (f) {
             for (var i = 0; i < this._elements.length; i++) {
                 f(this._elements[i], i);
             }
             return this;
-        }
-    }
+        };
+        return StringQuery;
+    }());
     networkcube.StringQuery = StringQuery;
-    class GraphElementQuery extends Query {
-        constructor(elements, g) {
-            super(elements);
-            this.elementType = '';
-            this.g = g;
+    var GraphElementQuery = (function (_super) {
+        __extends(GraphElementQuery, _super);
+        function GraphElementQuery(elements, g) {
+            var _this = _super.call(this, elements) || this;
+            _this.elementType = '';
+            _this.g = g;
+            return _this;
         }
-        generic_filter(filter) {
+        GraphElementQuery.prototype.generic_filter = function (filter) {
             var arr = [];
             for (var i = 0; i < this._elements.length; i++) {
                 try {
@@ -18634,8 +18701,8 @@ var networkcube;
                 }
             }
             return arr;
-        }
-        generic_selected() {
+        };
+        GraphElementQuery.prototype.generic_selected = function () {
             var arr = [];
             for (var i = 0; i < this._elements.length; i++) {
                 if (this.g.get(this.elementType, this._elements[i]).isSelected()) {
@@ -18643,8 +18710,8 @@ var networkcube;
                 }
             }
             return arr;
-        }
-        generic_visible() {
+        };
+        GraphElementQuery.prototype.generic_visible = function () {
             var arr = [];
             for (var i = 0; i < this._elements.length; i++) {
                 if (this.g.get(this.elementType, this._elements[i]).isVisible()) {
@@ -18652,8 +18719,8 @@ var networkcube;
                 }
             }
             return arr;
-        }
-        generic_highlighted() {
+        };
+        GraphElementQuery.prototype.generic_highlighted = function () {
             var arr = [];
             for (var i = 0; i < this._elements.length; i++) {
                 if (this.g.get(this.elementType, this._elements[i]).isHighlighted()) {
@@ -18661,8 +18728,8 @@ var networkcube;
                 }
             }
             return arr;
-        }
-        generic_presentIn(start, end) {
+        };
+        GraphElementQuery.prototype.generic_presentIn = function (start, end) {
             var arr = [];
             for (var i = 0; i < this._elements.length; i++) {
                 if (this.g.get(this.elementType, this._elements[i]).presentIn(start, end)) {
@@ -18670,19 +18737,20 @@ var networkcube;
                 }
             }
             return arr;
-        }
-        generic_sort(attrName, asc) {
+        };
+        GraphElementQuery.prototype.generic_sort = function (attrName, asc) {
+            var _this = this;
             if (this._elements.length == 0) {
                 return this;
             }
             var array = this._elements.slice(0);
-            array.sort((e1, e2) => {
-                return networkcube.attributeSort(this.g.get(this.elementType, e1), this.g.get(this.elementType, e2), attrName, asc);
+            array.sort(function (e1, e2) {
+                return networkcube.attributeSort(_this.g.get(_this.elementType, e1), _this.g.get(_this.elementType, e2), attrName, asc);
             });
             this._elements = array;
             return this;
-        }
-        generic_removeDuplicates() {
+        };
+        GraphElementQuery.prototype.generic_removeDuplicates = function () {
             var uniqueElements = [];
             for (var i = 0; i < this._elements.length; i++) {
                 if (uniqueElements.indexOf(this._elements[i]) == -1)
@@ -18690,81 +18758,84 @@ var networkcube;
             }
             this._elements = uniqueElements;
             return this;
-        }
-    }
+        };
+        return GraphElementQuery;
+    }(Query));
     networkcube.GraphElementQuery = GraphElementQuery;
-    class NodeQuery extends GraphElementQuery {
-        constructor(elements, g) {
-            super(elements, g);
-            this.elementType = 'node';
+    var NodeQuery = (function (_super) {
+        __extends(NodeQuery, _super);
+        function NodeQuery(elements, g) {
+            var _this = _super.call(this, elements, g) || this;
+            _this.elementType = 'node';
             if (elements.length > 0 && elements[0] instanceof networkcube.Node) {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i].id());
+                    _this._elements.push(elements[i].id());
                 }
             }
             else if (elements.length > 0 && typeof elements[0] == 'number') {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i]);
+                    _this._elements.push(elements[i]);
                 }
             }
-            this.elementType = 'node';
+            _this.elementType = 'node';
+            return _this;
         }
-        contains(n) {
+        NodeQuery.prototype.contains = function (n) {
             return this._elements.indexOf(n.id()) > -1;
-        }
-        highlighted() {
-            return new NodeQuery(super.generic_highlighted(), this.g);
-        }
-        visible() {
-            return new NodeQuery(super.generic_visible(), this.g);
-        }
-        selected() {
-            return new NodeQuery(super.generic_selected(), this.g);
-        }
-        filter(filter) {
-            return new NodeQuery(super.generic_filter(filter), this.g);
-        }
-        presentIn(t1, t2) {
-            return new NodeQuery(super.generic_presentIn(t1, t2), this.g);
-        }
-        sort(attributeName, asc) {
-            return super.generic_sort(attributeName, asc);
-        }
-        label() {
+        };
+        NodeQuery.prototype.highlighted = function () {
+            return new NodeQuery(_super.prototype.generic_highlighted.call(this), this.g);
+        };
+        NodeQuery.prototype.visible = function () {
+            return new NodeQuery(_super.prototype.generic_visible.call(this), this.g);
+        };
+        NodeQuery.prototype.selected = function () {
+            return new NodeQuery(_super.prototype.generic_selected.call(this), this.g);
+        };
+        NodeQuery.prototype.filter = function (filter) {
+            return new NodeQuery(_super.prototype.generic_filter.call(this, filter), this.g);
+        };
+        NodeQuery.prototype.presentIn = function (t1, t2) {
+            return new NodeQuery(_super.prototype.generic_presentIn.call(this, t1, t2), this.g);
+        };
+        NodeQuery.prototype.sort = function (attributeName, asc) {
+            return _super.prototype.generic_sort.call(this, attributeName, asc);
+        };
+        NodeQuery.prototype.label = function () {
             var q = new StringQuery();
             for (var i = 0; i < this._elements.length; i++) {
                 q.add('' + this.g.attr('label', this._elements[i], 'node'));
             }
             return q;
-        }
-        neighbors(t1, t2) {
+        };
+        NodeQuery.prototype.neighbors = function (t1, t2) {
             return new NodeQuery(getBulkAttributes('neighbors', this._elements, 'node', this.g, t1, t2), this.g);
-        }
-        links(t1, t2) {
+        };
+        NodeQuery.prototype.links = function (t1, t2) {
             return new LinkQuery(getBulkAttributes('links', this._elements, 'node', this.g, t1, t2), this.g);
-        }
-        locations(t1, t2) {
+        };
+        NodeQuery.prototype.locations = function (t1, t2) {
             return new LocationQuery(getBulkAttributes('locations', this._elements, 'node', this.g, t1, t2), this.g);
-        }
-        nodeTypes() {
+        };
+        NodeQuery.prototype.nodeTypes = function () {
             var q = new StringQuery();
             for (var i = 0; i < this._elements.length; i++) {
                 q.add(this.g.attr('nodeType', this._elements[i], 'node'));
             }
             return q;
-        }
-        get(i) { return this.g._nodes[this._elements[i]]; }
-        last() { return this.g._nodes[this._elements[this._elements.length - 1]]; }
-        toArray() {
+        };
+        NodeQuery.prototype.get = function (i) { return this.g._nodes[this._elements[i]]; };
+        NodeQuery.prototype.last = function () { return this.g._nodes[this._elements[this._elements.length - 1]]; };
+        NodeQuery.prototype.toArray = function () {
             var a = [];
             for (var i = 0; i < this._elements.length; i++) {
                 a.push(this.g._nodes[this._elements[i]]);
             }
             return a;
-        }
-        createAttribute(attrName, f) {
+        };
+        NodeQuery.prototype.createAttribute = function (attrName, f) {
             if (this.g.nodeArrays[attrName] == undefined) {
                 this.g.nodeArrays[attrName] = [];
                 for (var i = 0; i < this.g._nodes.length; i++) {
@@ -18775,76 +18846,79 @@ var networkcube;
                 this.g.nodeArrays[attrName][this._elements[i]] = f(this.g._nodes[this._elements[i]]);
             }
             return this;
-        }
-        intersection(q) {
+        };
+        NodeQuery.prototype.intersection = function (q) {
             return new NodeQuery(this.generic_intersection(q)._elements, this.g);
-        }
-        removeDuplicates() {
+        };
+        NodeQuery.prototype.removeDuplicates = function () {
             return new NodeQuery(this.generic_removeDuplicates()._elements, this.g);
-        }
-        forEach(f) {
+        };
+        NodeQuery.prototype.forEach = function (f) {
             for (var i = 0; i < this._elements.length; i++) {
                 f(this.g.node(this._elements[i]), i);
             }
             return this;
-        }
-    }
+        };
+        return NodeQuery;
+    }(GraphElementQuery));
     networkcube.NodeQuery = NodeQuery;
-    class LinkQuery extends GraphElementQuery {
-        constructor(elements, g) {
-            super(elements, g);
-            this.elementType = 'link';
+    var LinkQuery = (function (_super) {
+        __extends(LinkQuery, _super);
+        function LinkQuery(elements, g) {
+            var _this = _super.call(this, elements, g) || this;
+            _this.elementType = 'link';
             if (elements.length > 0 && elements[0] instanceof networkcube.Link) {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i].id());
+                    _this._elements.push(elements[i].id());
                 }
             }
             if (elements.length > 0 && typeof elements[0] == 'number') {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i]);
+                    _this._elements.push(elements[i]);
                 }
             }
+            return _this;
         }
-        contains(l) {
+        LinkQuery.prototype.contains = function (l) {
             return this._elements.indexOf(l.id()) > -1;
-        }
-        highlighted() {
-            return new LinkQuery(super.generic_highlighted(), this.g);
-        }
-        visible() {
-            return new LinkQuery(super.generic_visible(), this.g);
-        }
-        selected() {
-            return new LinkQuery(super.generic_selected(), this.g);
-        }
-        filter(filter) {
-            return new LinkQuery(super.generic_filter(filter), this.g);
-        }
-        presentIn(t1, t2) {
-            return new LinkQuery(super.generic_presentIn(t1, t2), this.g);
-        }
-        sort(attributeName) {
-            return super.generic_sort(attributeName);
-        }
-        get(i) { return this.g._links[this._elements[i]]; }
-        last() { return this.g._links[this._elements[this._elements.length - 1]]; }
-        toArray() {
+        };
+        LinkQuery.prototype.highlighted = function () {
+            return new LinkQuery(_super.prototype.generic_highlighted.call(this), this.g);
+        };
+        LinkQuery.prototype.visible = function () {
+            return new LinkQuery(_super.prototype.generic_visible.call(this), this.g);
+        };
+        LinkQuery.prototype.selected = function () {
+            return new LinkQuery(_super.prototype.generic_selected.call(this), this.g);
+        };
+        LinkQuery.prototype.filter = function (filter) {
+            return new LinkQuery(_super.prototype.generic_filter.call(this, filter), this.g);
+        };
+        LinkQuery.prototype.presentIn = function (t1, t2) {
+            return new LinkQuery(_super.prototype.generic_presentIn.call(this, t1, t2), this.g);
+        };
+        LinkQuery.prototype.sort = function (attributeName) {
+            return _super.prototype.generic_sort.call(this, attributeName);
+        };
+        LinkQuery.prototype.get = function (i) { return this.g._links[this._elements[i]]; };
+        LinkQuery.prototype.last = function () { return this.g._links[this._elements[this._elements.length - 1]]; };
+        LinkQuery.prototype.toArray = function () {
             var a = [];
             for (var i = 0; i < this._elements.length; i++) {
                 a.push(this.g._links[this._elements[i]]);
             }
             return a;
-        }
-        weights(start, end) {
+        };
+        LinkQuery.prototype.weights = function (start, end) {
             var s = new NumberQuery();
             for (var i = 0; i < this._elements.length; i++) {
                 s.addAll(this.g.link(i).weights(start, end).toArray());
             }
             return s;
-        }
-        createAttribute(attrName, f) {
+        };
+        LinkQuery.prototype.createAttribute = function (attrName, f) {
             if (this.g.linkArrays[attrName] == undefined) {
                 this.g.linkArrays[attrName] = [];
                 for (var i = 0; i < this.g._links.length; i++) {
@@ -18855,8 +18929,8 @@ var networkcube;
                 this.g.linkArrays[attrName][this._elements[i]] = f(this.g._links[this._elements[i]]);
             }
             return this;
-        }
-        linkTypes() {
+        };
+        LinkQuery.prototype.linkTypes = function () {
             var linkTypes = [];
             var s;
             for (var i = 0; i < this._elements.length; i++) {
@@ -18865,8 +18939,8 @@ var networkcube;
                     linkTypes.push(s);
             }
             return linkTypes;
-        }
-        sources() {
+        };
+        LinkQuery.prototype.sources = function () {
             var nodes = [];
             var link;
             for (var i = 0; i < this._elements.length; i++) {
@@ -18875,8 +18949,8 @@ var networkcube;
                     nodes.push(link.source.id());
             }
             return new NodeQuery(nodes, this.g);
-        }
-        targets() {
+        };
+        LinkQuery.prototype.targets = function () {
             var nodes = [];
             var link;
             for (var i = 0; i < this._elements.length; i++) {
@@ -18885,70 +18959,73 @@ var networkcube;
                     nodes.push(link.target.id());
             }
             return new NodeQuery(nodes, this.g);
-        }
-        intersection(q) {
+        };
+        LinkQuery.prototype.intersection = function (q) {
             return new LinkQuery(this.generic_intersection(q)._elements, this.g);
-        }
-        removeDuplicates() {
+        };
+        LinkQuery.prototype.removeDuplicates = function () {
             return new LinkQuery(this.generic_removeDuplicates()._elements, this.g);
-        }
-        forEach(f) {
+        };
+        LinkQuery.prototype.forEach = function (f) {
             for (var i = 0; i < this._elements.length; i++) {
                 f(this.g.link(this._elements[i]), i);
             }
             return this;
-        }
-    }
+        };
+        return LinkQuery;
+    }(GraphElementQuery));
     networkcube.LinkQuery = LinkQuery;
-    class NodePairQuery extends GraphElementQuery {
-        constructor(elements, g) {
-            super(elements, g);
-            this.elementType = 'nodePair';
-            this.elementType = 'nodePair';
+    var NodePairQuery = (function (_super) {
+        __extends(NodePairQuery, _super);
+        function NodePairQuery(elements, g) {
+            var _this = _super.call(this, elements, g) || this;
+            _this.elementType = 'nodePair';
+            _this.elementType = 'nodePair';
             if (elements.length > 0 && elements[0] instanceof networkcube.NodePair) {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i].id());
+                    _this._elements.push(elements[i].id());
                 }
             }
             if (elements.length > 0 && typeof elements[0] == 'number') {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i]);
+                    _this._elements.push(elements[i]);
                 }
             }
+            return _this;
         }
-        contains(n) {
+        NodePairQuery.prototype.contains = function (n) {
             return this._elements.indexOf(n.id()) > -1;
-        }
-        highlighted() {
-            return new NodePairQuery(super.generic_highlighted(), this.g);
-        }
-        visible() {
-            return new NodePairQuery(super.generic_visible(), this.g);
-        }
-        selected() {
-            return new NodePairQuery(super.generic_selected(), this.g);
-        }
-        filter(filter) {
-            return new NodePairQuery(super.generic_filter(filter), this.g);
-        }
-        presentIn(t1, t2) {
-            return new NodePairQuery(super.generic_presentIn(t1, t2), this.g);
-        }
-        sort(attributeName) {
-            return super.generic_sort(attributeName);
-        }
-        get(i) { return this.g._nodePairs[this._elements[i]]; }
-        last() { return this.g._links[this._elements[this._elements.length - 1]]; }
-        toArray() {
+        };
+        NodePairQuery.prototype.highlighted = function () {
+            return new NodePairQuery(_super.prototype.generic_highlighted.call(this), this.g);
+        };
+        NodePairQuery.prototype.visible = function () {
+            return new NodePairQuery(_super.prototype.generic_visible.call(this), this.g);
+        };
+        NodePairQuery.prototype.selected = function () {
+            return new NodePairQuery(_super.prototype.generic_selected.call(this), this.g);
+        };
+        NodePairQuery.prototype.filter = function (filter) {
+            return new NodePairQuery(_super.prototype.generic_filter.call(this, filter), this.g);
+        };
+        NodePairQuery.prototype.presentIn = function (t1, t2) {
+            return new NodePairQuery(_super.prototype.generic_presentIn.call(this, t1, t2), this.g);
+        };
+        NodePairQuery.prototype.sort = function (attributeName) {
+            return _super.prototype.generic_sort.call(this, attributeName);
+        };
+        NodePairQuery.prototype.get = function (i) { return this.g._nodePairs[this._elements[i]]; };
+        NodePairQuery.prototype.last = function () { return this.g._links[this._elements[this._elements.length - 1]]; };
+        NodePairQuery.prototype.toArray = function () {
             var a = [];
             for (var i = 0; i < this._elements.length; i++) {
                 a.push(this.g._nodePairs[this._elements[i]]);
             }
             return a;
-        }
-        createAttribute(attrName, f) {
+        };
+        NodePairQuery.prototype.createAttribute = function (attrName, f) {
             if (this.g.nodePairArrays[attrName] == undefined) {
                 this.g.nodePairArrays[attrName] = [];
                 for (var i = 0; i < this.g._nodePairs.length; i++) {
@@ -18959,78 +19036,81 @@ var networkcube;
                 this.g.nodePairArrays[attrName][this._elements[i]] = f(this.g._nodePairs[this._elements[i]]);
             }
             return this;
-        }
-        intersection(q) {
+        };
+        NodePairQuery.prototype.intersection = function (q) {
             return new NodePairQuery(this.generic_intersection(q)._elements, this.g);
-        }
-        removeDuplicates() {
+        };
+        NodePairQuery.prototype.removeDuplicates = function () {
             return new NodePairQuery(this.generic_removeDuplicates()._elements, this.g);
-        }
-        forEach(f) {
+        };
+        NodePairQuery.prototype.forEach = function (f) {
             for (var i = 0; i < this._elements.length; i++) {
                 f(this.g.nodePair(this._elements[i]), i);
             }
             return this;
-        }
-    }
+        };
+        return NodePairQuery;
+    }(GraphElementQuery));
     networkcube.NodePairQuery = NodePairQuery;
-    class TimeQuery extends GraphElementQuery {
-        constructor(elements, g) {
-            super(elements, g);
-            this.elementType = 'time';
-            this.elementType = 'time';
+    var TimeQuery = (function (_super) {
+        __extends(TimeQuery, _super);
+        function TimeQuery(elements, g) {
+            var _this = _super.call(this, elements, g) || this;
+            _this.elementType = 'time';
+            _this.elementType = 'time';
             if (elements.length > 0 && elements[0] instanceof networkcube.Time) {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i].id());
+                    _this._elements.push(elements[i].id());
                 }
             }
             if (elements.length > 0 && typeof elements[0] == 'number') {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i]);
+                    _this._elements.push(elements[i]);
                 }
             }
+            return _this;
         }
-        contains(t) {
+        TimeQuery.prototype.contains = function (t) {
             return this._elements.indexOf(t.id()) > -1;
-        }
-        highlighted() {
-            return new TimeQuery(super.generic_highlighted(), this.g);
-        }
-        visible() {
-            return new TimeQuery(super.generic_visible(), this.g);
-        }
-        selected() {
-            return new TimeQuery(super.generic_selected(), this.g);
-        }
-        filter(filter) {
-            return new TimeQuery(super.generic_filter(filter), this.g);
-        }
-        presentIn(t1, t2) {
-            return new TimeQuery(super.generic_presentIn(t1, t2), this.g);
-        }
-        sort(attributeName) {
-            return super.generic_sort(attributeName);
-        }
-        links() {
+        };
+        TimeQuery.prototype.highlighted = function () {
+            return new TimeQuery(_super.prototype.generic_highlighted.call(this), this.g);
+        };
+        TimeQuery.prototype.visible = function () {
+            return new TimeQuery(_super.prototype.generic_visible.call(this), this.g);
+        };
+        TimeQuery.prototype.selected = function () {
+            return new TimeQuery(_super.prototype.generic_selected.call(this), this.g);
+        };
+        TimeQuery.prototype.filter = function (filter) {
+            return new TimeQuery(_super.prototype.generic_filter.call(this, filter), this.g);
+        };
+        TimeQuery.prototype.presentIn = function (t1, t2) {
+            return new TimeQuery(_super.prototype.generic_presentIn.call(this, t1, t2), this.g);
+        };
+        TimeQuery.prototype.sort = function (attributeName) {
+            return _super.prototype.generic_sort.call(this, attributeName);
+        };
+        TimeQuery.prototype.links = function () {
             var links = [];
             for (var i = 0; i < this._elements.length; i++) {
                 links = links.concat(this.g.attr('links', this._elements[i], 'time'));
             }
             return new LinkQuery(links, this.g);
-        }
-        get(i) { return this.g._times[this._elements[i]]; }
-        last() { return this.g._times[this._elements[this._elements.length - 1]]; }
-        toArray() {
+        };
+        TimeQuery.prototype.get = function (i) { return this.g._times[this._elements[i]]; };
+        TimeQuery.prototype.last = function () { return this.g._times[this._elements[this._elements.length - 1]]; };
+        TimeQuery.prototype.toArray = function () {
             var a = [];
             var allTimes = this.g._times;
             for (var i = 0; i < this._elements.length; i++) {
                 a.push(allTimes[this._elements[i]]);
             }
             return a;
-        }
-        createAttribute(attrName, f) {
+        };
+        TimeQuery.prototype.createAttribute = function (attrName, f) {
             if (this.g.timeArrays[attrName] == undefined) {
                 this.g.timeArrays[attrName] = [];
                 for (var i = 0; i < this.g._times.length; i++) {
@@ -19041,74 +19121,77 @@ var networkcube;
                 this.g.timeArrays[attrName][this._elements[i]] = f(this.g._times[this._elements[i]]);
             }
             return this;
-        }
-        unixTimes() {
+        };
+        TimeQuery.prototype.unixTimes = function () {
             var unixTimes = [];
             for (var i = 0; i < this._elements.length; i++) {
                 unixTimes.push(this.g.time(this._elements[i]).unixTime());
             }
             return unixTimes;
-        }
-        intersection(q) {
+        };
+        TimeQuery.prototype.intersection = function (q) {
             return new TimeQuery(this.generic_intersection(q)._elements, this.g);
-        }
-        forEach(f) {
+        };
+        TimeQuery.prototype.forEach = function (f) {
             for (var i = 0; i < this._elements.length; i++) {
                 f(this.g.time(this._elements[i]), i);
             }
             return this;
-        }
-    }
+        };
+        return TimeQuery;
+    }(GraphElementQuery));
     networkcube.TimeQuery = TimeQuery;
-    class LocationQuery extends GraphElementQuery {
-        constructor(elements, g) {
-            super(elements, g);
-            this.elementType = 'location';
-            this.elementType = 'location';
+    var LocationQuery = (function (_super) {
+        __extends(LocationQuery, _super);
+        function LocationQuery(elements, g) {
+            var _this = _super.call(this, elements, g) || this;
+            _this.elementType = 'location';
+            _this.elementType = 'location';
             if (elements.length > 0 && elements[0] instanceof networkcube.Location) {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements = elements[i].id();
+                    _this._elements = elements[i].id();
                 }
             }
             if (elements.length > 0 && typeof elements[0] == 'number') {
-                this._elements = [];
+                _this._elements = [];
                 for (var i = 0; i < elements.length; i++) {
-                    this._elements.push(elements[i]);
+                    _this._elements.push(elements[i]);
                 }
             }
+            return _this;
         }
-        contains(l) {
+        LocationQuery.prototype.contains = function (l) {
             return this._elements.indexOf(l.id()) > -1;
-        }
-        highlighted() {
-            return new LocationQuery(super.generic_highlighted(), this.g);
-        }
-        visible() {
-            return new LocationQuery(super.generic_visible(), this.g);
-        }
-        selected() {
-            return new LocationQuery(super.generic_selected(), this.g);
-        }
-        filter(filter) {
-            return new LocationQuery(super.generic_filter(filter), this.g);
-        }
-        presentIn(t1, t2) {
-            return new LocationQuery(super.generic_presentIn(t1, t2), this.g);
-        }
-        sort(attributeName) {
-            return super.generic_sort(attributeName);
-        }
-        get(i) { return this.g._locations[this._elements[i]]; }
-        last() { return this.g._locations[this._elements[this._elements.length - 1]]; }
-        toArray() {
+        };
+        LocationQuery.prototype.highlighted = function () {
+            return new LocationQuery(_super.prototype.generic_highlighted.call(this), this.g);
+        };
+        LocationQuery.prototype.visible = function () {
+            return new LocationQuery(_super.prototype.generic_visible.call(this), this.g);
+        };
+        LocationQuery.prototype.selected = function () {
+            return new LocationQuery(_super.prototype.generic_selected.call(this), this.g);
+        };
+        LocationQuery.prototype.filter = function (filter) {
+            return new LocationQuery(_super.prototype.generic_filter.call(this, filter), this.g);
+        };
+        LocationQuery.prototype.presentIn = function (t1, t2) {
+            return new LocationQuery(_super.prototype.generic_presentIn.call(this, t1, t2), this.g);
+        };
+        LocationQuery.prototype.sort = function (attributeName) {
+            return _super.prototype.generic_sort.call(this, attributeName);
+        };
+        LocationQuery.prototype.get = function (i) { return this.g._locations[this._elements[i]]; };
+        LocationQuery.prototype.last = function () { return this.g._locations[this._elements[this._elements.length - 1]]; };
+        LocationQuery.prototype.toArray = function () {
             var a = [];
             for (var i = 0; i < this._elements.length; i++) {
                 a.push(this.g._locations[this._elements[i]]);
             }
             return a;
-        }
-        createAttribute(attrName, f) {
+        };
+        LocationQuery.prototype.createAttribute = function (attrName, f) {
             if (this.g.locationArrays[attrName] == undefined) {
                 this.g.locationArrays[attrName] = [];
                 for (var i = 0; i < this.g._locations.length; i++) {
@@ -19119,20 +19202,21 @@ var networkcube;
                 this.g.locationArrays[attrName][this._elements[i]] = f(this.g._locations[this._elements[i]]);
             }
             return this;
-        }
-        intersection(q) {
+        };
+        LocationQuery.prototype.intersection = function (q) {
             return new LocationQuery(this.generic_intersection(q)._elements, this.g);
-        }
-        removeDuplicates() {
+        };
+        LocationQuery.prototype.removeDuplicates = function () {
             return new LocationQuery(this.generic_removeDuplicates()._elements, this.g);
-        }
-        forEach(f) {
+        };
+        LocationQuery.prototype.forEach = function (f) {
             for (var i = 0; i < this._elements.length; i++) {
                 f(this.g.location(this._elements[i]), i);
             }
             return this;
-        }
-    }
+        };
+        return LocationQuery;
+    }(GraphElementQuery));
     networkcube.LocationQuery = LocationQuery;
     function getBulkAttributes(attrName, ids, type, g, t1, t2) {
         var a = [];
@@ -19159,36 +19243,39 @@ var networkcube;
         }
         return a;
     }
-    class Motif {
-        constructor(nodes, links) {
+    var Motif = (function () {
+        function Motif(nodes, links) {
             this.nodes = [];
             this.links = [];
             this.times = [];
             this.nodes = nodes.slice(0);
             this.links = links.slice(0);
         }
-        print() {
+        Motif.prototype.print = function () {
             console.log('nodes:', this.nodes.length, 'links:', this.links.length);
-        }
-    }
+        };
+        return Motif;
+    }());
     networkcube.Motif = Motif;
-    class MotifTemplate {
-        constructor(nodes, links) {
+    var MotifTemplate = (function () {
+        function MotifTemplate(nodes, links) {
             this.nodes = [];
             this.links = [];
             this.nodes = nodes.slice(0);
             this.links = links.slice(0);
         }
-    }
+        return MotifTemplate;
+    }());
     networkcube.MotifTemplate = MotifTemplate;
-    class MotifSequence {
-        constructor() {
+    var MotifSequence = (function () {
+        function MotifSequence() {
             this.motifs = [];
         }
-        push(m) {
+        MotifSequence.prototype.push = function (m) {
             this.motifs.push(m);
-        }
-    }
+        };
+        return MotifSequence;
+    }());
     networkcube.MotifSequence = MotifSequence;
 })(networkcube || (networkcube = {}));
 var networkcube;
@@ -19214,8 +19301,8 @@ var networkcube;
         return value;
     }
     networkcube.dgraphReplacer = dgraphReplacer;
-    class DynamicGraph {
-        constructor() {
+    var DynamicGraph = (function () {
+        function DynamicGraph() {
             this.BOOKMARK_COLORS = d3.scale.category10();
             this.selectionColor_pointer = 0;
             this.minWeight = 10000000;
@@ -19259,7 +19346,7 @@ var networkcube;
             this.nodeTypeArrays_NAME = "nodeTypeArrays_NAME";
             this.locationArrays_NAME = "locationArrays_NAME";
         }
-        attr(field, id, type) {
+        DynamicGraph.prototype.attr = function (field, id, type) {
             var r;
             try {
                 r = this.attributeArrays[type][field][id];
@@ -19268,8 +19355,8 @@ var networkcube;
                 r = undefined;
             }
             return r;
-        }
-        standardArrayReplacer(key, value) {
+        };
+        DynamicGraph.prototype.standardArrayReplacer = function (key, value) {
             if (value instanceof DynamicGraph) {
                 console.log("standardReplacer found a DynamicGraph property", key);
                 return networkcube.DGRAPH_SUB;
@@ -19277,16 +19364,16 @@ var networkcube;
             else if (key == 'selections')
                 return undefined;
             return value;
-        }
-        static timeReviver(k, v, s) {
+        };
+        DynamicGraph.timeReviver = function (k, v, s) {
             if (k == '') {
                 return networkcube.copyPropsShallow(v, new networkcube.Time(v.id, s));
             }
             else {
                 return dgraphReviver(s, k, v);
             }
-        }
-        static nodeArrayReviver(k, v, s) {
+        };
+        DynamicGraph.nodeArrayReviver = function (k, v, s) {
             switch (k) {
                 case '':
                     return networkcube.copyPropsShallow(v, new NodeArray());
@@ -19303,8 +19390,8 @@ var networkcube;
                 default:
                     return v;
             }
-        }
-        static linkArrayReviver(k, v, s) {
+        };
+        DynamicGraph.linkArrayReviver = function (k, v, s) {
             switch (k) {
                 case '':
                     return networkcube.copyPropsShallow(v, new LinkArray());
@@ -19313,16 +19400,16 @@ var networkcube;
                 default:
                     return v;
             }
-        }
-        static nodePairArrayReviver(k, v, s) {
+        };
+        DynamicGraph.nodePairArrayReviver = function (k, v, s) {
             switch (k) {
                 case '':
                     return networkcube.copyPropsShallow(v, new NodePairArray());
                 default:
                     return v;
             }
-        }
-        static timeArrayReviver(k, v, s) {
+        };
+        DynamicGraph.timeArrayReviver = function (k, v, s) {
             switch (k) {
                 case '':
                     return networkcube.copyPropsShallow(v, new TimeArray());
@@ -19332,32 +19419,32 @@ var networkcube;
                 default:
                     return v;
             }
-        }
-        static linkTypeArrayReviver(k, v, s) {
+        };
+        DynamicGraph.linkTypeArrayReviver = function (k, v, s) {
             switch (k) {
                 case '':
                     return networkcube.copyPropsShallow(v, new LinkTypeArray());
                 default:
                     return v;
             }
-        }
-        static nodeTypeArrayReviver(k, v, s) {
+        };
+        DynamicGraph.nodeTypeArrayReviver = function (k, v, s) {
             switch (k) {
                 case '':
                     return networkcube.copyPropsShallow(v, new NodeTypeArray());
                 default:
                     return v;
             }
-        }
-        static locationArrayReviver(k, v, s) {
+        };
+        DynamicGraph.locationArrayReviver = function (k, v, s) {
             switch (k) {
                 case '':
                     return networkcube.copyPropsShallow(v, new LocationArray());
                 default:
                     return v;
             }
-        }
-        loadDynamicGraph(dataMgr, dataSetName) {
+        };
+        DynamicGraph.prototype.loadDynamicGraph = function (dataMgr, dataSetName) {
             this.clearSelections();
             this.name = dataSetName;
             var thisGraph = this;
@@ -19403,8 +19490,8 @@ var networkcube;
             };
             this.createGraphObjects(true, true);
             this.createSelections(true);
-        }
-        saveDynamicGraph(dataMgr) {
+        };
+        DynamicGraph.prototype.saveDynamicGraph = function (dataMgr) {
             dataMgr.saveToStorage(this.name, this.gran_min_NAME, this.gran_min);
             dataMgr.saveToStorage(this.name, this.gran_max_NAME, this.gran_max);
             dataMgr.saveToStorage(this.name, this.minWeight_NAME, this.minWeight);
@@ -19417,8 +19504,8 @@ var networkcube;
             dataMgr.saveToStorage(this.name, this.linkTypeArrays_NAME, this.linkTypeArrays, this.standardArrayReplacer);
             dataMgr.saveToStorage(this.name, this.nodeTypeArrays_NAME, this.nodeTypeArrays, this.standardArrayReplacer);
             dataMgr.saveToStorage(this.name, this.locationArrays_NAME, this.locationArrays, this.standardArrayReplacer);
-        }
-        debugCompareTo(other) {
+        };
+        DynamicGraph.prototype.debugCompareTo = function (other) {
             var result = true;
             if (this.name != other.name) {
                 console.log("name different");
@@ -19518,8 +19605,8 @@ var networkcube;
                 result = false;
             }
             return result;
-        }
-        initDynamicGraph(data) {
+        };
+        DynamicGraph.prototype.initDynamicGraph = function (data) {
             this.clearSelections();
             console.log('[dynamicgraph.ts] Create dynamic graph for ', data.name, data);
             this.name = data.name;
@@ -19857,8 +19944,8 @@ var networkcube;
             console.log('>>>this.nodeArrays["neighbors"][0]', this.nodeArrays['neighbors'][0]);
             this.createGraphObjects(true, true);
             this.createSelections(false);
-        }
-        createSelections(shouldCreateArrays) {
+        };
+        DynamicGraph.prototype.createSelections = function (shouldCreateArrays) {
             if (shouldCreateArrays) {
                 if (!('nodeArrays' in this && this.nodeArrays)) {
                     this.nodeArrays = new NodeArray();
@@ -19948,8 +20035,8 @@ var networkcube;
             if (linkSelections.length == 1)
                 linkSelections[0].color = '#444';
             this.currentSelection_id = 0;
-        }
-        createGraphObjects(shouldCreateTimes, shouldCreateLinkTypes) {
+        };
+        DynamicGraph.prototype.createGraphObjects = function (shouldCreateTimes, shouldCreateLinkTypes) {
             console.log('[DynamicNetwork:createGraph()] >>> ');
             var d = Date.now();
             if (this.locationArrays && 'id' in this.locationArrays) {
@@ -19995,22 +20082,30 @@ var networkcube;
                     this._times.push(new networkcube.Time(i, this));
             }
             console.log('[DynamicNetwork:getGraph()] <<< ', Date.now() - d, 'msec');
-        }
-        nodeAttr(attr, id) {
+        };
+        DynamicGraph.prototype.nodeAttr = function (attr, id) {
             return this.attr(attr, id, 'node');
-        }
-        linkAttr(attr, id) {
+        };
+        DynamicGraph.prototype.linkAttr = function (attr, id) {
             return this.attr(attr, id, 'link');
-        }
-        pairAttr(attr, id) {
+        };
+        DynamicGraph.prototype.pairAttr = function (attr, id) {
             return this.attr(attr, id, 'nodePair');
-        }
-        timeAttr(attr, id) {
+        };
+        DynamicGraph.prototype.timeAttr = function (attr, id) {
             return this.attr(attr, id, 'time');
-        }
-        get startTime() { return this._times[0]; }
-        get endTime() { return this._times[this._times.length - 1]; }
-        highlight(action, idCompound) {
+        };
+        Object.defineProperty(DynamicGraph.prototype, "startTime", {
+            get: function () { return this._times[0]; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DynamicGraph.prototype, "endTime", {
+            get: function () { return this._times[this._times.length - 1]; },
+            enumerable: true,
+            configurable: true
+        });
+        DynamicGraph.prototype.highlight = function (action, idCompound) {
             if (action == 'reset') {
                 this.highlightArrays.nodeIds = [];
                 this.highlightArrays.linkIds = [];
@@ -20044,8 +20139,8 @@ var networkcube;
                     }
                 }
             }
-        }
-        selection(action, idCompound, selectionId) {
+        };
+        DynamicGraph.prototype.selection = function (action, idCompound, selectionId) {
             if (selectionId == undefined)
                 selectionId = this.currentSelection_id;
             var selection = this.getSelection(selectionId);
@@ -20059,19 +20154,19 @@ var networkcube;
                 this.selection('add', idCompound, selectionId);
             }
             else if (action == 'add') {
-                idCompound.linkIds.forEach((v, i, arr) => self.addToSelectionByTypeAndId(selection, 'link', v));
-                idCompound.nodeIds.forEach((v, i, arr) => self.addToSelectionByTypeAndId(selection, 'node', v));
-                idCompound.timeIds.forEach((v, i, arr) => self.addToSelectionByTypeAndId(selection, 'time', v));
-                idCompound.nodePairIds.forEach((v, i, arr) => self.addToSelectionByTypeAndId(selection, 'nodePair', v));
+                idCompound.linkIds.forEach(function (v, i, arr) { return self.addToSelectionByTypeAndId(selection, 'link', v); });
+                idCompound.nodeIds.forEach(function (v, i, arr) { return self.addToSelectionByTypeAndId(selection, 'node', v); });
+                idCompound.timeIds.forEach(function (v, i, arr) { return self.addToSelectionByTypeAndId(selection, 'time', v); });
+                idCompound.nodePairIds.forEach(function (v, i, arr) { return self.addToSelectionByTypeAndId(selection, 'nodePair', v); });
             }
             else if (action == 'remove') {
-                idCompound.linkIds.forEach((v, i, arr) => self.removeFromSelectionByTypeAndId(selection, 'link', v));
-                idCompound.nodeIds.forEach((v, i, arr) => self.removeFromSelectionByTypeAndId(selection, 'node', v));
-                idCompound.timeIds.forEach((v, i, arr) => self.removeFromSelectionByTypeAndId(selection, 'time', v));
-                idCompound.nodePairIds.forEach((v, i, arr) => self.removeFromSelectionByTypeAndId(selection, 'nodePair', v));
+                idCompound.linkIds.forEach(function (v, i, arr) { return self.removeFromSelectionByTypeAndId(selection, 'link', v); });
+                idCompound.nodeIds.forEach(function (v, i, arr) { return self.removeFromSelectionByTypeAndId(selection, 'node', v); });
+                idCompound.timeIds.forEach(function (v, i, arr) { return self.removeFromSelectionByTypeAndId(selection, 'time', v); });
+                idCompound.nodePairIds.forEach(function (v, i, arr) { return self.removeFromSelectionByTypeAndId(selection, 'nodePair', v); });
             }
-        }
-        addToAttributeArraysSelection(selection, type, id) {
+        };
+        DynamicGraph.prototype.addToAttributeArraysSelection = function (selection, type, id) {
             var elementSelections = this.attributeArrays[type].selections[id];
             for (var i = 0; i < elementSelections.length; i++) {
                 if (elementSelections[i].priority > selection.priority) {
@@ -20080,18 +20175,18 @@ var networkcube;
                 }
             }
             this.attributeArrays[type].selections[id].push(selection);
-        }
-        removeFromAttributeArraysSelection(selection, type, id) {
+        };
+        DynamicGraph.prototype.removeFromAttributeArraysSelection = function (selection, type, id) {
             var arr = this.attributeArrays[type].selections[id];
             for (var i = 0; i < arr.length; i++) {
                 if (arr[i] == selection)
                     this.attributeArrays[type].selections[id].splice(i, 1);
             }
-        }
-        addElementToSelection(selection, e) {
+        };
+        DynamicGraph.prototype.addElementToSelection = function (selection, e) {
             this.addToSelectionByTypeAndId(selection, e.type, e.id());
-        }
-        addToSelectionByTypeAndId(selection, type, id) {
+        };
+        DynamicGraph.prototype.addToSelectionByTypeAndId = function (selection, type, id) {
             if (type != selection.acceptedType) {
                 console.log('attempting to put object of the wrong type into a selection');
                 return;
@@ -20113,11 +20208,11 @@ var networkcube;
                     this.defaultLinkSelection.elementIds.splice(i, 1);
                 }
             }
-        }
-        removeElementFromSelection(selection, e) {
+        };
+        DynamicGraph.prototype.removeElementFromSelection = function (selection, e) {
             this.removeFromSelectionByTypeAndId(selection, e.type, e.id());
-        }
-        removeFromSelectionByTypeAndId(selection, type, id) {
+        };
+        DynamicGraph.prototype.removeFromSelectionByTypeAndId = function (selection, type, id) {
             var i = selection.elementIds.indexOf(id);
             if (i == -1)
                 return;
@@ -20133,58 +20228,58 @@ var networkcube;
                     this.addToAttributeArraysSelection(this.defaultLinkSelection, type, id);
                 }
             }
-        }
-        getSelectionsByTypeAndId(type, id) {
+        };
+        DynamicGraph.prototype.getSelectionsByTypeAndId = function (type, id) {
             return this.attributeArrays[type].selections[id];
-        }
-        filterSelection(selectionId, filter) {
+        };
+        DynamicGraph.prototype.filterSelection = function (selectionId, filter) {
             this.getSelection(selectionId).filter = filter;
-        }
-        isFiltered(id, type) {
+        };
+        DynamicGraph.prototype.isFiltered = function (id, type) {
             return this.attributeArrays[type + 's'].filter;
-        }
-        isHighlighted(id, type) {
+        };
+        DynamicGraph.prototype.isHighlighted = function (id, type) {
             return this.highlightArrays[type + 'Ids'].indexOf(id) > -1;
-        }
-        getHighlightedIds(type) {
+        };
+        DynamicGraph.prototype.getHighlightedIds = function (type) {
             return this.highlightArrays[type + 'Ids'];
-        }
-        setCurrentSelection(id) {
+        };
+        DynamicGraph.prototype.setCurrentSelection = function (id) {
             console.log('[DynamicGraph] setCurrentSelectionId ', id);
             this.currentSelection_id = id;
-        }
-        getCurrentSelection() {
+        };
+        DynamicGraph.prototype.getCurrentSelection = function () {
             return this.getSelection(this.currentSelection_id);
-        }
-        addSelection(id, color, acceptedType, priority) {
+        };
+        DynamicGraph.prototype.addSelection = function (id, color, acceptedType, priority) {
             var s = this.createSelection(acceptedType);
             s.id = id;
             s.color = color;
             s.priority = priority;
-        }
-        createSelection(type) {
+        };
+        DynamicGraph.prototype.createSelection = function (type) {
             var s = new Selection(this.selections.length, type);
             s.color = this.BOOKMARK_COLORS(this.selectionColor_pointer % 10);
             this.selectionColor_pointer++;
             this.selections.push(s);
             return s;
-        }
-        deleteSelection(selectionId) {
+        };
+        DynamicGraph.prototype.deleteSelection = function (selectionId) {
             var s = this.getSelection(selectionId);
             var idCompound = new networkcube.IDCompound();
             idCompound[s.acceptedType + 'Ids'] = s.elementIds.slice(0);
             console.log('Delete selection->remove elemeents', s.elementIds.slice(0));
             this.selection('remove', idCompound, s.id);
             this.selections.splice(this.selections.indexOf(s), 1);
-        }
-        setSelectionColor(id, color) {
+        };
+        DynamicGraph.prototype.setSelectionColor = function (id, color) {
             var s = this.getSelection(id);
             if (!s) {
                 return;
             }
             s.color = color;
-        }
-        getSelections(type) {
+        };
+        DynamicGraph.prototype.getSelections = function (type) {
             var selections = [];
             if (type) {
                 for (var i = 0; i < this.selections.length; i++) {
@@ -20196,18 +20291,18 @@ var networkcube;
             else {
                 return this.selections;
             }
-        }
-        getSelection(id) {
+        };
+        DynamicGraph.prototype.getSelection = function (id) {
             for (var i = 0; i < this.selections.length; i++) {
                 if (id == this.selections[i].id)
                     return this.selections[i];
             }
             console.error('[DynamicGraph] No selection with id ', id, 'found!');
-        }
-        clearSelections() {
+        };
+        DynamicGraph.prototype.clearSelections = function () {
             this.selections = [];
-        }
-        getTimeIdForUnixTime(unixTime) {
+        };
+        DynamicGraph.prototype.getTimeIdForUnixTime = function (unixTime) {
             var timeId;
             for (timeId = 0; timeId < this.timeArrays.length; timeId++) {
                 if (unixTime == this.timeArrays.unixTime[timeId]) {
@@ -20217,8 +20312,8 @@ var networkcube;
             }
             console.error('Time object for unix time', unixTime, 'not found!');
             return undefined;
-        }
-        addNodeOrdering(name, order) {
+        };
+        DynamicGraph.prototype.addNodeOrdering = function (name, order) {
             for (var i = 0; i < this.nodeOrders.length; i++) {
                 if (this.nodeOrders[i].name == name) {
                     console.error('Ordering', name, 'already exists');
@@ -20227,8 +20322,8 @@ var networkcube;
             }
             var o = new Ordering(name, order);
             this.nodeOrders.push(o);
-        }
-        setNodeOrdering(name, order) {
+        };
+        DynamicGraph.prototype.setNodeOrdering = function (name, order) {
             for (var i = 0; i < this.nodeOrders.length; i++) {
                 if (this.nodeOrders[i].name == name) {
                     this.nodeOrders[i].order = order;
@@ -20236,15 +20331,15 @@ var networkcube;
                 }
             }
             console.error('Ordering', name, 'does not exist');
-        }
-        removeNodeOrdering(name, order) {
+        };
+        DynamicGraph.prototype.removeNodeOrdering = function (name, order) {
             for (var i = 0; i < this.nodeOrders.length; i++) {
                 if (this.nodeOrders[i].name == name) {
                     this.nodeOrders.splice(i, 1);
                 }
             }
-        }
-        getNodeOrder(name) {
+        };
+        DynamicGraph.prototype.getNodeOrder = function (name) {
             for (var i = 0; i < this.nodeOrders.length; i++) {
                 if (this.nodeOrders[i].name == name) {
                     return this.nodeOrders[i];
@@ -20252,31 +20347,31 @@ var networkcube;
             }
             console.error('Ordering', name, 'not found!');
             return;
-        }
-        nodes() {
+        };
+        DynamicGraph.prototype.nodes = function () {
             return new networkcube.NodeQuery(this.nodeArrays.id, this);
-        }
-        links() {
+        };
+        DynamicGraph.prototype.links = function () {
             return new networkcube.LinkQuery(this.linkArrays.id, this);
-        }
-        times() {
+        };
+        DynamicGraph.prototype.times = function () {
             return new networkcube.TimeQuery(this.timeArrays.id, this);
-        }
-        locations() {
+        };
+        DynamicGraph.prototype.locations = function () {
             return new networkcube.LocationQuery(this.locationArrays.id, this);
-        }
-        nodePairs() {
+        };
+        DynamicGraph.prototype.nodePairs = function () {
             return new networkcube.NodePairQuery(this.nodePairArrays.id, this);
-        }
-        linksBetween(n1, n2) {
+        };
+        DynamicGraph.prototype.linksBetween = function (n1, n2) {
             var nodePairId = this.matrix[n1.id()][n2.id()];
             if (nodePairId == undefined)
                 nodePairId = this.matrix[n2.id()][n1.id()];
             if (nodePairId == undefined)
                 return new networkcube.LinkQuery([], this);
             return new networkcube.LinkQuery(this.nodePair(nodePairId).links().toArray(), this);
-        }
-        get(type, id) {
+        };
+        DynamicGraph.prototype.get = function (type, id) {
             if (type.indexOf('nodePair') > -1)
                 return this.nodePair(id);
             if (type.indexOf('node') > -1)
@@ -20287,8 +20382,8 @@ var networkcube;
                 return this.time(id);
             if (type.indexOf('locations') > -1)
                 return this.location(id);
-        }
-        getAll(type) {
+        };
+        DynamicGraph.prototype.getAll = function (type) {
             if (type == 'nodes')
                 return this.nodes();
             if (type == 'links')
@@ -20299,43 +20394,44 @@ var networkcube;
                 return this.nodePairs();
             if (type == 'locations')
                 return this.locations();
-        }
-        node(id) {
+        };
+        DynamicGraph.prototype.node = function (id) {
             for (var i = 0; i < this._nodes.length; i++) {
                 if (this._nodes[i].id() == id)
                     return this._nodes[i];
             }
-        }
-        link(id) {
+        };
+        DynamicGraph.prototype.link = function (id) {
             for (var i = 0; i < this._links.length; i++) {
                 if (this._links[i].id() == id)
                     return this._links[i];
             }
-        }
-        time(id) {
+        };
+        DynamicGraph.prototype.time = function (id) {
             for (var i = 0; i < this._times.length; i++) {
                 if (this._times[i].id() == id)
                     return this._times[i];
             }
-        }
-        location(id) {
+        };
+        DynamicGraph.prototype.location = function (id) {
             for (var i = 0; i < this._locations.length; i++) {
                 if (this._locations[i].id() == id)
                     return this._locations[i];
             }
-        }
-        nodePair(id) {
+        };
+        DynamicGraph.prototype.nodePair = function (id) {
             for (var i = 0; i < this._nodePairs.length; i++) {
                 if (this._nodePairs[i].id() == id)
                     return this._nodePairs[i];
             }
-        }
-        getMinGranularity() { return this.gran_min; }
-        getMaxGranularity() { return this.gran_max; }
-    }
+        };
+        DynamicGraph.prototype.getMinGranularity = function () { return this.gran_min; };
+        DynamicGraph.prototype.getMaxGranularity = function () { return this.gran_max; };
+        return DynamicGraph;
+    }());
     networkcube.DynamicGraph = DynamicGraph;
-    class Selection {
-        constructor(id, acceptedType) {
+    var Selection = (function () {
+        function Selection(id, acceptedType) {
             this.showColor = true;
             this.filter = false;
             this.priority = 0;
@@ -20345,142 +20441,172 @@ var networkcube;
             this.acceptedType = acceptedType;
             this.priority = id;
         }
-        acceptsType(type) {
+        Selection.prototype.acceptsType = function (type) {
             return this.acceptedType == type;
-        }
-    }
+        };
+        return Selection;
+    }());
     networkcube.Selection = Selection;
-    class AttributeArray {
-        constructor() {
+    var AttributeArray = (function () {
+        function AttributeArray() {
             this.id = [];
         }
-        get length() {
-            return this.id.length;
-        }
-    }
+        Object.defineProperty(AttributeArray.prototype, "length", {
+            get: function () {
+                return this.id.length;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return AttributeArray;
+    }());
     networkcube.AttributeArray = AttributeArray;
-    class NodeArray extends AttributeArray {
-        constructor() {
-            super(...arguments);
-            this.id = [];
-            this.label = [];
-            this.outLinks = [];
-            this.inLinks = [];
-            this.links = [];
-            this.outNeighbors = [];
-            this.inNeighbors = [];
-            this.neighbors = [];
-            this.selections = [];
-            this.attributes = [];
-            this.locations = [];
-            this.filter = [];
-            this.nodeType = [];
+    var NodeArray = (function (_super) {
+        __extends(NodeArray, _super);
+        function NodeArray() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.id = [];
+            _this.label = [];
+            _this.outLinks = [];
+            _this.inLinks = [];
+            _this.links = [];
+            _this.outNeighbors = [];
+            _this.inNeighbors = [];
+            _this.neighbors = [];
+            _this.selections = [];
+            _this.attributes = [];
+            _this.locations = [];
+            _this.filter = [];
+            _this.nodeType = [];
+            return _this;
         }
-    }
+        return NodeArray;
+    }(AttributeArray));
     networkcube.NodeArray = NodeArray;
-    class LinkArray extends AttributeArray {
-        constructor() {
-            super(...arguments);
-            this.source = [];
-            this.target = [];
-            this.linkType = [];
-            this.directed = [];
-            this.nodePair = [];
-            this.presence = [];
-            this.weights = [];
-            this.selections = [];
-            this.filter = [];
-            this.attributes = new Object;
+    var LinkArray = (function (_super) {
+        __extends(LinkArray, _super);
+        function LinkArray() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.source = [];
+            _this.target = [];
+            _this.linkType = [];
+            _this.directed = [];
+            _this.nodePair = [];
+            _this.presence = [];
+            _this.weights = [];
+            _this.selections = [];
+            _this.filter = [];
+            _this.attributes = new Object;
+            return _this;
         }
-    }
+        return LinkArray;
+    }(AttributeArray));
     networkcube.LinkArray = LinkArray;
-    class NodePairArray extends AttributeArray {
-        constructor() {
-            super(...arguments);
-            this.source = [];
-            this.target = [];
-            this.links = [];
-            this.selections = [];
-            this.filter = [];
+    var NodePairArray = (function (_super) {
+        __extends(NodePairArray, _super);
+        function NodePairArray() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.source = [];
+            _this.target = [];
+            _this.links = [];
+            _this.selections = [];
+            _this.filter = [];
+            return _this;
         }
-    }
+        return NodePairArray;
+    }(AttributeArray));
     networkcube.NodePairArray = NodePairArray;
-    class TimeArray extends AttributeArray {
-        constructor() {
-            super(...arguments);
-            this.id = [];
-            this.momentTime = [];
-            this.label = [];
-            this.unixTime = [];
-            this.selections = [];
-            this.filter = [];
-            this.links = [];
+    var TimeArray = (function (_super) {
+        __extends(TimeArray, _super);
+        function TimeArray() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.id = [];
+            _this.momentTime = [];
+            _this.label = [];
+            _this.unixTime = [];
+            _this.selections = [];
+            _this.filter = [];
+            _this.links = [];
+            return _this;
         }
-    }
+        return TimeArray;
+    }(AttributeArray));
     networkcube.TimeArray = TimeArray;
-    class LinkTypeArray extends AttributeArray {
-        constructor() {
-            super(...arguments);
-            this.name = [];
-            this.count = [];
-            this.color = [];
-            this.filter = [];
+    var LinkTypeArray = (function (_super) {
+        __extends(LinkTypeArray, _super);
+        function LinkTypeArray() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.name = [];
+            _this.count = [];
+            _this.color = [];
+            _this.filter = [];
+            return _this;
         }
-    }
+        return LinkTypeArray;
+    }(AttributeArray));
     networkcube.LinkTypeArray = LinkTypeArray;
-    class NodeTypeArray extends AttributeArray {
-        constructor() {
-            super(...arguments);
-            this.name = [];
-            this.count = [];
-            this.color = [];
-            this.filter = [];
+    var NodeTypeArray = (function (_super) {
+        __extends(NodeTypeArray, _super);
+        function NodeTypeArray() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.name = [];
+            _this.count = [];
+            _this.color = [];
+            _this.filter = [];
+            return _this;
         }
-    }
+        return NodeTypeArray;
+    }(AttributeArray));
     networkcube.NodeTypeArray = NodeTypeArray;
-    class LocationArray extends AttributeArray {
-        constructor() {
-            super(...arguments);
-            this.id = [];
-            this.label = [];
-            this.longitude = [];
-            this.latitude = [];
-            this.x = [];
-            this.y = [];
-            this.z = [];
-            this.radius = [];
+    var LocationArray = (function (_super) {
+        __extends(LocationArray, _super);
+        function LocationArray() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.id = [];
+            _this.label = [];
+            _this.longitude = [];
+            _this.latitude = [];
+            _this.x = [];
+            _this.y = [];
+            _this.z = [];
+            _this.radius = [];
+            return _this;
         }
-    }
+        return LocationArray;
+    }(AttributeArray));
     networkcube.LocationArray = LocationArray;
-    class LinkType {
-        constructor(id, name, color) {
+    var LinkType = (function () {
+        function LinkType(id, name, color) {
             this.id = id;
             this.name = name;
             this.color = color;
         }
-    }
+        return LinkType;
+    }());
     networkcube.LinkType = LinkType;
-    class NodeType {
-        constructor(id, name, color) {
+    var NodeType = (function () {
+        function NodeType(id, name, color) {
             this.id = id;
             this.name = name;
             this.color = color;
         }
-    }
+        return NodeType;
+    }());
     networkcube.NodeType = NodeType;
-    class Ordering {
-        constructor(name, order) {
+    var Ordering = (function () {
+        function Ordering(name, order) {
             this.order = [];
             this.name = name;
             this.order = order;
         }
-    }
+        return Ordering;
+    }());
     networkcube.Ordering = Ordering;
 })(networkcube || (networkcube = {}));
 var networkcube;
 (function (networkcube) {
-    class DataManager {
-        constructor(options) {
+    var DataManager = (function () {
+        function DataManager(options) {
             this.keepOnlyOneSession = false;
             this.sessionDataPrefix = "ncubesession";
             this.SEP = "_";
@@ -20492,10 +20618,10 @@ var networkcube;
                 this.keepOnlyOneSession = false;
             }
         }
-        setOptions(options) {
+        DataManager.prototype.setOptions = function (options) {
             this.keepOnlyOneSession = options.keepOnlyOneSession;
-        }
-        clearSessionData(session) {
+        };
+        DataManager.prototype.clearSessionData = function (session) {
             var searchPrefix = this.sessionDataPrefix + this.SEP + session;
             var keysToClear = [];
             console.log('clearSessionData');
@@ -20511,11 +20637,11 @@ var networkcube;
                 console.log('remove from storage', key);
                 localStorage.removeItem(key);
             }
-        }
-        clearAllSessionData() {
+        };
+        DataManager.prototype.clearAllSessionData = function () {
             this.clearSessionData('');
-        }
-        isSessionCached(session, dataSetName) {
+        };
+        DataManager.prototype.isSessionCached = function (session, dataSetName) {
             var prefix = this.sessionDataPrefix + this.SEP + session + this.SEP + dataSetName;
             var firstSessionKey = null;
             for (var i = 0; i < localStorage.length; i++) {
@@ -20525,8 +20651,8 @@ var networkcube;
                 }
             }
             return false;
-        }
-        importData(session, data) {
+        };
+        DataManager.prototype.importData = function (session, data) {
             this.session = session;
             console.log('import data set', data.name, data);
             if (!data.nodeTable && !data.linkTable) {
@@ -20574,8 +20700,8 @@ var networkcube;
             else {
                 console.log('data is not well-schematized, so not caching dynamicGraph');
             }
-        }
-        saveToStorage(dataName, valueName, value, replacer) {
+        };
+        DataManager.prototype.saveToStorage = function (dataName, valueName, value, replacer) {
             if (value == undefined) {
                 console.log('attempting to save undefined value. aborting', dataName, valueName);
                 return;
@@ -20590,8 +20716,8 @@ var networkcube;
                 + this.session
                 + this.SEP + dataName
                 + this.SEP + valueName] = stringToSave;
-        }
-        getFromStorage(dataName, valueName, reviver, state) {
+        };
+        DataManager.prototype.getFromStorage = function (dataName, valueName, reviver, state) {
             console.assert(this.session && this.session != '');
             var statefulReviver;
             if (reviver)
@@ -20615,22 +20741,22 @@ var networkcube;
             else {
                 return undefined;
             }
-        }
-        removeFromStorage(dataName, valueName) {
+        };
+        DataManager.prototype.removeFromStorage = function (dataName, valueName) {
             localStorage.removeItem(this.sessionDataPrefix
                 + this.SEP + this.session
                 + this.SEP + dataName
                 + this.SEP + valueName);
-        }
-        getGraph(session, dataname) {
+        };
+        DataManager.prototype.getGraph = function (session, dataname) {
             this.session = session;
             if (!this.dynamicGraph || this.dynamicGraph.name != dataname) {
                 this.dynamicGraph = new networkcube.DynamicGraph();
                 this.dynamicGraph.loadDynamicGraph(this, dataname);
             }
             return this.dynamicGraph;
-        }
-        isSchemaWellDefined(data) {
+        };
+        DataManager.prototype.isSchemaWellDefined = function (data) {
             console.log('isSchemaWellDefined');
             if (data.locationTable && !networkcube.isValidIndex(data.locationSchema.id))
                 return false;
@@ -20642,8 +20768,9 @@ var networkcube;
                     && networkcube.isValidIndex(data.linkSchema.target)))
                 return false;
             return true;
-        }
-    }
+        };
+        return DataManager;
+    }());
     networkcube.DataManager = DataManager;
     function getDefaultNodeSchema() {
         return new NodeSchema(0);
@@ -20657,8 +20784,8 @@ var networkcube;
         return new LocationSchema(0, 1, 2, 3, 4, 5, 6, 7, 8);
     }
     networkcube.getDefaultLocationSchema = getDefaultLocationSchema;
-    class DataSet {
-        constructor(params) {
+    var DataSet = (function () {
+        function DataSet(params) {
             this.locationTable = [];
             this.selections = [];
             this.name = params.name;
@@ -20680,61 +20807,72 @@ var networkcube;
                 this.locationSchema = params.locationSchema;
             console.log('[n3] data set created', this);
         }
-    }
+        return DataSet;
+    }());
     networkcube.DataSet = DataSet;
-    class TableSchema {
-        constructor(name) {
+    var TableSchema = (function () {
+        function TableSchema(name) {
             this.name = name;
         }
-    }
+        return TableSchema;
+    }());
     networkcube.TableSchema = TableSchema;
-    class NodeSchema extends TableSchema {
-        constructor(id) {
-            super('nodeSchema');
-            this.id = id;
+    var NodeSchema = (function (_super) {
+        __extends(NodeSchema, _super);
+        function NodeSchema(id) {
+            var _this = _super.call(this, 'nodeSchema') || this;
+            _this.id = id;
+            return _this;
         }
-    }
+        return NodeSchema;
+    }(TableSchema));
     networkcube.NodeSchema = NodeSchema;
-    class LinkSchema extends TableSchema {
-        constructor(id, source, target) {
-            super('linkSchema');
-            this.linkType = -1;
-            this.directed = -1;
-            this.time = -1;
-            this.source = source;
-            this.target = target;
-            this.id = id;
+    var LinkSchema = (function (_super) {
+        __extends(LinkSchema, _super);
+        function LinkSchema(id, source, target) {
+            var _this = _super.call(this, 'linkSchema') || this;
+            _this.linkType = -1;
+            _this.directed = -1;
+            _this.time = -1;
+            _this.source = source;
+            _this.target = target;
+            _this.id = id;
+            return _this;
         }
-    }
+        return LinkSchema;
+    }(TableSchema));
     networkcube.LinkSchema = LinkSchema;
-    class LocationSchema extends TableSchema {
-        constructor(id, label, geoname, longitude, latitude, x, y, z, radius) {
-            super('locationSchema');
-            this.geoname = -1;
-            this.longitude = -1;
-            this.latitude = -1;
-            this.x = -1;
-            this.y = -1;
-            this.z = -1;
-            this.radius = -1;
-            this.id = id;
-            this.label = label;
+    var LocationSchema = (function (_super) {
+        __extends(LocationSchema, _super);
+        function LocationSchema(id, label, geoname, longitude, latitude, x, y, z, radius) {
+            var _this = _super.call(this, 'locationSchema') || this;
+            _this.geoname = -1;
+            _this.longitude = -1;
+            _this.latitude = -1;
+            _this.x = -1;
+            _this.y = -1;
+            _this.z = -1;
+            _this.radius = -1;
+            _this.id = id;
+            _this.label = label;
             if (networkcube.isValidIndex(geoname))
-                this.geoname = geoname;
+                _this.geoname = geoname;
             if (networkcube.isValidIndex(longitude))
-                this.longitude = longitude;
+                _this.longitude = longitude;
             if (networkcube.isValidIndex(latitude))
-                this.latitude = latitude;
+                _this.latitude = latitude;
             if (networkcube.isValidIndex(x))
-                this.x = x;
+                _this.x = x;
             if (networkcube.isValidIndex(y))
-                this.y = y;
+                _this.y = y;
             if (networkcube.isValidIndex(z))
-                this.z = z;
+                _this.z = z;
             if (networkcube.isValidIndex(radius))
-                this.radius = radius;
+                _this.radius = radius;
+            return _this;
         }
-    }
+        return LocationSchema;
+    }(TableSchema));
     networkcube.LocationSchema = LocationSchema;
 })(networkcube || (networkcube = {}));
 var networkcube;
@@ -21017,7 +21155,7 @@ var networkcube;
 var networkcube;
 (function (networkcube) {
     function loadDyson(url, callback) {
-        d3.json(url, (data) => {
+        d3.json(url, function (data) {
             var nodeTable = [];
             var nodeSchema = { id: 0, label: 1 };
             var nodes = data.nodes;
@@ -21058,7 +21196,7 @@ var networkcube;
             console.error('[n3] Link Schema does not have -target- attribute. Import aborted.');
             return;
         }
-        $.get(url, (linkData) => {
+        $.get(url, function (linkData) {
             var linkData = Papa.parse(linkData, {}).data;
             var nodeTable = [];
             var names = [];
@@ -21136,7 +21274,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        d3.xml(url, "application/xml", (data) => {
+        d3.xml(url, "application/xml", function (data) {
             console.log('data:', data);
             var nodes = data.documentElement.getElementsByTagName("node");
             var nodeTable = [];
@@ -21178,7 +21316,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        d3.json(url, (data) => {
+        d3.json(url, function (data) {
             if (!data)
                 return;
             var links = data.links;
@@ -21302,7 +21440,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        d3.json(url, (data) => {
+        d3.json(url, function (data) {
             console.log('data:', data);
             if (!data)
                 return;
@@ -21359,7 +21497,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        d3.json(url, (data) => {
+        d3.json(url, function (data) {
             var nodeTable = [];
             var linkTable = [];
             var nodeSchema = new networkcube.NodeSchema(0);
@@ -21404,7 +21542,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        $.get(url, (data) => {
+        $.get(url, function (data) {
             var lines = data.split('\n');
             var nodeTable = [];
             var nodeSchema = { id: 0, label: 1 };
@@ -21463,7 +21601,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        $.get(url, (data) => {
+        $.get(url, function (data) {
             var lines = data.split('\n');
             var nodeTable = [];
             var nodeSchema = { id: 0, label: 1 };
@@ -21533,7 +21671,7 @@ var networkcube;
         var linkSchema = { id: 0, source: 1, target: 2 };
         var line;
         var s, t;
-        $.get(url, (data) => {
+        $.get(url, function (data) {
             data = data.split('\n');
             var line;
             var currPersonId;
@@ -21605,7 +21743,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        $.get(url, (data) => {
+        $.get(url, function (data) {
             var lines = data.split('\n');
             var nodeTable = [];
             var nodeSchema = { id: 0, label: 1 };
@@ -21677,7 +21815,7 @@ var networkcube;
         var url = url;
         var dataset;
         var callBack = callBack;
-        $.get(url, (data) => {
+        $.get(url, function (data) {
             var lines = data.split('\n');
             var nodeTable = [];
             var nodeSchema = { id: 0, label: 1 };
@@ -21754,27 +21892,34 @@ var networkcube;
             term = terms[i].trim();
             console.log('search term', term);
             if (!type || type == 'node')
-                result.nodeIds = result.nodeIds.concat(dgraph.nodes().filter((e) => e.label().toLowerCase().indexOf(term) > -1
-                    || e.nodeType().toLowerCase().indexOf(term) > -1).ids());
+                result.nodeIds = result.nodeIds.concat(dgraph.nodes().filter(function (e) {
+                    return e.label().toLowerCase().indexOf(term) > -1
+                        || e.nodeType().toLowerCase().indexOf(term) > -1;
+                }).ids());
             if (!type || type == 'link')
-                result.linkIds = result.linkIds.concat(dgraph.links().filter((e) => e.source.label().toLowerCase().indexOf(term) > -1
-                    || e.target.label().toLowerCase().indexOf(term) > -1
-                    || e.linkType().indexOf(term) > -1).ids());
+                result.linkIds = result.linkIds.concat(dgraph.links().filter(function (e) {
+                    return e.source.label().toLowerCase().indexOf(term) > -1
+                        || e.target.label().toLowerCase().indexOf(term) > -1
+                        || e.linkType().indexOf(term) > -1;
+                }).ids());
             if (!type || type == 'locations')
-                result.locationIds = result.locationIds.concat(dgraph.locations().filter((e) => e.label().toLowerCase().indexOf(term) > -1).ids());
+                result.locationIds = result.locationIds.concat(dgraph.locations().filter(function (e) {
+                    return e.label().toLowerCase().indexOf(term) > -1;
+                }).ids());
         }
         return result;
     }
     networkcube.searchForTerm = searchForTerm;
-    class StringContainsFilter {
-        constructor(pattern) {
+    var StringContainsFilter = (function () {
+        function StringContainsFilter(pattern) {
             this.pattern = pattern;
         }
-        test(word) {
+        StringContainsFilter.prototype.test = function (word) {
             console.log('contains:', word, this.pattern);
             return word.indexOf(this.pattern) > -1;
-        }
-    }
+        };
+        return StringContainsFilter;
+    }());
 })(networkcube || (networkcube = {}));
 var networkcube;
 (function (networkcube) {
@@ -21804,8 +21949,11 @@ var networkcube;
         networkcube.MESSAGE_SELECTION_COLORING
     ];
     var messageHandlers = [];
-    class MessageHandler {
-    }
+    var MessageHandler = (function () {
+        function MessageHandler() {
+        }
+        return MessageHandler;
+    }());
     var messageHandler = new MessageHandler();
     var previousMessageId = -1;
     function addEventListener(messageType, handler) {
@@ -21820,12 +21968,13 @@ var networkcube;
     }
     networkcube.setDefaultEventListener = setDefaultEventListener;
     window.addEventListener('storage', receiveMessage, false);
-    class Message {
-        constructor(type) {
+    var Message = (function () {
+        function Message(type) {
             this.id = Math.random();
             this.type = type;
         }
-    }
+        return Message;
+    }());
     networkcube.Message = Message;
     function sendMessage(type, body) {
         var m = new Message(type);
@@ -21862,13 +22011,16 @@ var networkcube;
         }
     }
     networkcube.highlight = highlight;
-    class HighlightMessage extends Message {
-        constructor(action, idCompound) {
-            super(networkcube.MESSAGE_HIGHLIGHT);
-            this.action = action;
-            this.idCompound = idCompound;
+    var HighlightMessage = (function (_super) {
+        __extends(HighlightMessage, _super);
+        function HighlightMessage(action, idCompound) {
+            var _this = _super.call(this, networkcube.MESSAGE_HIGHLIGHT) || this;
+            _this.action = action;
+            _this.idCompound = idCompound;
+            return _this;
         }
-    }
+        return HighlightMessage;
+    }(Message));
     networkcube.HighlightMessage = HighlightMessage;
     function selection(action, compound, selectionId) {
         var g = networkcube.getDynamicGraph();
@@ -21881,14 +22033,17 @@ var networkcube;
         distributeMessage(m);
     }
     networkcube.selection = selection;
-    class SelectionMessage extends Message {
-        constructor(action, idCompound, selectionId) {
-            super(networkcube.MESSAGE_SELECTION);
-            this.action = action;
-            this.idCompound = idCompound;
-            this.selectionId = selectionId;
+    var SelectionMessage = (function (_super) {
+        __extends(SelectionMessage, _super);
+        function SelectionMessage(action, idCompound, selectionId) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION) || this;
+            _this.action = action;
+            _this.idCompound = idCompound;
+            _this.selectionId = selectionId;
+            return _this;
         }
-    }
+        return SelectionMessage;
+    }(Message));
     networkcube.SelectionMessage = SelectionMessage;
     function timeRange(startUnix, endUnix, single, propagate) {
         var m = new TimeRangeMessage(startUnix, endUnix);
@@ -21901,13 +22056,16 @@ var networkcube;
             processMessage(m);
     }
     networkcube.timeRange = timeRange;
-    class TimeRangeMessage extends Message {
-        constructor(start, end) {
-            super(networkcube.MESSAGE_TIME_RANGE);
-            this.startUnix = start;
-            this.endUnix = end;
+    var TimeRangeMessage = (function (_super) {
+        __extends(TimeRangeMessage, _super);
+        function TimeRangeMessage(start, end) {
+            var _this = _super.call(this, networkcube.MESSAGE_TIME_RANGE) || this;
+            _this.startUnix = start;
+            _this.endUnix = end;
+            return _this;
         }
-    }
+        return TimeRangeMessage;
+    }(Message));
     networkcube.TimeRangeMessage = TimeRangeMessage;
     function createSelection(type, name) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SELECTION_CREATE);
@@ -21919,12 +22077,15 @@ var networkcube;
         return b;
     }
     networkcube.createSelection = createSelection;
-    class CreateSelectionMessage extends Message {
-        constructor(b) {
-            super(networkcube.MESSAGE_SELECTION_CREATE);
-            this.selection = b;
+    var CreateSelectionMessage = (function (_super) {
+        __extends(CreateSelectionMessage, _super);
+        function CreateSelectionMessage(b) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION_CREATE) || this;
+            _this.selection = b;
+            return _this;
         }
-    }
+        return CreateSelectionMessage;
+    }(Message));
     networkcube.CreateSelectionMessage = CreateSelectionMessage;
     function setCurrentSelection(b) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SELECTION_SET_CURRENT);
@@ -21933,12 +22094,15 @@ var networkcube;
         distributeMessage(m);
     }
     networkcube.setCurrentSelection = setCurrentSelection;
-    class SetCurrentSelectionIdMessage extends Message {
-        constructor(b) {
-            super(networkcube.MESSAGE_SELECTION_SET_CURRENT);
-            this.selectionId = b.id;
+    var SetCurrentSelectionIdMessage = (function (_super) {
+        __extends(SetCurrentSelectionIdMessage, _super);
+        function SetCurrentSelectionIdMessage(b) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION_SET_CURRENT) || this;
+            _this.selectionId = b.id;
+            return _this;
         }
-    }
+        return SetCurrentSelectionIdMessage;
+    }(Message));
     networkcube.SetCurrentSelectionIdMessage = SetCurrentSelectionIdMessage;
     function showSelectionColor(selection, showColor) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SELECTION_SET_COLORING_VISIBILITY);
@@ -21946,13 +22110,16 @@ var networkcube;
         distributeMessage(m);
     }
     networkcube.showSelectionColor = showSelectionColor;
-    class ShowSelectionColorMessage extends Message {
-        constructor(selection, showColor) {
-            super(networkcube.MESSAGE_SELECTION_SET_COLORING_VISIBILITY);
-            this.selectionId = selection.id;
-            this.showColor = showColor;
+    var ShowSelectionColorMessage = (function (_super) {
+        __extends(ShowSelectionColorMessage, _super);
+        function ShowSelectionColorMessage(selection, showColor) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION_SET_COLORING_VISIBILITY) || this;
+            _this.selectionId = selection.id;
+            _this.showColor = showColor;
+            return _this;
         }
-    }
+        return ShowSelectionColorMessage;
+    }(Message));
     networkcube.ShowSelectionColorMessage = ShowSelectionColorMessage;
     function filterSelection(selection, filter) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SELECTION_FILTER);
@@ -21960,13 +22127,16 @@ var networkcube;
         distributeMessage(m);
     }
     networkcube.filterSelection = filterSelection;
-    class FilterSelectionMessage extends Message {
-        constructor(selection, filter) {
-            super(networkcube.MESSAGE_SELECTION_FILTER);
-            this.selectionId = selection.id;
-            this.filter = filter;
+    var FilterSelectionMessage = (function (_super) {
+        __extends(FilterSelectionMessage, _super);
+        function FilterSelectionMessage(selection, filter) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION_FILTER) || this;
+            _this.selectionId = selection.id;
+            _this.filter = filter;
+            return _this;
         }
-    }
+        return FilterSelectionMessage;
+    }(Message));
     networkcube.FilterSelectionMessage = FilterSelectionMessage;
     function swapPriority(s1, s2) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SELECTION_PRIORITY);
@@ -21974,15 +22144,18 @@ var networkcube;
         distributeMessage(m);
     }
     networkcube.swapPriority = swapPriority;
-    class SelectionPriorityMessage extends Message {
-        constructor(s1, s2, p1, p2) {
-            super(networkcube.MESSAGE_SELECTION_PRIORITY);
-            this.selectionId1 = s1.id;
-            this.selectionId2 = s2.id;
-            this.priority1 = p1;
-            this.priority2 = p2;
+    var SelectionPriorityMessage = (function (_super) {
+        __extends(SelectionPriorityMessage, _super);
+        function SelectionPriorityMessage(s1, s2, p1, p2) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION_PRIORITY) || this;
+            _this.selectionId1 = s1.id;
+            _this.selectionId2 = s2.id;
+            _this.priority1 = p1;
+            _this.priority2 = p2;
+            return _this;
         }
-    }
+        return SelectionPriorityMessage;
+    }(Message));
     networkcube.SelectionPriorityMessage = SelectionPriorityMessage;
     function deleteSelection(selection) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SELECTION_DELETE);
@@ -21990,38 +22163,47 @@ var networkcube;
         distributeMessage(m);
     }
     networkcube.deleteSelection = deleteSelection;
-    class DeleteSelectionMessage extends Message {
-        constructor(selection) {
-            super(networkcube.MESSAGE_SELECTION_DELETE);
-            this.selectionId = selection.id;
+    var DeleteSelectionMessage = (function (_super) {
+        __extends(DeleteSelectionMessage, _super);
+        function DeleteSelectionMessage(selection) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION_DELETE) || this;
+            _this.selectionId = selection.id;
+            return _this;
         }
-    }
+        return DeleteSelectionMessage;
+    }(Message));
     networkcube.DeleteSelectionMessage = DeleteSelectionMessage;
     function setSelectionColor(s, color) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SELECTION_COLORING);
         distributeMessage(new SelectionColorMessage(s, color));
     }
     networkcube.setSelectionColor = setSelectionColor;
-    class SelectionColorMessage extends Message {
-        constructor(selection, color) {
-            super(networkcube.MESSAGE_SELECTION_COLORING);
-            this.selectionId = selection.id;
-            this.color = color;
+    var SelectionColorMessage = (function (_super) {
+        __extends(SelectionColorMessage, _super);
+        function SelectionColorMessage(selection, color) {
+            var _this = _super.call(this, networkcube.MESSAGE_SELECTION_COLORING) || this;
+            _this.selectionId = selection.id;
+            _this.color = color;
+            return _this;
         }
-    }
+        return SelectionColorMessage;
+    }(Message));
     function search(term, type) {
         trace.event(null, 'toolFunctionUse', networkcube.MESSAGE_SEARCH_RESULT, term);
         var idCompound = networkcube.searchForTerm(term, networkcube.getDynamicGraph(), type);
         distributeMessage(new SearchResultMessage(term, idCompound));
     }
     networkcube.search = search;
-    class SearchResultMessage extends Message {
-        constructor(searchTerm, idCompound) {
-            super(networkcube.MESSAGE_SEARCH_RESULT);
-            this.idCompound = idCompound;
-            this.searchTerm = searchTerm;
+    var SearchResultMessage = (function (_super) {
+        __extends(SearchResultMessage, _super);
+        function SearchResultMessage(searchTerm, idCompound) {
+            var _this = _super.call(this, networkcube.MESSAGE_SEARCH_RESULT) || this;
+            _this.idCompound = idCompound;
+            _this.searchTerm = searchTerm;
+            return _this;
         }
-    }
+        return SearchResultMessage;
+    }(Message));
     networkcube.SearchResultMessage = SearchResultMessage;
     var MESSAGE_KEY = 'networkcube_message';
     localStorage[MESSAGE_KEY] = undefined;
@@ -22158,8 +22340,11 @@ var networkcube;
         return order;
     }
     networkcube.orderNodes = orderNodes;
-    class OrderingConfiguration {
-    }
+    var OrderingConfiguration = (function () {
+        function OrderingConfiguration() {
+        }
+        return OrderingConfiguration;
+    }());
     networkcube.OrderingConfiguration = OrderingConfiguration;
 })(networkcube || (networkcube = {}));
 var networkcube;
@@ -22301,7 +22486,7 @@ var networkcube;
         return '?session=' + session + '&datasetName=' + dataName;
     }
     networkcube.getURLString = getURLString;
-    let OrderType;
+    var OrderType;
     (function (OrderType) {
         OrderType[OrderType["Local"] = 0] = "Local";
         OrderType[OrderType["Global"] = 1] = "Global";
@@ -22437,7 +22622,9 @@ var glutils;
         }
     }
     glutils.updateBuffer = updateBuffer;
-    function createText(string, x, y, z, size, color, weight = 'normal', align = 'left') {
+    function createText(string, x, y, z, size, color, weight, align) {
+        if (weight === void 0) { weight = 'normal'; }
+        if (align === void 0) { align = 'left'; }
         var textGeom = new THREE.TextGeometry(string, {
             size: size,
             height: 1,
@@ -22465,24 +22652,24 @@ var glutils;
     }
     glutils.getMousePos = getMousePos;
     var txtCanvas = document.createElement("canvas");
-    class WebGL {
-        constructor(params) {
+    var WebGL = (function () {
+        function WebGL(params) {
             this.elementQueries = [];
             txtCanvas = document.createElement("canvas");
             txtCanvas.setAttribute('id', 'textCanvas');
         }
-        render() {
+        WebGL.prototype.render = function () {
             for (var i = 0; i < this.elementQueries.length; i++) {
                 if (this.elementQueries[i].updateAttributes || this.elementQueries[i].updateStyle) {
                     this.elementQueries[i].set();
                 }
             }
             this.renderer.render(this.scene, this.camera);
-        }
-        selectAll() {
+        };
+        WebGL.prototype.selectAll = function () {
             return glutils.selectAll();
-        }
-        enableZoom(b) {
+        };
+        WebGL.prototype.enableZoom = function (b) {
             if (b) {
                 window.addEventListener("mousewheel", mouseWheel, false);
                 function mouseWheel(event) {
@@ -22496,14 +22683,15 @@ var glutils;
             else {
                 window.addEventListener("mousewheel", mouseWheel, false);
             }
-        }
-        enablePanning(b) {
+        };
+        WebGL.prototype.enablePanning = function (b) {
             this.interactor.isPanEnabled = b;
-        }
-        enableHorizontalPanning(b) {
+        };
+        WebGL.prototype.enableHorizontalPanning = function (b) {
             this.interactor.isHorizontalPanEnabled = b;
-        }
-    }
+        };
+        return WebGL;
+    }());
     glutils.WebGL = WebGL;
     var webgl;
     function initWebGL(parentId, width, height, params) {
@@ -22540,8 +22728,8 @@ var glutils;
         return q;
     }
     glutils.selectAll = selectAll;
-    class WebGLElementQuery {
-        constructor() {
+    var WebGLElementQuery = (function () {
+        function WebGLElementQuery() {
             this.dataElements = [];
             this.visualElements = [];
             this.children = [];
@@ -22558,11 +22746,11 @@ var glutils;
             this.IS_SHADER = false;
             this.scene = webgl.scene;
         }
-        data(arr) {
+        WebGLElementQuery.prototype.data = function (arr) {
             this.dataElements = arr.slice(0);
             return this;
-        }
-        append(shape) {
+        };
+        WebGLElementQuery.prototype.append = function (shape) {
             var elements = [];
             switch (shape) {
                 case 'circle':
@@ -22595,21 +22783,25 @@ var glutils;
             this.shape = shape;
             this.visualElements = elements;
             return this;
-        }
-        push(e) {
+        };
+        WebGLElementQuery.prototype.push = function (e) {
             this.dataElements.push(e);
             return this;
-        }
-        getData(i) {
+        };
+        WebGLElementQuery.prototype.getData = function (i) {
             return this.dataElements[this.visualElements.indexOf(i)];
-        }
-        getVisual(i) {
+        };
+        WebGLElementQuery.prototype.getVisual = function (i) {
             return this.visualElements[this.dataElements.indexOf(i)];
-        }
-        get length() {
-            return this.dataElements.length;
-        }
-        filter(f) {
+        };
+        Object.defineProperty(WebGLElementQuery.prototype, "length", {
+            get: function () {
+                return this.dataElements.length;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        WebGLElementQuery.prototype.filter = function (f) {
             var arr = [];
             var visArr = [];
             for (var i = 0; i < this.dataElements.length; i++) {
@@ -22622,8 +22814,8 @@ var glutils;
                 .data(arr);
             q.visualElements = visArr;
             return q;
-        }
-        attr(name, v) {
+        };
+        WebGLElementQuery.prototype.attr = function (name, v) {
             var l = this.visualElements.length;
             if (this.IS_SHADER) {
                 for (var i = 0; i < this.dataElements.length; i++) {
@@ -22640,8 +22832,8 @@ var glutils;
             }
             this.updateAttributes = true;
             return this;
-        }
-        style(name, v) {
+        };
+        WebGLElementQuery.prototype.style = function (name, v) {
             var l = this.visualElements.length;
             if (this.IS_SHADER) {
                 name = name.replace('-', '');
@@ -22656,8 +22848,8 @@ var glutils;
             }
             this.updateStyle = true;
             return this;
-        }
-        set() {
+        };
+        WebGLElementQuery.prototype.set = function () {
             if (!this.IS_SHADER)
                 return this;
             var l = this.visualElements.length;
@@ -22679,8 +22871,8 @@ var glutils;
             this.updateAttributes = false;
             this.updateStyle = false;
             return this;
-        }
-        text(v) {
+        };
+        WebGLElementQuery.prototype.text = function (v) {
             var l = this.visualElements.length;
             for (var i = 0; i < l; i++) {
                 this.visualElements[i]['text'] = v instanceof Function ? v(this.dataElements[i], i) : v;
@@ -22689,8 +22881,8 @@ var glutils;
                 setText(this.visualElements[i], this.visualElements[i]['text']);
             }
             return this;
-        }
-        on(event, f) {
+        };
+        WebGLElementQuery.prototype.on = function (event, f) {
             switch (event) {
                 case 'mouseover':
                     this.mouseOverHandler = f;
@@ -22713,8 +22905,8 @@ var glutils;
             }
             webgl.interactor.register(this, event);
             return this;
-        }
-        call(method, dataElement, event) {
+        };
+        WebGLElementQuery.prototype.call = function (method, dataElement, event) {
             var i = this.dataElements.indexOf(dataElement);
             switch (method) {
                 case 'mouseover':
@@ -22737,8 +22929,8 @@ var glutils;
                     break;
             }
             return this;
-        }
-        setAttr(element, attr, v, index) {
+        };
+        WebGLElementQuery.prototype.setAttr = function (element, attr, v, index) {
             switch (attr) {
                 case 'x':
                     element.position.x = v;
@@ -22796,15 +22988,16 @@ var glutils;
             element.geometry.verticesNeedUpdate = true;
             element.geometry.elementsNeedUpdate = true;
             element.geometry.lineDistancesNeedUpdate = true;
-        }
-        removeAll() {
+        };
+        WebGLElementQuery.prototype.removeAll = function () {
             for (var i = 0; i < this.visualElements.length; i++) {
                 if (this.visualElements[i].wireframe)
                     this.scene.remove(this.visualElements[i].wireframe);
                 this.scene.remove(this.visualElements[i]);
             }
-        }
-    }
+        };
+        return WebGLElementQuery;
+    }());
     glutils.WebGLElementQuery = WebGLElementQuery;
     function setStyle(element, attr, v, query) {
         switch (attr) {
@@ -22896,12 +23089,13 @@ var glutils;
         }
         return visualElements;
     }
-    class GroupElement {
-        constructor() {
+    var GroupElement = (function () {
+        function GroupElement() {
             this.position = { x: 0, y: 0, z: 0 };
             this.children = [];
         }
-    }
+        return GroupElement;
+    }());
     function createCirclesNoShader(dataElements, scene) {
         var material;
         var geometry;
@@ -23064,8 +23258,9 @@ var glutils;
         mesh.geometry = new THREE.ShapeGeometry(shape);
         mesh.geometry.verticesNeedUpdate = true;
     }
-    class WebGLInteractor {
-        constructor(scene, canvas, camera) {
+    var WebGLInteractor = (function () {
+        function WebGLInteractor(scene, canvas, camera) {
+            var _this = this;
             this.mouse = [];
             this.mouseStart = [];
             this.mouseDown = false;
@@ -23087,20 +23282,20 @@ var glutils;
             this.canvas = canvas;
             this.camera = camera;
             this.mouse = [0, 0];
-            canvas.addEventListener('mousemove', (e) => {
-                this.mouseMoveHandler(e);
+            canvas.addEventListener('mousemove', function (e) {
+                _this.mouseMoveHandler(e);
             });
-            canvas.addEventListener('mousedown', (e) => {
-                this.mouseDownHandler(e);
+            canvas.addEventListener('mousedown', function (e) {
+                _this.mouseDownHandler(e);
             });
-            canvas.addEventListener('mouseup', (e) => {
-                this.mouseUpHandler(e);
+            canvas.addEventListener('mouseup', function (e) {
+                _this.mouseUpHandler(e);
             });
-            canvas.addEventListener('click', (e) => {
-                this.clickHandler(e);
+            canvas.addEventListener('click', function (e) {
+                _this.clickHandler(e);
             });
         }
-        register(selection, method) {
+        WebGLInteractor.prototype.register = function (selection, method) {
             switch (method) {
                 case 'mouseover':
                     this.mouseOverSelections.push(selection);
@@ -23121,16 +23316,16 @@ var glutils;
                     this.clickSelections.push(selection);
                     break;
             }
-        }
-        addEventListener(eventName, f) {
+        };
+        WebGLInteractor.prototype.addEventListener = function (eventName, f) {
             if (eventName == 'lassoStart')
                 this.lassoStartHandler = f;
             if (eventName == 'lassoEnd')
                 this.lassoEndHandler = f;
             if (eventName == 'lassoMove')
                 this.lassoMoveHandler = f;
-        }
-        mouseMoveHandler(e) {
+        };
+        WebGLInteractor.prototype.mouseMoveHandler = function (e) {
             this.mouse = mouseToWorldCoordinates(e.clientX, e.clientY);
             if (this.isLassoEnabled && e.which == 2) {
                 this.lassoPoints.push(this.mouse);
@@ -23177,8 +23372,8 @@ var glutils;
                     }
                 }
             }
-        }
-        clickHandler(e) {
+        };
+        WebGLInteractor.prototype.clickHandler = function (e) {
             this.mouse = mouseToWorldCoordinates(e.clientX, e.clientY);
             var intersectedVisualElements = [];
             for (var i = 0; i < this.clickSelections.length; i++) {
@@ -23188,8 +23383,8 @@ var glutils;
                 }
             }
             this.mouseDown = false;
-        }
-        mouseDownHandler(e) {
+        };
+        WebGLInteractor.prototype.mouseDownHandler = function (e) {
             this.mouse = mouseToWorldCoordinates(e.clientX, e.clientY);
             this.mouseStart = [e.clientX, e.clientY];
             this.cameraStart = [webgl.camera.position.x, webgl.camera.position.y];
@@ -23206,8 +23401,8 @@ var glutils;
             if (this.lassoStartHandler && e.which == 2) {
                 this.lassoStartHandler(this.lassoPoints);
             }
-        }
-        mouseUpHandler(e) {
+        };
+        WebGLInteractor.prototype.mouseUpHandler = function (e) {
             this.mouse = mouseToWorldCoordinates(e.clientX, e.clientY);
             var intersectedVisualElements = [];
             for (var i = 0; i < this.mouseUpSelections.length; i++) {
@@ -23220,8 +23415,8 @@ var glutils;
             if (this.lassoEndHandler && e.which == 2) {
                 this.lassoEndHandler(this.lassoPoints);
             }
-        }
-        intersect(selection, mousex, mousey) {
+        };
+        WebGLInteractor.prototype.intersect = function (selection, mousex, mousey) {
             switch (selection.shape) {
                 case 'circle':
                     return this.intersectCircles(selection);
@@ -23237,8 +23432,8 @@ var glutils;
                     break;
             }
             return [];
-        }
-        intersectCircles(selection) {
+        };
+        WebGLInteractor.prototype.intersectCircles = function (selection) {
             var intersectedElements = [];
             var d;
             for (var i = 0; i < selection.dataElements.length; i++) {
@@ -23247,8 +23442,8 @@ var glutils;
                     intersectedElements.push(selection.dataElements[i]);
             }
             return intersectedElements;
-        }
-        intersectRects(selection) {
+        };
+        WebGLInteractor.prototype.intersectRects = function (selection) {
             var intersectedElements = [];
             var d;
             var e;
@@ -23259,8 +23454,8 @@ var glutils;
                     intersectedElements.push(selection.dataElements[i]);
             }
             return intersectedElements;
-        }
-        intersectPaths(selection) {
+        };
+        WebGLInteractor.prototype.intersectPaths = function (selection) {
             var intersectedElements = [];
             var e;
             var v1, v2;
@@ -23307,8 +23502,9 @@ var glutils;
             function distToSegment(p, v, w) {
                 return Math.sqrt(distToSegmentSquared(p, v, w));
             }
-        }
-    }
+        };
+        return WebGLInteractor;
+    }());
     glutils.WebGLInteractor = WebGLInteractor;
     function mouseToWorldCoordinates(mouseX, mouseY) {
         var rect = webgl.canvas.getBoundingClientRect();
@@ -23332,8 +23528,9 @@ var glutils;
         return curvePoints;
     }
     glutils.curve = curve;
-    class CheckBox {
-        constructor() {
+    var CheckBox = (function () {
+        function CheckBox() {
+            var _this = this;
             this.selected = false;
             this.frame = selectAll()
                 .data([0])
@@ -23341,16 +23538,16 @@ var glutils;
                 .attr('r', 5)
                 .style('fill', '#fff')
                 .style('stroke', '#000000')
-                .on('click', () => {
-                this.selected = !this.selected;
-                this.circle.style('opacity', this.selected ? 1 : 0);
-                if (this.changeCallBack != undefined)
-                    this.changeCallBack();
+                .on('click', function () {
+                _this.selected = !_this.selected;
+                _this.circle.style('opacity', _this.selected ? 1 : 0);
+                if (_this.changeCallBack != undefined)
+                    _this.changeCallBack();
             });
             this.circle = selectAll()
                 .data([0]);
         }
-        attr(attrName, value) {
+        CheckBox.prototype.attr = function (attrName, value) {
             switch (attrName) {
                 case 'x':
                     this.frame.attr('x', value);
@@ -23359,13 +23556,14 @@ var glutils;
                     this.frame.attr('y', value);
                     return this;
             }
-        }
-        on(eventType, fn) {
+        };
+        CheckBox.prototype.on = function (eventType, fn) {
             switch (eventType) {
                 case 'change': this.changeCallBack = fn;
             }
-        }
-    }
+        };
+        return CheckBox;
+    }());
     glutils.CheckBox = CheckBox;
 })(glutils || (glutils = {}));
 var THREEx = THREEx || {};
