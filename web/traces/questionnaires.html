@@ -5,11 +5,13 @@
 <div id="trackingButtonsDiv">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+        <!--<script src="//www.openjs.com/scripts/events/keyboard_shortcuts/shortcut.js"></script>-->
         <!--<script src="lib/shortcut.js"></script>-->
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"/>
-        <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot (Alt+m)</button>
+        <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot (Ctrl+m)</button>
         <button id="emailMeBtn" class="trackingButton" name="End" onclick="endOfActivityClicked()">Report end of the activity</button>
         <script type="text/javascript">
+
             function mailmeButtonClicked()
             {
                 trace.event(null, "MiniQuestionnaires", "MailMeQuestionnaire1");
@@ -20,6 +22,11 @@
                 trace.event(null, "MiniQuestionnaires", "EndActivityQuestionnaire1");
                 $("#endOfActivityQuestionnaireDiv").css("visibility", "visible")
             }
+
+            // shortcut.add("ctrl+m", function() {
+            //     mailmeButtonClicked();
+            // });  
+
         </script>
         <div id="mailmeQuestionnaireDiv" style="visibility:hidden; position:fixed; top:0; left:0; width:100%; height:100%; z-index:10">
             <div style="background-color:#000; opacity:.5; position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1"></div>
@@ -34,6 +41,7 @@
         var IDLE_MINUTES = 14;
         var idleTime = 0;
         var idleInterval = setInterval(timerIncrement, 1000);
+        var isCtrl = false;
         $(document).ready(function () 
         {
             // check URL and set paths
@@ -51,22 +59,23 @@
                 idleTime = 0;
             });
 
-            var isCtrl = false;
-            $(document).keyup(function(e) {
+            //$(document).keyup(function(e) {
+            $(this).keyup(function(e) {
                 if(e.which == 17) {
                     isCtrl = false;
                 }
             });
-            $(document).keydown(function(e) {
+            $(this).keydown(function(e) {
                 if(e.which == 17) {
-                    isCtrl = true; 
+                    isCtrl = true;
                 }
-                if(e.keyCode == 109 && isCtrl) { 
-                    log("------- catching Ctrl+m");
-                    mailmeButtonClicked();
-                } 
+                if(e.which === 77 && isCtrl) { 
+                     console.log("------- catching Ctrl+m");
+                     mailmeButtonClicked();
+                 } 
             });
         });
+
         function timerIncrement() {
             console.log('>>> timerIncrement')
             idleTime = idleTime + 1;
@@ -76,6 +85,7 @@
                 window.clearInterval(idleInterval);
             }
         }
+        
         function showInactivityBox() 
         {
             bootbox.confirm({
@@ -106,4 +116,5 @@
                 }
             });
         }
+
     </script>
