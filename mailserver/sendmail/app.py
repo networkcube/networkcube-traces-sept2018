@@ -247,7 +247,7 @@ def send():
     else:
         send_data = None
 
-        msg = MIMEMultipart()
+    msg = MIMEMultipart()
     msg['Subject'] = send_subject
     msg['From'] = send_from
     msg['To'] = send_to
