@@ -23,9 +23,9 @@
                 $("#endOfActivityQuestionnaireDiv").css("visibility", "visible")
             }
 
-            shortcut.add("ctrl+m", function() {
-                mailmeButtonClicked();
-            });  
+            // shortcut.add("ctrl+m", function() {
+            //     mailmeButtonClicked();
+            // });  
 
         </script>
         <div id="mailmeQuestionnaireDiv" style="visibility:hidden; position:fixed; top:0; left:0; width:100%; height:100%; z-index:10">
@@ -41,6 +41,7 @@
         var IDLE_MINUTES = 14;
         var idleTime = 0;
         var idleInterval = setInterval(timerIncrement, 1000);
+        var isCtrl = false;
         $(document).ready(function () 
         {
             // check URL and set paths
@@ -58,22 +59,26 @@
                 idleTime = 0;
             });
 
-            var isCtrl = false;
-            $(document).keyup(function(e) {
+            //$(document).keyup(function(e) {
+            $(this).keyup(function(e) {
                 if(e.which == 17) {
                     isCtrl = false;
                 }
             });
-            $(document).keydown(function(e) {
+            $(this).keydown(function(e) {
                 if(e.which == 17) {
-                    isCtrl = true; 
+                    console.log("------- NOT catching Ctrl+m");
+                    isCtrl = true;
+                    console.log(isCtrl); 
                 }
-                if(e.keyCode == 109 && isCtrl) { 
-                    log("------- catching Ctrl+m");
-                    mailmeButtonClicked();
-                } 
+                if(e.which === 77 && isCtrl) { 
+                //if(isCtrl) { 
+                     console.log("------- catching Ctrl+m");
+                     mailmeButtonClicked();
+                 } 
             });
         });
+
         function timerIncrement() {
             console.log('>>> timerIncrement')
             idleTime = idleTime + 1;
@@ -83,6 +88,7 @@
                 window.clearInterval(idleInterval);
             }
         }
+        
         function showInactivityBox() 
         {
             bootbox.confirm({
@@ -113,4 +119,5 @@
                 }
             });
         }
+
     </script>
