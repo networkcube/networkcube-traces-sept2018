@@ -1,16 +1,20 @@
 {
-    "version": "1.5.0-alpha",
+    "version": "2.7.2",
     "compilerOptions": {
-        "target": "es6",
+        "target": "es5",
         "declaration": true,
-        "noImplicitAny": false,
+        "noImplicitUseStrict": true,
+        "alwaysStrict": false,
+        // "noStrictGenericChecks": true,
+        // "strict": false,
+        // "strictNullChecks": false,
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
         "outFile": "./networkcube.js",
         "sourceMap": true,
-        "watch": true
+        "watch": true,
     },
     "files": [
         "./lib/jquery.ts",

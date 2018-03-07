@@ -1,3 +1,7 @@
 .DS_Store
 *.js.map
+passwd
+node_modules
 debug/*
+valid_emails.*
+dist/

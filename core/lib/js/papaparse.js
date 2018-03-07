@@ -5,7 +5,7 @@
 */
 (function(global)
 {
-	"use strict";
+	// "use strict";
 
 	var IS_WORKER = !global.document, LOADED_SYNC = false, AUTO_SCRIPT_PATH;
 	var workers = {}, workerIdCounter = 0;

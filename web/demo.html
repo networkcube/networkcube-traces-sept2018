@@ -162,8 +162,10 @@
         </div>
 
         <script>
-            
-            SERVER = location.protocol + '//'+ window.location.hostname +  '' + window.location.pathname + '/';
+            var hostname = window.location.hostname;
+            if (window.location.port)
+                hostname += ':'+window.location.port;
+            SERVER = location.protocol + '//'+ hostname +  '' + window.location.pathname + '/';
             SERVER = SERVER.split('web/')[0]
       
       
