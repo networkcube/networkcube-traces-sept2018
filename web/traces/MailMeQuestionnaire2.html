@@ -223,7 +223,7 @@
                     <td> 
                         <fieldset style="text-align:top; border:none; background-color:#f5f5f0;margin-top: 0px auto; width: 190px;">
                         <p><font size="2">To select a single answer and submit it: double click on the answer</font></p>
-                        <p style="margin-top: -15px;"><font size="2">Ore select multiple answers then click on the CONTINUE button</font></p>
+                        <p style="margin-top: -15px;"><font size="2">Or select multiple answers then click on the CONTINUE button</font></p>
                         </fieldset> 
                     </td>
                     </table>
@@ -312,7 +312,7 @@
                         window.setTimeout(function() {
                           closeWindow();
                         }, 3000);
-                        window.parent.$('#mailmeQuestionnaireDiv2').css('visibility', 'hidden');
+                       window.parent.$('#mailmeQuestionnaireDiv2').css('visibility', 'hidden');
                       }
 
                       function doubleClick(checkboxNumber)
@@ -425,7 +425,7 @@
                           {
                             //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
                             trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
-                            networkcube.showMessage('Email send!', 3000);
+                            networkcube.showMessage('Email sent!', 3000);
                           })
                           // }
                         }

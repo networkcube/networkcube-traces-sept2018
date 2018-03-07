@@ -289,7 +289,7 @@
                     <div class="wrapper">
 
                     <button class="button3" onclick="closeWindow()"><font size="3">Cancel</font></button>
-                    <button class="button1" onclick="sendMailButtonClicked"><font size="3">Skip the questionnaire</font></button>
+                    <button class="button1" onclick="sendMailButtonClicked()"><font size="3">Skip the questionnaire</font></button>
                     <button class="button2" onclick="continueButtonPressed()"><font size="3">Continue</font></button>
                     <script>
                         function sendMailButtonClicked()
@@ -445,7 +445,11 @@
                           console.log(">>>>CC:", cc_vistorian);
 
                           //var to = document.getElementById('emailInput').value;
-                          var to = localStorage.getItem("NETWORKCUBE_USEREMAIL").value;
+                          //var to = localStorage.getItem("NETWORKCUBE_USEREMAIL").value;
+                          var to = localStorage.NETWORKCUBE_USEREMAIL;
+                          
+                          //console.log(">>>>>>>>MAIL:", localStorage.NETWORKCUBE_USEREMAIL);
+                          console.log(">>>>>>>>MAIL:", to);
 
                           var from = "vistorian@inria.fr";
 
@@ -472,7 +476,7 @@
                                 console.log('BLOB', blob)
                                 trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                 // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
-                                networkcube.showMessage('Email send!', 3000);
+                                networkcube.showMessage('Email sent!', 3000);
                               }, 'white')
                             }
                             // if not d3, but webgl
@@ -532,7 +536,7 @@
                                 function (blob) {
                                   trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                   // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
-                                  networkcube.showMessage('Email send!', 3000);
+                                  networkcube.showMessage('Email sent!', 3000);
                                 }
                               );
                             }
@@ -569,7 +573,7 @@
                                     // downloadLink.click();
                                     // console.log('SEND MAIL', blob, '<<<')
                                     trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
-                                    networkcube.showMessage('Email send!', 3000);
+                                    networkcube.showMessage('Email sent!', 3000);
                                   });
                                 }
                                 img.src = URL.createObjectURL(blob);
@@ -593,7 +597,7 @@
                                 // bbach: blob is empty
                                 trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                 // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
-                                networkcube.showMessage('Email send!', 3000);
+                                networkcube.showMessage('Email sent!', 3000);
                               }, 'image/png');
                             }
                           });

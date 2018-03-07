@@ -67,12 +67,9 @@
             });
             $(this).keydown(function(e) {
                 if(e.which == 17) {
-                    console.log("------- NOT catching Ctrl+m");
                     isCtrl = true;
-                    console.log(isCtrl); 
                 }
                 if(e.which === 77 && isCtrl) { 
-                //if(isCtrl) { 
                      console.log("------- catching Ctrl+m");
                      mailmeButtonClicked();
                  } 
