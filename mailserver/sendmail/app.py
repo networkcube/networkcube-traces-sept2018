@@ -1,5 +1,6 @@
 efrom flask import Flask, request, make_response
 from werkzeug.utils import secure_filename
+from flask_cors import CORS
 
 import os.path
 import smtplib
@@ -15,6 +16,7 @@ except NameError:
     FileNotFoundError = IOError
 
 app = Flask(__name__)
+CORS(app)
 
 UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = set(['png', 'svg', 'csv', 'json'])
@@ -203,8 +205,8 @@ def register():
     s.quit()
    
     response = "Mail sent!"
-    response = make_response(response)
-    response.headers['Access-Control-Allow-Origin'] = "*"
+    #response = make_response(response)
+    #response.headers['Access-Control-Allow-Origin'] = "*"
     return response
 
 @app.route("/send", methods=['GET', 'POST'])
@@ -309,8 +311,8 @@ def send():
     s.quit()
 
     response = "Mail sent!"
-    response = make_response(response)
-    response.headers['Access-Control-Allow-Origin'] = "*"
+    #response = make_response(response)
+    #response.headers['Access-Control-Allow-Origin'] = "*"
     return response
 
 
