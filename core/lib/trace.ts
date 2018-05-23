@@ -92,7 +92,14 @@
 			}
 		};
 		
-		var json = JSON.stringify(list);
+	    var json;
+            try {
+                json = JSON.stringify(list);
+            }
+            catch(err) {
+                console.log('Cannot send data with circular structures');
+                return;
+            }
 		httpRequest.open("POST", traceUrl, true);
 		if (window.XDomainRequest) 
 		{
@@ -110,7 +117,8 @@
 
 	var sendLogs = function() 
 	{
-		if (_traceq.length == 0) return;
+	    if (_traceq.length == 0) return;
+            
 		_sending = _traceq;
 		if (debug) {
 			window.console && console.log("Sending %d messages", _sending.length);

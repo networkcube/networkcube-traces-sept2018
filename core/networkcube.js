@@ -14669,11 +14669,19 @@ var geometry;
             if (httpRequest.readyState == this.DONE) {
                 if (debug) {
                     window.console && console.log("status =%d", httpRequest.status);
+
                 }
                 sendMoreOrAgain(httpRequest.status < 300);
             }
         };
-        var json = JSON.stringify(list);
+	    var json;
+            try {
+                json = JSON.stringify(list);
+            }
+            catch(err) {
+                console.log('Cannot send data with circular structures');
+                return;
+            }
         httpRequest.open("POST", traceUrl, true);
         if (window.XDomainRequest) {
         }

@@ -434,8 +434,9 @@
             time_end = times[times.length-1]
         }
 
-        console.log('start-end', time_start, time_end)
-      
+        console.log('start-end', time_start, time_end);
+        trace.event('nodelink', 'filter', 'time-slider', 
+                    {'start': time_start, 'end': time_end});
       
         timeSlider.set(m.startUnix, m.endUnix);
         updateLinks();
