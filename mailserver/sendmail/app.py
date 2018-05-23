@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response
+efrom flask import Flask, request, make_response
 from werkzeug.utils import secure_filename
 
 import os.path
@@ -27,6 +27,19 @@ valid_passwd = {}
 
 VALID_EMAILS_FILE = 'valid_emails.txt'
 PASSWD_FILE = 'passwd'
+
+LOG = None
+
+def writelog(msg):
+    if LOG is None:
+        try:
+            LOG = open('sendmail.log', 'w+')
+        except:
+            LOG = False
+    if not LOG:
+        return
+    LOG.write(msg)
+    LOG.write('\n')
 
 def load_valid_emails():
     try:
@@ -206,6 +219,7 @@ def send():
     except Exception:
         return hello()
     if send_to not in valid_dest:
+        writelog("Invalid destination: "+send_to)
         return "Invalid destination: "+send_to #+" valids:"+",".join(list(valid_dest))
     if 'CopyToVistorian' in request.form:
         send_cc = "vistorian@inria.fr"
