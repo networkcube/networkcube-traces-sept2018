@@ -249,15 +249,17 @@
 		console.log('>>>> EMAIL SEND')
 	}
 
-	function sendUserTrackingRegistrationFunction(email) 
+	function sendUserTrackingRegistrationFunction(userEmail, userId) 
 	{
 		var formdata = new FormData(),
 			oReq = new XMLHttpRequest();
 
-		console.log('session/email: ' + email)
 				
-		formdata.append("email", email);
-
+		formdata.append("email", userEmail);
+		formdata.append("id", userId);
+		console.log('session/userEmail: ' + userEmail);
+		console.log('session/userId: ' + userId);
+	
 		if (location.protocol == "https:")
 			oReq.open("POST", "https://aviz.saclay.inria.fr/sendmail/register", true);
 		else
