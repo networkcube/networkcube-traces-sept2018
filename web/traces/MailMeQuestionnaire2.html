@@ -98,7 +98,7 @@
                     </button> -->
 
                     <h3> <font size="5">Mail me a screenshot (Part 2: for "Analyze data")</font></h3>
-                    <p><font size="4">Answer and click CONTINUE or press ESC to skip this additional questionnaire and send the email</font></p>
+                    <p><font size="4">Answer and click FINISH AND SUBMIT or press ESC to skip this additional questionnaire and send the email</font></p>
                     <hr>
                     <h3> <font size="4">How helpful was the tool to analyze your data in this session?</font></h3>
                     <!-- Multiple Radios (inline) -->
@@ -223,7 +223,7 @@
                     <td> 
                         <fieldset style="text-align:top; border:none; background-color:#f5f5f0;margin-top: 0px auto; width: 190px;">
                         <p><font size="2">To select a single answer and submit it: double click on the answer</font></p>
-                        <p style="margin-top: -15px;"><font size="2">Or select multiple answers then click on the CONTINUE button</font></p>
+                        <p style="margin-top: -15px;"><font size="2">Or select multiple answers then click on the FINISH AND SUBMIT button</font></p>
                         </fieldset> 
                     </td>
                     </table>
@@ -379,10 +379,10 @@
                         //window.history.back();
                         
                         sendEmail();
-                        closeWindow();
-                        window.setTimeout(function() {
-                          closeWindow();
-                        }, 3000);
+                        //closeWindow();
+                       // window.setTimeout(function() {
+                         // closeWindow();
+                       // }, 3000);
                       }
 
                       
@@ -425,7 +425,8 @@
                           {
                             //  trace.sendmail('vanessa.serrano@iqs.url.edu', 'benj.bach@mail.com', "test", 'message body here', true, blob, null);
                             trace.sendmail(to, from, subject, message, cc_vistorian, blob, null);
-                            networkcube.showMessage('Email sent!', 3000);
+                            networkcube.showMessage('Email sent to ' + to + '!', 3000);
+                            console.log(to);
                           })
                           // }
                         }

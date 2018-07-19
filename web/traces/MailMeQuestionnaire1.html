@@ -476,7 +476,7 @@
                                 console.log('BLOB', blob)
                                 trace.sendmail(to, from, 'test', 'mymessage', true, blob, null);
                                 // trace.sendmail('benj.bach@gmail.com', 'vistorian@inria.fr', 'test', 'mymessage', '', blob, null);
-                                networkcube.showMessage('Email sent!', 3000);
+                                networkcube.showMessage('Email sent to ' + to + '!', 3000);
                               }, 'white')
                             }
                             // if not d3, but webgl
