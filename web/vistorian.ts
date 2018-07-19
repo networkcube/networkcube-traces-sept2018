@@ -599,13 +599,17 @@ module vistorian {
 
                         localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'true');
                         $('#trackingContainer').load(relativePathToTracesDir + 'traces/questionnaires.html');
-
+                        
+                        var d = new Date();
+                        localStorage.setItem("NETWORKCUBE_USERID", d.getTime());
+                                                
                         $('#enableDisableTrackingBtn')
                             .prop('value', 'Disable tracking and screenshots')
                             .prop('class', 'disable');
         
-                        console.log('NETWORKCUBE_USEREMAIL: ', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
-                        trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"))
+                        console.log('NETWORKCUBE_USEREMAIL:', localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                        console.log('NETWORKCUBE_USERID:', localStorage.getItem("NETWORKCUBE_USERID"));
+                        trace.registerUser(localStorage.getItem("NETWORKCUBE_USEREMAIL"), localStorage.getItem("NETWORKCUBE_USERID"))
                     }
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');

@@ -8,7 +8,7 @@
         <!--<script src="//www.openjs.com/scripts/events/keyboard_shortcuts/shortcut.js"></script>-->
         <!--<script src="lib/shortcut.js"></script>-->
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"/>
-        <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot (Ctrl+m)</button>
+        <button id="submit" class="trackingButton" name="MailMe" onclick="mailmeButtonClicked()">Mail me a screenshot</button>
         <button id="emailMeBtn" class="trackingButton" name="End" onclick="endOfActivityClicked()">Report end of the activity</button>
         <script type="text/javascript">
 
@@ -41,7 +41,7 @@
         var IDLE_MINUTES = 14;
         var idleTime = 0;
         var idleInterval = setInterval(timerIncrement, 1000);
-        var isCtrl = false;
+        // var isCtrl = false;
         $(document).ready(function () 
         {
             // check URL and set paths
@@ -59,22 +59,26 @@
                 idleTime = 0;
             });
 
-            //$(document).keyup(function(e) {
-            $(this).keyup(function(e) {
-                if(e.which == 17) {
-                    isCtrl = false;
-                }
-            });
-            $(this).keydown(function(e) {
-                if(e.which == 17) {
-                    isCtrl = true;
-                }
-                if(e.which === 77 && isCtrl) { 
-                     console.log("------- catching Ctrl+m");
-                     mailmeButtonClicked();
-                 } 
-            });
+            // $(document).keyup(function(e) {
+
         });
+
+        // $(window).keyup(function(e) {
+        //     if(e.which == 16) {
+        //         isCtrl = false;
+        //     }
+        // });
+        // $(window).keydown(function(e) {
+        //     console.log('>>>', e.which);
+        //     if(e.which == 16) {
+        //         isCtrl = true;
+        //     }
+        //     if(e.which == 77 && isCtrl) { 
+        //         console.log("------- catching shift+m");
+        //         mailmeButtonClicked();
+        //         // isCtrl = false;
+        //     }
+        // });
 
         function timerIncrement() {
             console.log('>>> timerIncrement')
