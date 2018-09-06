@@ -126,8 +126,9 @@
                             ondblclick="doubleClick(5)" onclick="toggleButton('button5')">
                             <label for="my-checkbox"><font size="2">Other</font></label>
                           <!--</button>&nbsp;You will be able to describe it later-->
-                          </button>&nbsp;Please, explain: <textarea id="otherReasonInput" type="text" name="otherReason" cols="50" rows="3" onkeyup="localStorage.setItem(\'NETWORKCUBE_OTHERREASON\', document.getElementById(\'otherReasonInput\').value)"></textarea>
+                          <!--</button>&nbsp;Please, explain: <textarea id="otherReasonInput" type="text" name="otherReasonInput" cols="50" rows="3" onkeyup="localStorage.setItem(\'NETWORKCUBE_OTHERREASON\', document.getElementById(\'otherReasonInput\').value)"></textarea>-->
 
+                          </button>&nbsp;Please, explain: <textarea id="otherReasonInput" type="text" name="otherReasonInput" cols="50" rows="3"></textarea>
                           <p></p>                      
                           <script>
 
@@ -145,6 +146,16 @@
                               $('#'+buttonName).toggleClass('active')
                               console.log(checkedButtons)
 
+                              var Reasons = document.getElementById('otherReasonInput').value;
+                              var Reasonstext = String(Reasons);
+                              localStorage.setItem('traces_reasons', $('#otherReasonInput').val())
+                              console.log('>>>> OTHER REASONS')
+
+                              // if(checkedButtons="Other"){
+                              //     var Reasons = document.getElementById('otherReasonInput').value;
+                              //     var Reasonstext = String(Reasons);
+                              //     localStorage.setItem('traces_reasons', $('#otherReasonInput').val())
+                              // }
                             }  
 
                             function doubleClick(buttonNumber)
@@ -179,7 +190,9 @@
                                 if(buttonNumber == 4){Context4 = 'Test the software'; console.log(Context4); trace.event(null, 'MiniQuestionnaire', 'EndActivityQuestionnaire1', Context4);}
                                 var Context5;
                                 if(buttonNumber == 5){Context5 = 'Other'; console.log(Context5); trace.event(null, 'MiniQuestionnaire', 'EndActivityQuestionnaire1', Context5);}
-
+                                console.log(">>>>>>>>>>>>>>>>>>>MAIL:",localStorage.NETWORKCUBE_USEREMAIL);
+                                //localStorage.removeItem('NETWORKCUBE_USEREMAIL');
+                                //console.log(">>>>>>>>>>>>>>>>>>>MAIL:",localStorage.NETWORKCUBE_USEREMAIL);                                
                                 closeWindow();
                               }
 
@@ -205,7 +218,7 @@
                     <div class="wrapper">
 
                     <button class="button3" onclick="closeWindow()"><font size="3">Cancel</font></button>
-                    <button class="button1" onclick="submitQuestionnaireResults()"><font size="3">Skip the questionnaire</font></button>
+                    <!--<button class="button1" onclick="submitQuestionnaireResults()"><font size="3">Skip the questionnaire</font></button>-->
                     <button class="button2" onclick="continueBtnPressed()"><font size="3">Continue</font></button>
                     <script>
 
@@ -248,6 +261,7 @@
                               if(checkedButtons["button4"] == true){Context4 = 'Test the software'; console.log(Context4); trace.event(null, 'MiniQuestionnaire', 'EndActivityQuestionnaire1', Context4);}
                               var Context5;
                               if(checkedButtons["button5"] == true){Context5 = 'Other'; console.log(Context5); trace.event(null, 'MiniQuestionnaire', 'EndActivityQuestionnaire1', Context5);}
+                              localStorage.removeItem("NETWORKCUBE_USEREMAIL");
                               closeWindow();
                             }
                         }

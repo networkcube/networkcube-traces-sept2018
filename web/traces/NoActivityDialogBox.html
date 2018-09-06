@@ -23,8 +23,11 @@
                 className: 'btn-success'
             },
             cancel: {
-                label: 'DONE: report on recent activity',
-                className: 'btn-warning'
+                //label: 'DONE: report on recent activity',
+                label: 'DONE: finish and close',
+                className: 'btn-warning',
+                localStorage.removeItem("NETWORKCUBE_USEREMAIL"),
+                closeWindow()
             }
         },
         // bbach: Did this had a reason?

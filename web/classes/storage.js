@@ -1,5 +1,3 @@
-/// <reference path="../scripts/jstorage.d.ts"/>
-/// <reference path="./vistorian.ts"/>
 var storage;
 (function (storage) {
     var SESSION_TABLENAMES = "vistorian.tablenames";
@@ -8,7 +6,6 @@ var storage;
     var SESSION_NETWORKIDS = "vistorian.networkIds";
     var SESSION_SESSIONID = "vistorian.lastSessionId";
     var SEP = "#";
-    // SESSION
     function saveSessionId(sessionid) {
         console.log('save session', sessionid);
         $.jStorage.set(SESSION_SESSIONID, sessionid);
@@ -20,13 +17,8 @@ var storage;
         return session;
     }
     storage.getLastSessionId = getLastSessionId;
-    //////////////
-    /// TABLES ///
-    //////////////
-    // Stores all user's tables (tables must be in json format)
     function saveUserTable(table, sessionid) {
         console.log('[vistorian] Save user table', table.name, sessionid);
-        // add name to table names if not yet there.
         var tableNames = getTableNames(sessionid);
         var found = false;
         if (!tableNames) {
@@ -40,18 +32,15 @@ var storage;
             });
         }
         if (!found) {
-            // console.log('\tTable', table.name, 'not found. Table added.')
             tableNames.push(table.name);
             saveTableNames(tableNames, sessionid);
         }
         else {
-            // console.log('\tTable', table.name, 'found. Replace table')
         }
         $.jStorage.set(sessionid + SEP + SESSION_TABLE + SEP + table.name, table);
         console.log('\tTable', table.name, 'added.', getTableNames(sessionid).length + ' tables stored.', getUserTable(table.name, sessionid));
     }
     storage.saveUserTable = saveUserTable;
-    // returns all users' tables
     function getUserTables(sessionid) {
         var tablenames = this.getTableNames(sessionid);
         var tables = [];
@@ -97,11 +86,7 @@ var storage;
         console.log('table deleted', getTableNames(sessionid));
     }
     storage.deleteTable = deleteTable;
-    ////////////////
-    /// NETWORKS ///
-    ////////////////
     function saveNetwork(network, sessionid) {
-        // add name to table names if not yet there.
         var networkIds = getNetworkIds(sessionid);
         var found = false;
         if (!networkIds) {
@@ -119,7 +104,6 @@ var storage;
             saveNetworkIds(networkIds, sessionid);
             console.log('Save imported networkId', network.id);
         }
-        // console.log('save network', network)
         $.jStorage.set(sessionid + SEP + SESSION_NETWORK + SEP + network.id, network);
     }
     storage.saveNetwork = saveNetwork;
@@ -162,7 +146,6 @@ var storage;
             networkIds.splice(networkIds.indexOf(id), 1);
             saveNetworkIds(networkIds, sessionid);
         }
-        // console.log('[storage] Network removed', getNetworkIds().length, 'networks remaining.');
     }
     storage.deleteNetworkById = deleteNetworkById;
 })(storage || (storage = {}));

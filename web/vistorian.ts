@@ -582,18 +582,21 @@ module vistorian {
             {
                 if (result == true)
                 {
-                    if (!validateEmail(localStorage.getItem("NETWORKCUBE_USEREMAIL")))
-                     {
+                    if (!validateEmail(localStorage.getItem("NETWORKCUBE_USEREMAIL"))||localStorage.getItem("NETWORKCUBE_USEREMAIL")==null)                
+                    {
                          //return false
                          //return true;
                          //status = true;
                          //$('.bootbox.modal').modal('show');
                          //alert("Please, enter your email!");
-                         bootbox.alert({
-                            message: "Please, enter a correct email!",
-                            size: 'big'
-                         });
+                         // bootbox.alert({
+                         //    message: "Please, enter a correct email!",
+                         //    size: 'big',
+                         //    backdrop: 'true'
+                         // });
                          $('#email-error').css('color','red');
+                         document.getElementById('userEmailInput').style.borderColor="red";
+                         document.getElementById('userEmailInput').style.borderWidth = "5px";
                          return false;
                      }else{
 
@@ -613,6 +616,7 @@ module vistorian {
                     }
                 }else{
                     localStorage.setItem("NETWORKCUBE_IS_TRACKING_ENABLED", 'false');
+                    console.log(">>>>>>>>>>>>>>>>>>>MAIL:",localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                     if($('#trackingButtonsDiv'))
                     {
                         $('#trackingButtonsDiv').remove()
@@ -674,6 +678,8 @@ module vistorian {
                     $('#enableDisableTrackingBtn')
                         .prop('value', 'Enable tracking and screenshots')
                         .prop('class', 'enable');
+                    localStorage.removeItem('NETWORKCUBE_USEREMAIL');
+                    console.log(">>>>>>>>>>>>>>>>>>>MAIL:",localStorage.getItem("NETWORKCUBE_USEREMAIL"));
                     // bb: removed as I don't think users need to give a reason. We do not care I think and I woudld not bug users too much.
                     // bootbox.prompt({
                     //       size: "large",

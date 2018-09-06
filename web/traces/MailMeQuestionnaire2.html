@@ -253,7 +253,7 @@
           // GET RESULTS FROM 1ST QUESTIONNAIRE
           // Read stuff from local storage
           //email = localStorage.getItem('traces_email', $('#emailInput').val())
-          email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
+          var email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
           // localStorage.getItem('traces_format')
           localStorage.getItem('traces_addLegend')
           localStorage.getItem('traces_sendCopyToVistorian')
@@ -323,7 +323,7 @@
           // GET RESULTS FROM 1ST QUESTIONNAIRE
           // Read stuff from local storage
           //email = localStorage.getItem('traces_email', $('#emailInput').val())
-          email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
+          var email = localStorage.getItem("NETWORKCUBE_USEREMAIL").value
           // localStorage.getItem('traces_format')
           localStorage.getItem('traces_addLegend')
           localStorage.getItem('traces_sendCopyToVistorian')
@@ -403,7 +403,8 @@
 
             // console.log(">>>>CC:", cc_vistorian);
 
-            var to = email;
+            //var to = email;
+            var to = localStorage.NETWORKCUBE_USEREMAIL;
 
             var from = "vistorian@inria.fr";
 
