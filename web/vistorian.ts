@@ -582,7 +582,8 @@ module vistorian {
             {
                 if (result == true)
                 {
-                    if (!validateEmail(localStorage.getItem("NETWORKCUBE_USEREMAIL"))||localStorage.getItem("NETWORKCUBE_USEREMAIL")==null)                
+                    console.log(">>>>>>>>>>>>>>>>>>>MAIL:",localStorage.getItem("NETWORKCUBE_USEREMAIL"));
+                    if (localStorage.getItem("NETWORKCUBE_USEREMAIL")==null||!validateEmail(localStorage.getItem("NETWORKCUBE_USEREMAIL"))||localStorage.getItem("NETWORKCUBE_USEREMAIL")=="")                
                     {
                          //return false
                          //return true;
